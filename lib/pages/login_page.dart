@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
 
                 //login button
                 Padding(
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 //'Not a member' text
                 const Text(
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 18,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 //sign in button
                 Padding(
