@@ -1,3 +1,4 @@
+import 'package:bilmant2a/components/text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -8,6 +9,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,17 +51,29 @@ class _LoginPageState extends State<LoginPage> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 50.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Email Address',
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
                         ),
-                      ),
+                        const Icon(
+                          Icons.email,
+                          size: 30,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 5.0),
+                            child: MyTextField(
+                                controller: emailTextController,
+                                hintText: 'Email',
+                                obscureText: false),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
 
                 //password textfield
@@ -70,15 +85,25 @@ class _LoginPageState extends State<LoginPage> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 50.0),
-                      child: TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Password',
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
                         ),
-                      ),
+                        const Icon(
+                          Icons.lock,
+                          size: 30,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 5.0),
+                            child: MyTextField(
+                                controller: passwordTextController,
+                                hintText: 'Password',
+                                obscureText: true),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
