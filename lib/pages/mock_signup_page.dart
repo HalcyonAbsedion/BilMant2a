@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../components/text_field.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   @override
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   //Welcome text
                   const Text(
-                    'Hello, Neighbor!',
+                    'Create Account!',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                     'Check Out What Your Community is Doing!',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 20,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Center(
-                        child: Text('Log In',
+                        child: Text('Sign Up',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Center(
-                          child: Text('Sign Up!',
+                          child: Text('Log In!',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
