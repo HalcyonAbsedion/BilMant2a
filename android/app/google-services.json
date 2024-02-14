@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "320062436564",
+    "project_id": "bilmant2a-92a43",
+    "storage_bucket": "bilmant2a-92a43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320062436564:android:2f89f7188d87b95be63741",
+        "android_client_info": {
+          "package_name": "com.example.bilmant2a"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyoGKeeCKHiAp84llbgpXxST_mvRrhEEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
