@@ -16,9 +16,28 @@ class _LoginPageState extends State<LoginPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailTextController.text.trim(),
-        password: passwordTextController.text.trim());
+    showDialog(
+      context: context,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailTextController.text.trim(),
+          password: passwordTextController.text.trim());
+      if (context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      displayMessage(e.code);
+    }
+  }
+
+  void displayMessage(String message) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(message),
+            ));
   }
 
   @override
@@ -36,9 +55,63 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 100),
+                  Container(
+                    decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.blueGrey),
+                      borderRadius: BorderRadius.circular(120),
+                    ),
+                    child: const Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
+                            Icon(
+                              Icons.star,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
+                            Icon(
+                              Icons.star,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
+                            Icon(
+                              Icons.star,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.apartment_sharp,
+                              size: 80,
+                              color: Colors.black54,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'BilMant2a',
+                          style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 40,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
 
                   //Welcome text
                   const Text(
