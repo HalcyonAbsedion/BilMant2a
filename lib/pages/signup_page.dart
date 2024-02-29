@@ -14,6 +14,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmpasswordController = TextEditingController();
   @override
   void dispose() {
     _emailController.dispose();
@@ -21,10 +22,38 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  Future signUp() async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _emailController.text.trim());
+  void signUp() async {
+    showDialog(
+      context: context,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    if (_passwordController.text != _confirmpasswordController.text) {
+      Navigator.pop(context);
+      displayMessage("Passwords don't match!");
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
+
+      if (context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      displayMessage(e.code);
+    }
+  }
+
+  void displayMessage(String message) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(message),
+            ));
   }
 
   Widget build(BuildContext context) {
@@ -84,8 +113,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   inputFile(label: "Email", controller: _emailController),
                   // inputFile(label: "Location / Area"),
                   // inputFile(label: "Gender"),
-                  inputFile(label: "Password", controller: _passwordController,obscureText: true),
-                  // inputFile(label: "Confirm Password ", obscureText: true),
+                  inputFile(
+                      label: "Password",
+                      controller: _passwordController,
+                      obscureText: true),
+                  inputFile(
+                      label: "Confirm Password",
+                      controller: _confirmpasswordController,
+                      obscureText: true),
                 ],
               ),
               Container(
@@ -140,7 +175,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-Widget inputFile({required String label, bool obscureText = false,required TextEditingController controller}) {
+Widget inputFile(
+    {required String label,
+    bool obscureText = false,
+    required TextEditingController controller}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
