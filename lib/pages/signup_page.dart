@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,6 +12,21 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future signUp() async {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _emailController.text.trim());
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: true,
@@ -61,14 +78,14 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Column(
                 children: <Widget>[
-                  inputFile(label: "Username"),
-                  inputFile(label: "First Name"),
-                  inputFile(label: "Last Name"),
-                  inputFile(label: "Email"),
-                  inputFile(label: "Location / Area"),
-                  inputFile(label: "Gender"),
-                  inputFile(label: "Password", obscureText: true),
-                  inputFile(label: "Confirm Password ", obscureText: true),
+                  // inputFile(label: "Username"),
+                  // inputFile(label: "First Name"),
+                  // inputFile(label: "Last Name"),
+                  inputFile(label: "Email", controller: _emailController),
+                  // inputFile(label: "Location / Area"),
+                  // inputFile(label: "Gender"),
+                  inputFile(label: "Password", controller: _passwordController,obscureText: true),
+                  // inputFile(label: "Confirm Password ", obscureText: true),
                 ],
               ),
               Container(
@@ -85,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: MaterialButton(
                   minWidth: double.infinity,
                   height: 60,
-                  onPressed: () {},
+                  onPressed: signUp,
                   color: Color.fromARGB(255, 242, 0, 0),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -123,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-Widget inputFile({required String label, bool obscureText = false}) {
+Widget inputFile({required String label, bool obscureText = false,required TextEditingController controller}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -137,6 +154,7 @@ Widget inputFile({required String label, bool obscureText = false}) {
       ),
       TextField(
         obscureText: obscureText,
+        controller: controller,
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           enabledBorder: OutlineInputBorder(
