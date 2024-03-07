@@ -1,4 +1,4 @@
-
+import 'package:bilmant2a/components/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../pages/home_page.dart';
@@ -19,7 +19,7 @@ class _AuthPageState extends State<AuthPage> {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return HomePage();
+                return NavBar();
               } else {
                 return LoginOrRegister();
               }
