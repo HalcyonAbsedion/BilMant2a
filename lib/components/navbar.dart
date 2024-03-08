@@ -1,3 +1,5 @@
+import 'package:bilmant2a/components/top_bar.dart';
+import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
