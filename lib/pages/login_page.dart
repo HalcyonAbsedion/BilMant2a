@@ -17,18 +17,28 @@ class _LoginPageState extends State<LoginPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   Future signIn() async {
+    BuildContext? dialogContext;
     showDialog(
       context: context,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) {
+        dialogContext = context; // Store the context before showing the dialog
+        return const Center(child: CircularProgressIndicator());
+      },
     );
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailTextController.text.trim(),
-          password: passwordTextController.text.trim());
-      if (context.mounted) Navigator.pop(context);
+        email: emailTextController.text.trim(),
+        password: passwordTextController.text.trim(),
+      );
+      if (dialogContext != null && dialogContext!.mounted) {
+        Navigator.pop(
+            dialogContext!); // Use the stored context to dismiss the dialog
+      }
     } on FirebaseAuthException catch (e) {
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
+      if (dialogContext != null && dialogContext!.mounted) {
+        Navigator.pop(
+            dialogContext!); // Use the stored context to dismiss the dialog
+      }
       displayMessage(e.message.toString());
     }
   }

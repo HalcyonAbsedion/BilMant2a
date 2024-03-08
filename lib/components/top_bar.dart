@@ -15,31 +15,33 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Futura',
         primarySwatch: Colors.teal,
       ),
-      home: DefaultTabController(
-        length: 4,
-        child: Home(),
-      ),
+      home: const Home(),
     );
   }
 }
 
 class Home extends StatelessWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      backgroundColor: Colors.grey,
-      body: Center(
-        child: TabBarView(
-          children: [],
+    return DefaultTabController(
+      length: 3, // Adjusted length to match the number of tabs
+      child: Scaffold(
+        appBar: _appBar(),
+        backgroundColor: Colors.grey,
+        body: const TabBarView(
+          children: [
+            Center(child: Text('Explore Page')),
+            Center(child: Text('Donations Page')),
+            Center(child: Text('Volunteer Page')),
+          ],
         ),
       ),
     );
   }
 
-  PreferredSize _appBar() {
+  PreferredSizeWidget _appBar() {
     return PreferredSize(
       preferredSize: const Size.fromHeight(120),
       child: Container(
@@ -60,8 +62,8 @@ class Home extends StatelessWidget {
   }
 
   BoxDecoration _boxDecoration() {
-    return BoxDecoration(
-      borderRadius: const BorderRadius.vertical(
+    return const BoxDecoration(
+      borderRadius: BorderRadius.vertical(
         bottom: Radius.circular(20),
       ),
       color: Colors.black,
@@ -69,15 +71,15 @@ class Home extends StatelessWidget {
   }
 
   Widget _topBar() {
-    return Row(
+    return const Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Text(
             'BIL MANT2A',
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
-        const CircleAvatar(
+        CircleAvatar(
           radius: 15,
           backgroundColor: Colors.red,
         )
@@ -86,12 +88,12 @@ class Home extends StatelessWidget {
   }
 
   Widget _tabBar() {
-    return TabBar(
-      labelPadding: const EdgeInsets.all(0),
+    return const TabBar(
+      labelPadding: EdgeInsets.all(0),
       labelColor: Colors.lightGreen,
       indicatorColor: Colors.white,
       unselectedLabelColor: Colors.white,
-      tabs: const [
+      tabs: [
         Tab(
           iconMargin: EdgeInsets.all(0),
           icon: Icon(Icons.explore),

@@ -1,3 +1,4 @@
+import 'package:bilmant2a/components/navbar.dart';
 import 'package:bilmant2a/components/post.dart';
 import 'package:bilmant2a/components/text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,9 +20,14 @@ class _HomePageState extends State<HomePage> {
       FirebaseFirestore.instance.collection("User Posts").add({
         'UserEmail': user.email,
         'Message': textController.text,
-        'TimeStamp': Timestamp.now()
+        'TimeStamp': Timestamp.now(),
+        'Likes': [],
       });
     }
+
+    setState(() {
+      textController.clear();
+    });
   }
 
   @override
@@ -86,7 +92,9 @@ class _HomePageState extends State<HomePage> {
                           final post = snapshot.data!.docs[index];
                           return PostWidget(
                               message: post['Message'],
-                              user: post['UserEmail']);
+                              user: post['UserEmail'],
+                              postId: post.id,
+                              likes: List<String>.from(post['Likes'] ?? []));
                         },
                       );
                     } else if (snapshot.hasError) {
