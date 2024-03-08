@@ -1,17 +1,13 @@
-import 'package:bilmant2a/components/navbar.dart';
 import 'package:bilmant2a/components/post.dart';
 import 'package:bilmant2a/components/text_field.dart';
-import 'package:bilmant2a/components/top_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:bilmant2a/components/top_bar.dart'; // Import the TopBar widget
-import 'package:flutter/material.dart';
-import 'package:bilmant2a/components/top_bar.dart'; // Import the TopBar widget
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  
+  final String postType; // New parameter for post type
+  const HomePage({Key? key, this.postType = 'explore'}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,14 +16,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
   final textController = TextEditingController();
+  String selectedPostType = 'explore';
 
-  void postSend() {
+  void postSend(String selectedPostType) {
     if (textController.text.isNotEmpty) {
       FirebaseFirestore.instance.collection("User Posts").add({
         'UserEmail': user.email,
         'Message': textController.text,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
+        'PostType': selectedPostType, // New field for post type
       });
     }
 
@@ -40,37 +38,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "BilMant2a",
-            style: TextStyle(color: Colors.white),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        backgroundColor: Colors.grey[900],
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-            icon: const Icon(
-              Icons.logout,
-              size: 30,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
       body: SafeArea(
         child: Column(
           children: [
-            // Wrap the TopBar widget with a Container and provide a specific height
-            Container(
-              height: 200, // Adjust the height as needed
-              child: TopBar(),
-            ),
             Padding(
               padding: const EdgeInsets.all(25.0),
               child: Row(
@@ -82,8 +52,23 @@ class _HomePageState extends State<HomePage> {
                       obscureText: false,
                     ),
                   ),
+                  DropdownButton<String>(
+                    value: selectedPostType,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedPostType = newValue!;
+                      });
+                    },
+                    items: <String>['explore', 'donations', 'volunteer']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                   IconButton(
-                    onPressed: postSend,
+                    onPressed: () => postSend(selectedPostType),
                     icon: const Icon(Icons.arrow_circle_up),
                   ),
                 ],
@@ -93,12 +78,14 @@ class _HomePageState extends State<HomePage> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("User Posts")
+                    .where('PostType', isEqualTo: widget.postType) // Filter by post type
                     .orderBy(
                       "TimeStamp",
                       descending: false,
                     )
                     .snapshots(),
                 builder: (context, snapshot) {
+                  
                   if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,

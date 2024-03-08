@@ -1,4 +1,3 @@
-import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +73,7 @@ class _NavBarState extends State<NavBar> {
         },
         physics: NeverScrollableScrollPhysics(), // Disable scrolling
         children: [
-          HomePage(),
+          TopBar(),
           Container(
               color: Colors.blue, child: Center(child: Text('Discover Page'))),
           Container(
