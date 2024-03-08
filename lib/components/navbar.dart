@@ -71,6 +71,7 @@ class _NavBarState extends State<NavBar> {
             _selectedIndex = index;
           });
         },
+        physics: NeverScrollableScrollPhysics(), // Disable scrolling
         children: [
           HomePage(),
           Container(
