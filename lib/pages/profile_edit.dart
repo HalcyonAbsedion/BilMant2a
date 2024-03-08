@@ -1,3 +1,4 @@
+import 'package:bilmant2a/pages/account_page.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePageEdit extends StatefulWidget {
@@ -11,6 +12,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       //background
       backgroundColor: Color.fromARGB(209, 0, 0, 0),
       body: SafeArea(

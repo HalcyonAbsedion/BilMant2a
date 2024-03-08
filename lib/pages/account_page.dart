@@ -1,4 +1,7 @@
+import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class Profile extends StatefulWidget {
   const Profile({
@@ -10,6 +13,20 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  File? _imageFile; // Define _imageFile
+
+  final ImagePicker _imagePicker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    XFile? pickedImage =
+        await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _imageFile = File(pickedImage.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,16 +45,6 @@ class _ProfileState extends State<Profile> {
             ),
           ),
         ],
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-          ),
-        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -52,12 +59,11 @@ class _ProfileState extends State<Profile> {
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      // backgroundImage: AssetImage("images/moustaphaImage1.jpg"),
+                      backgroundImage:
+                          _imageFile != null ? FileImage(_imageFile!) : null,
                     ),
                     InkWell(
-                      onTap: () {
-                        // Your function logic here
-                      },
+                      onTap: _pickImage, // Call the function to pick an image
                       child: CircleAvatar(
                         radius: 50,
                         backgroundColor: const Color.fromARGB(255, 255, 0, 0),
@@ -87,8 +93,15 @@ class _ProfileState extends State<Profile> {
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () {},
                   child: const Text("Edit Profile"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePageEdit(),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(0),
                     fixedSize: const Size(300, 50),

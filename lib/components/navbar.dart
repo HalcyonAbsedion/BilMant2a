@@ -1,3 +1,4 @@
+import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -79,8 +80,7 @@ class _NavBarState extends State<NavBar> {
           Container(
               color: Colors.green,
               child: Center(child: Text('Neighbors Page'))),
-          Container(
-              color: Colors.yellow, child: Center(child: Text('Account Page'))),
+          Profile(),
         ],
       ),
     );
