@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,22 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _ageController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _genderController = TextEditingController();
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmpasswordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _ageController.dispose();
+    _locationController.dispose();
+    _genderController.dispose();
     super.dispose();
   }
 
@@ -37,14 +50,35 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
+      UserCredential? userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim());
 
-      if (context.mounted) Navigator.pop(context);
+      createUser(userCredential);
+
+      if (userCredential.user != null && context.mounted) {
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       displayMessage(e.code);
+    }
+  }
+
+  Future createUser(UserCredential? userCredential) async {
+    if (userCredential != null && userCredential.user != null) {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userCredential.user!.email)
+          .set({
+        'email': userCredential.user!.email,
+        'first name': _firstNameController.text,
+        'last name': _lastNameController.text,
+        'age': int.parse(_ageController.text),
+        'location': _locationController.text,
+        'gender': _genderController.text,
+      });
     }
   }
 
@@ -108,11 +142,16 @@ class _RegisterPageState extends State<RegisterPage> {
               Column(
                 children: <Widget>[
                   // inputFile(label: "Username"),
-                  // inputFile(label: "First Name"),
-                  // inputFile(label: "Last Name"),
+                  inputFile(
+                      label: "First Name", controller: _firstNameController),
+                  inputFile(
+                      label: "Last Name", controller: _lastNameController),
                   inputFile(label: "Email", controller: _emailController),
-                  // inputFile(label: "Location / Area"),
-                  // inputFile(label: "Gender"),
+                  inputFile(
+                      label: "Location / Area",
+                      controller: _locationController),
+                  inputFile(label: "Gender", controller: _genderController),
+                  inputFile(label: "Age", controller: _ageController),
                   inputFile(
                       label: "Password",
                       controller: _passwordController,
