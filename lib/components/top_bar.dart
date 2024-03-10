@@ -1,27 +1,8 @@
+import 'package:bilmant2a/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Futura',
-        primarySwatch: Colors.teal,
-      ),
-      home: const Home(),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class TopBar extends StatelessWidget {
+  const TopBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +13,9 @@ class Home extends StatelessWidget {
         backgroundColor: Colors.grey,
         body: const TabBarView(
           children: [
-            Center(child: Text('Explore Page')),
-            Center(child: Text('Donations Page')),
-            Center(child: Text('Volunteer Page')),
+            HomePage(postType: 'explore'),
+            HomePage(postType: 'donations'),
+            HomePage(postType: 'volunteer'),
           ],
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:bilmant2a/auth/auth.dart';
-import 'package:bilmant2a/components/navbar.dart';
 import 'package:bilmant2a/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
