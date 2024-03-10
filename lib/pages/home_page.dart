@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  
   final String postType; // New parameter for post type
   const HomePage({Key? key, this.postType = 'explore'}) : super(key: key);
 
@@ -46,10 +45,13 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: [
                   Expanded(
-                    child: MyTextField(
-                      controller: textController,
-                      hintText: "What's on your mind",
-                      obscureText: false,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: MyTextField(
+                        controller: textController,
+                        hintText: "What's on your mind?",
+                        obscureText: false,
+                      ),
                     ),
                   ),
                   DropdownButton<String>(
@@ -78,14 +80,14 @@ class _HomePageState extends State<HomePage> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("User Posts")
-                    .where('PostType', isEqualTo: widget.postType) // Filter by post type
+                    .where('PostType',
+                        isEqualTo: widget.postType) // Filter by post type
                     .orderBy(
                       "TimeStamp",
                       descending: false,
                     )
                     .snapshots(),
                 builder: (context, snapshot) {
-                  
                   if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
