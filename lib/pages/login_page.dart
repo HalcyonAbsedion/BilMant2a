@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsets.only(left: 5.0),
+                              padding: const EdgeInsets.only(left: 5.0),
                               child: MyTextField(
                                   controller: emailTextController,
                                   hintText: 'Email',
@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsets.only(left: 5.0),
+                              padding: const EdgeInsets.only(left: 5.0),
                               child: MyTextField(
                                   controller: passwordTextController,
                                   hintText: 'Password',
@@ -220,10 +220,10 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return ForgotPasswordPage();
+                              return const ForgotPasswordPage();
                             }));
                           },
-                          child: Text(
+                          child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
                                 color: Colors.blue,
@@ -241,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: GestureDetector(
                       onTap: signIn,
                       child: Container(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.circular(12),
@@ -264,7 +264,7 @@ class _LoginPageState extends State<LoginPage> {
                     'Did not join the community yet?',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -274,19 +274,13 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 50.0),
                     child: GestureDetector(
                       onTap: widget.onTap,
-                      child: Container(
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Center(
-                          child: Text('Sign Up!',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              )),
+                      child: const Center(
+                        child: const Text(
+                          'Sign up!',
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
                         ),
                       ),
                     ),
