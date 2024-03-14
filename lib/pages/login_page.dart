@@ -275,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: GestureDetector(
                       onTap: widget.onTap,
                       child: const Center(
-                        child: const Text(
+                        child: Text(
                           'Sign up!',
                           style: TextStyle(
                               color: Colors.blue,
