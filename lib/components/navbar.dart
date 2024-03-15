@@ -34,7 +34,7 @@ class _NavBarState extends State<NavBar> {
     });
     _pageController.animateToPage(
       index,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.ease,
     );
   }
@@ -54,7 +54,7 @@ class _NavBarState extends State<NavBar> {
             gap: 8,
             onTabChange: _onTabChange,
             padding: EdgeInsets.all(16),
-            tabs: [
+            tabs: const [
               GButton(
                 icon: Icons.home,
                 text: 'Home',
@@ -73,15 +73,19 @@ class _NavBarState extends State<NavBar> {
             _selectedIndex = index;
           });
         },
-        physics: NeverScrollableScrollPhysics(), // Disable scrolling
+        physics: const NeverScrollableScrollPhysics(), // Disable scrolling
         children: [
-          TopBar(),
+          const TopBar(),
           Container(
-              color: Colors.blue, child: Center(child: Text('Discover Page'))),
+            color: Colors.blue,
+            child: const Center(
+              child: Text('Discover Page'),
+            ),
+          ),
           Container(
               color: Colors.green,
-              child: Center(child: Text('Neighbors Page'))),
-          Profile(),
+              child: const Center(child: Text('Neighbors Page'))),
+          const Profile(),
         ],
       ),
     );
