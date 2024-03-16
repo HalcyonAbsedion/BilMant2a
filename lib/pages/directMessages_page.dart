@@ -11,7 +11,14 @@ class DirectMessages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Direct Messages')),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Direct Messages',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: _buildUserList(),
     );
   }
@@ -40,22 +47,21 @@ class DirectMessages extends StatelessWidget {
     String s = userData['first name'] + " " + userData['last name'];
     String email = userData["email"].toString();
     String uid = userData["uid"].toString();
-    if(userData['email']!= _chatService.getCurrentUser()!.email){
+    if (userData['email'] != _chatService.getCurrentUser()!.email) {
       return UserTile(
-      text: s,
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChatPage(
-                receiverEmail: email,
-                receiverID: uid,
-              ),
-            ));
-      },
-    );
-    }
-    else{
+        text: s,
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatPage(
+                  receiverEmail: email,
+                  receiverID: uid,
+                ),
+              ));
+        },
+      );
+    } else {
       return Container();
     }
   }
