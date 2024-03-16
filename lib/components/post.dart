@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 class PostWidget extends StatefulWidget {
   final String message;
-  final String user;
+  final String userEmail;
   final String postId;
   final List<String> likes;
 
   const PostWidget(
       {super.key,
       required this.message,
-      required this.user,
+      required this.userEmail,
       required this.postId,
       required this.likes});
 
@@ -54,36 +54,68 @@ class _PostWidgetState extends State<PostWidget> {
       decoration: BoxDecoration(color: Colors.white),
       margin: EdgeInsets.only(top: 25, left: 25, right: 25),
       padding: EdgeInsets.all(25),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              //like button
-              LikeButton(
-                isLiked: isLiked,
-                onTap: toggleLike,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-
-              Text(widget.likes.length.toString()),
-            ],
-          ),
-          const SizedBox(width: 25),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.user,
+                widget.userEmail,
                 style: TextStyle(color: Colors.grey[500]),
               ),
               const SizedBox(height: 10),
               Text(widget.message)
             ],
-          )
+          ),
+          Row(
+            children: [
+              likeComponent(),
+              commentComponent(),
+              shareComponent(),
+            ],
+          ),
         ],
       ),
     );
   }
+
+  Widget likeComponent() {
+    return Container(
+      child: Row(
+        children: [
+          // Like button
+          LikeButton(
+            isLiked: isLiked,
+            onTap: toggleLike,
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          Text(widget.likes.length.toString()),
+        ],
+      ),
+    );
+  }
+  Widget commentComponent() {
+    return Container(
+      child: const Row(
+        children: [
+          IconButton(onPressed: null, icon: Icon(Icons.comment)),
+          Text("999"),
+        ],
+      ),
+    );
+  }
+ Widget shareComponent() {
+    return Container(
+      child: const Row(
+        children: [
+          IconButton(onPressed: null, icon: Icon(Icons.share)),
+          Text("999"),
+        ],
+      ),
+    );
+  }
+
 }
