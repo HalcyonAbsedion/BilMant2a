@@ -77,10 +77,10 @@ class _NavBarState extends State<NavBar> {
         physics: const NeverScrollableScrollPhysics(), // Disable scrolling
         children: [
           const TopBar(),
-          DirectMessages(),
           Container(
               color: Colors.green,
-              child: const Center(child: Text('Neighbors Page'))),
+              child: const Center(child: Text('Discover Page'))),
+          DirectMessages(),
           const Profile(),
         ],
       ),
