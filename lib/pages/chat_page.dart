@@ -1,3 +1,5 @@
+import 'package:bilmant2a/components/chat_bubble.dart';
+import 'package:bilmant2a/components/text_field.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +26,13 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(receiverEmail)),
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: Text(receiverEmail),
+          backgroundColor: const Color.fromARGB(255, 21, 60, 128),
+          foregroundColor: Colors.grey,
+          elevation: 0,
+        ),
         body: Column(
           children: [
             Expanded(
@@ -58,23 +66,31 @@ class ChatPage extends StatelessWidget {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
     bool isCurrentUser = data['senderID'] == _chatService.getCurrentUser()!.uid;
-    var alignment = isCurrentUser ? Alignment.centerRight: Alignment.centerLeft;
+    var alignment =
+        isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
 
     return Container(
-      alignment: alignment,
-      child: Text(data["message"].toString()));
+        alignment: alignment,
+        child:
+            ChatBubble(message: data["message"], isCurrentUser: isCurrentUser));
   }
 
   Widget _buildUserInput() {
     return Row(
       children: [
         Expanded(
-          child: TextField(
+          child: MyTextField(
             controller: _messageController,
             obscureText: false,
+            hintText: 'Type a message...',
           ),
         ),
-        IconButton(onPressed: sendMessage, icon: const Icon(Icons.arrow_upward))
+        IconButton(
+            onPressed: sendMessage,
+            icon: const Icon(
+              Icons.send,
+              color: Colors.blue,
+            ))
       ],
     );
   }
