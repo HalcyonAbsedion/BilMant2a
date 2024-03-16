@@ -78,6 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'age': int.parse(_ageController.text),
         'location': _locationController.text,
         'gender': _genderController.text,
+        'uid': userCredential.user!.uid,
       });
     }
   }
