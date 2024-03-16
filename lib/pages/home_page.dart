@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                         final post = snapshot.data!.docs[index];
                         return PostWidget(
                           message: post['Message'],
-                          user: post['UserEmail'],
+                          userEmail: post['UserEmail'],
                           postId: post.id,
                           likes: List<String>.from(post['Likes'] ?? []),
                         );
