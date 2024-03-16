@@ -1,4 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:bilmant2a/pages/account_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePageEdit extends StatefulWidget {
@@ -9,6 +14,37 @@ class ProfilePageEdit extends StatefulWidget {
 }
 
 class _ProfilePageEditState extends State<ProfilePageEdit> {
+  final currentUser = FirebaseAuth.instance.currentUser!;
+
+  final usersColl = FirebaseFirestore.instance.collection("Users");
+
+  Future<void> editField(String field) async {
+    String newValue = "";
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Edit " + field),
+        content: TextField(
+          autofocus: true,
+          onChanged: (value) {
+            newValue = value;
+          },
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context), child: Text("Cancel")),
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(newValue),
+              child: Text("Save")),
+        ],
+      ),
+    );
+
+    if (newValue.trim().length > 0) {
+      await usersColl.doc(currentUser.email).update({field: newValue.trim()});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,231 +53,117 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
         elevation: 0,
       ),
       //background
-      backgroundColor: Color.fromARGB(209, 0, 0, 0),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //image circle
-            Center(
-              child: Container(
-                height: 185,
-                width: 100,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      width: 4,
-                      color: Colors.white,
-                    )),
-              ),
-            ),
 
-            Container(
-              height: 1,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 50),
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("Users")
+            .doc(currentUser.email)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final userData = snapshot.data!.data() as Map<String, dynamic>;
+            return ListView(
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                Icon(Icons.person, size: 72),
+                Text(
+                  currentUser.email!,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 50,
+                ),
 
-            //username
-            Center(
-              child: Container(
-                child: Text(
-                  'Username:',
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+                //First name
+                Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text("First Name:"),
+                          IconButton(
+                              onPressed: () => editField("first name"),
+                              icon: Icon(Icons.settings))
+                        ],
+                      ),
+                      Text(userData['first name']),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            Center(
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            //First name
-            Center(
-              child: Container(
-                child: Text(
-                  'First Name:',
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+                //Last name
+                Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text("Last Name:"),
+                          IconButton(
+                              onPressed: () => editField("last name"),
+                              icon: Icon(Icons.settings))
+                        ],
+                      ),
+                      Text(userData['last name']),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            Center(
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            //Last name
-            Center(
-              child: Container(
-                child: Text(
-                  'Last Name:',
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+                //age
+                Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text("Age:"),
+                          IconButton(
+                              onPressed: () {}, icon: Icon(Icons.settings))
+                        ],
+                      ),
+                      Text('${userData['age'].toString()}'),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
 
-            Center(
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            //email
-            Center(
-              child: Container(
-                child: Text(
-                  'Email Address:',
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+                //bio
+                Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text("Bio:"),
+                          IconButton(
+                              onPressed: () {}, icon: Icon(Icons.settings))
+                        ],
+                      ),
+                      Text("sdfasdf"),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
 
-            Center(
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            //password
-            Center(
-              child: Container(
-                child: Text(
-                  'Password:',
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+                //location
+                Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text("Location:"),
+                          IconButton(
+                              onPressed: () {}, icon: Icon(Icons.settings))
+                        ],
+                      ),
+                      Text("lorem"),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            Center(
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            //location
-            Center(
-              child: Container(
-                child: Text(
-                  'Location:',
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            Center(
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            //dob
-            Center(
-              child: Container(
-                child: Text(
-                  'D.O.B:',
-                  textDirection: TextDirection.ltr,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            Center(
-              child: Container(
-                height: 30,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-          ],
-        ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error ${snapshot.error}'),
+            );
+          }
+          return const CircularProgressIndicator();
+        },
       ),
     );
   }
