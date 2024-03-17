@@ -51,7 +51,11 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
     return Container(
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 219, 223, 224),
+        border: Border.all(color: Colors.cyan),
+        borderRadius: BorderRadius.circular(12),
+      ),
       margin: EdgeInsets.only(top: 25, left: 25, right: 25),
       padding: EdgeInsets.all(25),
       child: Column(
@@ -97,6 +101,7 @@ class _PostWidgetState extends State<PostWidget> {
       ),
     );
   }
+
   Widget commentComponent() {
     return Container(
       child: const Row(
@@ -107,7 +112,8 @@ class _PostWidgetState extends State<PostWidget> {
       ),
     );
   }
- Widget shareComponent() {
+
+  Widget shareComponent() {
     return Container(
       child: const Row(
         children: [
@@ -117,5 +123,4 @@ class _PostWidgetState extends State<PostWidget> {
       ),
     );
   }
-
 }
