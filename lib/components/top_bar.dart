@@ -10,7 +10,7 @@ class TopBar extends StatelessWidget {
       length: 3, // Adjusted length to match the number of tabs
       child: Scaffold(
         appBar: _appBar(),
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.grey[300],
         body: const TabBarView(
           children: [
             HomePage(postType: 'explore'),
@@ -26,7 +26,6 @@ class TopBar extends StatelessWidget {
     return PreferredSize(
       preferredSize: const Size.fromHeight(120),
       child: Container(
-        margin: const EdgeInsets.only(top: 5),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: _boxDecoration(),
         child: SafeArea(
@@ -60,10 +59,6 @@ class TopBar extends StatelessWidget {
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
-        CircleAvatar(
-          radius: 15,
-          backgroundColor: Colors.red,
-        )
       ],
     );
   }

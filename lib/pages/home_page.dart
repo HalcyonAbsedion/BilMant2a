@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: MyTextField(
                         controller: textController,
-                        hintText: "What's on your mind?",
+                        hintText: "Post Something!",
                         obscureText: false,
                       ),
                     ),
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   IconButton(
                     onPressed: () => postSend(selectedPostType),
-                    icon: const Icon(Icons.arrow_circle_up),
+                    icon: const Icon(Icons.edit),
                   ),
                 ],
               ),
