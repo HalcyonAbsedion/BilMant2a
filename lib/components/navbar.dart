@@ -81,7 +81,10 @@ class _NavBarState extends State<NavBar> {
               color: Colors.green,
               child: const Center(child: Text('Discover Page'))),
           DirectMessages(),
-          const Profile(),
+          // Wrap Profile with Builder
+          Builder(
+            builder: (context) => Profile(),
+          ),
         ],
       ),
     );
