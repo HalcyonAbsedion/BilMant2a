@@ -1,63 +1,72 @@
-import 'package:bilmant2a/components/post.dart';
+import 'dart:io';
+
 import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p;
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile({super.key});
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  var file;
-
-  final currentUser = FirebaseAuth.instance.currentUser!;
+  String firstname = "";
+  String lastName = "";
+  String imageURL = "";
 
   @override
   void initState() {
     super.initState();
-  }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails() async {
-    return await FirebaseFirestore.instance
-        .collection("Users")
-        .doc(currentUser!.email)
-        .get();
-  }
-
-  Future<List<Map<String, dynamic>>> getUserPosts(String? userEmail) async {
-    if (userEmail == null) {
-      // Handle the case where userEmail is null
-      return [];
+    print("HELEJSLFJSDFDSFSDFDSFDS");
+    // Check if user is authenticated
+    if (FirebaseAuth.instance.currentUser != null) {
+      // If authenticated, fetch user data
+      getName();
+    } else {
+      // If not authenticated, handle accordingly
+      // For example, navigate back to login screen
+      print("User not authenticated");
     }
+  }
 
+  void getName() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection("User Posts")
-              .where('UserEmail', isEqualTo: userEmail)
-              .get();
+      print("Current user UID: ${FirebaseAuth.instance.currentUser!.uid}");
+      DocumentSnapshot snap = await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser!.email)
+          .get();
 
-      List<Map<String, dynamic>> userPosts =
-          querySnapshot.docs.map((doc) => doc.data()).toList();
-      return userPosts;
-    } catch (error) {
-      // Handle any errors that occur during the process
-      print("Error fetching user posts: $error");
-      return [];
+      print("Snapshot data: ${snap.data()}");
+
+      if (snap.exists) {
+        setState(() {
+          firstname = (snap.data() as Map<String, dynamic>)['first name'];
+          lastName = (snap.data() as Map<String, dynamic>)['last name'];
+
+          imageURL = (snap.data() as Map<String, dynamic>)['imageURL'] ?? "";
+        });
+      } else {
+        print("Document does not exist");
+      }
+    } catch (e) {
+      print("Error retrieving document: $e");
     }
   }
+
+  var file;
+
+  final currentUser = FirebaseAuth.instance.currentUser!;
 
   final ImagePicker _imagePicker = ImagePicker();
 
@@ -198,71 +207,23 @@ class _ProfileState extends State<Profile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // const Icon(
-              //           Icons.edit,
-              //           size: 25,
-              //           color: Color.fromARGB(255, 255, 255, 255),)
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                    future: getUserDetails(),
-                    builder: (context,
-                        AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                            snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text("Error: ${snapshot.error}");
-                      } else {
-                        Map<String, dynamic>? user = snapshot.data!.data();
-                        String? imageUrl =
-                            user?['imageURL']; // Extract the image URL
-                        return InkWell(
-                          onTap: _selectPhoto,
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: imageUrl != null
-                                ? NetworkImage(imageUrl)
-                                : null,
-                            // Optionally, you can provide a placeholder image here
-                            // Placeholder can be a default user avatar or a loading indicator
-                            // backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : AssetImage('assets/default_avatar.png'),
-                          ),
-                        );
-                      }
-                    },
+                  InkWell(
+                    onTap: _selectPhoto,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage:
+                          imageURL != "" ? NetworkImage(imageURL) : null,
+                      // Optionally, you can provide a placeholder image here
+                      // Placeholder can be a default user avatar or a loading indicator
+                      // backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : AssetImage('assets/default_avatar.png'),
+                    ),
                   )
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  future: getUserDetails(),
-                  builder: (context,
-                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text("Error: ${snapshot.error}");
-                    } else {
-                      Map<String, dynamic>? user = snapshot.data!.data();
-                      if (user != null && user.containsKey('first name')) {
-                        return Text(
-                          "${user['first name']} ${user['last name']}",
-                          style: Theme.of(context).textTheme.headline6,
-                        );
-                      } else {
-                        return Text('Invalid user data');
-                      }
-                    }
-                  },
-                ),
-              ),
-
+              Text("${firstname} ${lastName}"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -301,44 +262,6 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               const SizedBox(height: 16),
-              StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("User Posts")
-                    .where(
-                      'UserEmail',
-                      isEqualTo: '${currentUser.email}', // Filter by user email
-                    )
-                    .orderBy(
-                      "TimeStamp",
-                      descending: true,
-                    )
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  } else {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final post = snapshot.data!.docs[index];
-                        return PostWidget(
-                          message: post['Message'],
-                          userEmail: post['UserEmail'],
-                          postId: post.id,
-                          likes: List<String>.from(post['Likes'] ?? []),
-                        );
-                      },
-                    );
-                  }
-                },
-              ),
             ],
           ),
         ),
