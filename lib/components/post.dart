@@ -52,7 +52,7 @@ class _PostWidgetState extends State<PostWidget> {
     // ignore: prefer_const_constructors
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 219, 223, 224),
+        color: Color.fromARGB(148, 204, 204, 204),
         border: Border.all(color: Colors.cyan),
         borderRadius: BorderRadius.circular(12),
       ),

@@ -13,7 +13,8 @@ class UserTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.grey,
           border: Border.all(
-            color: Colors.cyan,
+            color: Colors.white,
+            width: 1,
           ),
           borderRadius: BorderRadius.circular(12),
         ),

@@ -272,24 +272,31 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
               const SizedBox(height: 8),
-              ElevatedButton(
-                child: const Text("Edit Profile"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfilePageEdit(),
+              Container(
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.white)),
+                child: ElevatedButton(
+                  child: const Text(
+                    "Edit Profile",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePageEdit(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    fixedSize: const Size(300, 50),
+                    backgroundColor: Colors.grey[300],
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(0),
-                  fixedSize: const Size(300, 50),
-                  backgroundColor: Colors.red,
-                  textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -345,7 +352,7 @@ class _ProfileState extends State<Profile> {
         Text(
           value,
           style: const TextStyle(
-            color: Colors.red,
+            color: Colors.black,
             fontWeight: FontWeight.w600,
             fontSize: 18,
           ),
@@ -354,7 +361,7 @@ class _ProfileState extends State<Profile> {
         Text(
           label,
           style: const TextStyle(
-            color: Colors.red,
+            color: Colors.black,
             fontWeight: FontWeight.w600,
             fontSize: 18,
           ),

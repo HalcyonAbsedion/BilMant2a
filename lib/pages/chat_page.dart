@@ -26,11 +26,11 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 24, 24, 24),
         appBar: AppBar(
           title: Text(receiverEmail),
-          backgroundColor: const Color.fromARGB(255, 21, 60, 128),
-          foregroundColor: Colors.grey,
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
           elevation: 0,
         ),
         body: Column(
@@ -85,12 +85,21 @@ class ChatPage extends StatelessWidget {
             hintText: 'Type a message...',
           ),
         ),
-        IconButton(
-            onPressed: sendMessage,
-            icon: const Icon(
-              Icons.send,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
               color: Colors.blue,
-            ))
+            ),
+            child: IconButton(
+                onPressed: sendMessage,
+                icon: const Icon(
+                  Icons.send,
+                  color: Colors.white,
+                )),
+          ),
+        )
       ],
     );
   }
