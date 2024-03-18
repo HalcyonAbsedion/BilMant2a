@@ -86,8 +86,8 @@ class _ProfileState extends State<Profile> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.camera),
-                    title: Text("Picks a File"),
+                    leading: Icon(Icons.photo),
+                    title: Text("Choose a File"),
                     onTap: () {
                       Navigator.of(context).pop();
                       _picksImage(ImageSource.gallery);
@@ -194,7 +194,7 @@ class _ProfileState extends State<Profile> {
             child: IconButton(
               onPressed: () {},
               icon: const Icon(
-                Icons.share,
+                Icons.help,
                 color: Colors.black,
               ),
             ),
@@ -223,16 +223,22 @@ class _ProfileState extends State<Profile> {
                   )
                 ],
               ),
-              Text("${firstname} ${lastName}"),
+              Text(
+                "${firstname} ${lastName}",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildInfoColumn("16", "Friends"),
                   _buildInfoColumn("16", "Connections"),
                   _buildInfoColumn("16", "Posts"),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               Container(
                 decoration:
                     BoxDecoration(border: Border.all(color: Colors.white)),
@@ -260,6 +266,12 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                color: Colors.grey,
+                width: double.infinity,
+                height: 1,
               ),
               const SizedBox(height: 16),
             ],
