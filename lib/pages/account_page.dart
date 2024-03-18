@@ -227,13 +227,17 @@ class _ProfileState extends State<Profile> {
                 "${firstname} ${lastName}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontSize: 20,
                 ),
               ),
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildInfoColumn("16", "Friends"),
+                  _buildInfoColumn(
+                    "16",
+                    "Friends",
+                  ),
                   _buildInfoColumn("16", "Connections"),
                   _buildInfoColumn("16", "Posts"),
                 ],
