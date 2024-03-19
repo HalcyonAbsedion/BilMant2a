@@ -45,6 +45,7 @@ dependencies:
   flutter_image_compress: ^1.0.0
   firebase_storage: 11.6.9
   provider: ^5.0.0
+  flutter_animate: ^4.5.0
 
 dev_dependencies:
   flutter_test:

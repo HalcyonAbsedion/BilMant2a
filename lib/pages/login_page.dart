@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../components/text_field.dart';
 import '../pages/forgot_pw_page.dart';
@@ -73,9 +74,9 @@ class _LoginPageState extends State<LoginPage> {
                       // border: Border.all(color: Colors.blueGrey),
                       borderRadius: BorderRadius.circular(120),
                     ),
-                    child: const Column(
+                    child: Column(
                       children: [
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -100,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ],
                         ),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -110,14 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ],
                         ),
-                        Text(
+                        const Text(
                           'BilMant2a',
                           style: TextStyle(
                             color: Colors.blueGrey,
                             fontWeight: FontWeight.bold,
                             fontSize: 40,
                           ),
-                        ),
+                        ).animate().fadeIn(duration: 1500.ms),
                       ],
                     ),
                   ),
@@ -131,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontWeight: FontWeight.bold,
                       fontSize: 30,
                     ),
-                  ),
+                  ).animate().fadeIn(duration: 1500.ms, delay: 800.ms),
                   const SizedBox(height: 10),
 
                   //Welcome text part 2
@@ -142,37 +143,40 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
-                  ),
+                  ).animate().fadeIn(duration: 1500.ms, delay: 1200.ms),
                   const SizedBox(height: 30),
 
                   //email textfield
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(
-                            Icons.email,
-                            size: 30,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: MyTextField(
-                                  controller: emailTextController,
-                                  hintText: 'Email',
-                                  obscureText: false),
+                  Animate(
+                    effects: [FadeEffect(duration: 1000.ms, delay: 1500.ms)],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 10,
                             ),
-                          ),
-                        ],
+                            const Icon(
+                              Icons.email,
+                              size: 30,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: MyTextField(
+                                    controller: emailTextController,
+                                    hintText: 'Email',
+                                    obscureText: false),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -180,33 +184,36 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
 
                   //password textfield
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Icon(
-                            Icons.lock,
-                            size: 30,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: MyTextField(
-                                  controller: passwordTextController,
-                                  hintText: 'Password',
-                                  obscureText: true),
+                  Animate(
+                    effects: [FadeEffect(duration: 1000.ms, delay: 1800.ms)],
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 10,
                             ),
-                          ),
-                        ],
+                            const Icon(
+                              Icons.lock,
+                              size: 30,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: MyTextField(
+                                    controller: passwordTextController,
+                                    hintText: 'Password',
+                                    obscureText: true),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
