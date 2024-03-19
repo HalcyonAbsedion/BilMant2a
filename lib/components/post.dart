@@ -50,6 +50,8 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
+    final _textController = TextEditingController();
+
     return Container(
       decoration: BoxDecoration(
         color: Color.fromARGB(148, 204, 204, 204),
@@ -69,7 +71,7 @@ class _PostWidgetState extends State<PostWidget> {
                 style: TextStyle(color: Colors.grey[500]),
               ),
               const SizedBox(height: 10),
-              Text(widget.message)
+              Text(widget.message),
             ],
           ),
           Row(
@@ -78,6 +80,29 @@ class _PostWidgetState extends State<PostWidget> {
               commentComponent(),
               shareComponent(),
             ],
+          ),
+          SizedBox(
+            height: 50,
+            child: TextField(
+              controller: _textController,
+              style: TextStyle(),
+              decoration: InputDecoration(
+                hintText: 'Comment Here...',
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.cyan, width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(color: Colors.grey, width: 2.0)),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _textController.clear();
+                  },
+                  icon: Icon(Icons.clear),
+                ),
+              ),
+            ),
           ),
         ],
       ),
