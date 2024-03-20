@@ -47,27 +47,50 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: MyTextField(
+                      child: TextField(
                         controller: textController,
-                        hintText: "Post Something!",
+                        decoration: InputDecoration(
+                          hintText: "Post Something!",
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide:
+                                BorderSide(color: Colors.cyan, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 2.0)),
+                        ),
                         obscureText: false,
                       ),
                     ),
                   ),
-                  DropdownButton<String>(
-                    value: selectedPostType,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedPostType = newValue!;
-                      });
-                    },
-                    items: <String>['explore', 'donations', 'volunteer']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedPostType,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedPostType = newValue!;
+                        });
+                      },
+                      items: <String>['explore', 'donations', 'volunteer']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              value,
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                   IconButton(
                     onPressed: () => postSend(selectedPostType),
