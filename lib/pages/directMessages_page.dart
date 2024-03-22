@@ -13,10 +13,33 @@ class DirectMessages extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text(
-          'Direct Messages',
-          style: TextStyle(color: Colors.white),
+        backgroundColor: Colors.black,
+        toolbarHeight: 150,
+        title: const Column(
+          children: [
+            Text(
+              "Logo Here",
+              style: TextStyle(
+                color: Color.fromARGB(47, 202, 202, 202),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.chat,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  'Direct Messages',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
       body: _buildUserList(),

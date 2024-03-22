@@ -28,10 +28,32 @@ class ChatPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 24, 24, 24),
         appBar: AppBar(
-          title: Text(receiverEmail),
-          backgroundColor: Colors.blue,
+          shape: Border(
+            bottom: BorderSide(
+              color: const Color.fromARGB(139, 255, 255, 255),
+              width: 1,
+            ),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  receiverEmail,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              CircleAvatar(
+                backgroundColor: Colors.white,
+              ),
+            ],
+          ),
+          backgroundColor: Colors.black,
           foregroundColor: Colors.white,
-          elevation: 0,
+          elevation: 4,
         ),
         body: Column(
           children: [
@@ -79,10 +101,21 @@ class ChatPage extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: MyTextField(
+          child: TextField(
             controller: _messageController,
             obscureText: false,
-            hintText: 'Type a message...',
+            decoration: InputDecoration(
+              filled: true,
+              hintText: 'Type a message...',
+              focusedBorder: OutlineInputBorder(
+                borderSide: new BorderSide(color: Colors.cyan, width: 1),
+                borderRadius: new BorderRadius.circular(25.7),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: new BorderSide(color: Colors.white),
+                borderRadius: new BorderRadius.circular(25.7),
+              ),
+            ),
           ),
         ),
         Padding(

@@ -25,12 +25,11 @@ class UserTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.person,
-              )),
+                  color: Colors.blueGrey,
+                  shape: BoxShape.rectangle,
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10)),
+              child: const Icon(Icons.person, color: Colors.white)),
           const SizedBox(
             width: 20,
           ),
