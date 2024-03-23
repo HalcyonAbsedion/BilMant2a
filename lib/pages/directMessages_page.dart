@@ -67,7 +67,7 @@ class DirectMessages extends StatelessWidget {
 
   Widget _buildUserListItem(
       Map<String, dynamic> userData, BuildContext context) {
-    String s = userData['first name'] + " " + userData['last name'];
+    String s = userData['firstName'] + " " + userData['lastName'];
     String email = userData["email"].toString();
     String uid = userData["uid"].toString();
     if (userData['email'] != _chatService.getCurrentUser()!.email) {

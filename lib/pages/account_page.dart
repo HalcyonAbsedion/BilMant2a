@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bilmant2a/pages/profile_edit.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,6 +11,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -44,15 +46,15 @@ class _ProfileState extends State<Profile> {
       print("Current user UID: ${FirebaseAuth.instance.currentUser!.uid}");
       DocumentSnapshot snap = await FirebaseFirestore.instance
           .collection("Users")
-          .doc(FirebaseAuth.instance.currentUser!.email)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
 
       print("Snapshot data: ${snap.data()}");
 
       if (snap.exists) {
         setState(() {
-          firstname = (snap.data() as Map<String, dynamic>)['first name'];
-          lastName = (snap.data() as Map<String, dynamic>)['last name'];
+          firstname = (snap.data() as Map<String, dynamic>)['firstName'];
+          lastName = (snap.data() as Map<String, dynamic>)['lastName'];
 
           imageURL = (snap.data() as Map<String, dynamic>)['imageURL'] ?? "";
         });
@@ -171,6 +173,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -223,6 +226,7 @@ class _ProfileState extends State<Profile> {
                   )
                 ],
               ),
+              Text(userProvider.getUser.firstName),
               Text(
                 "${firstname} ${lastName}",
                 style: TextStyle(
