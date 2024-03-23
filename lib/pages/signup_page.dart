@@ -1,3 +1,4 @@
+import 'package:bilmant2a/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,7 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final _locationController = TextEditingController();
   final _genderController = TextEditingController();
-  final _dateController = TextEditingController();
+  final _birthDateController = TextEditingController();
 
   @override
   void dispose() {
@@ -50,37 +51,15 @@ class _RegisterPageState extends State<RegisterPage> {
       displayMessage("Passwords don't match!");
       return;
     }
-
-    try {
-      UserCredential? userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: _passwordController.text.trim());
-
-      createUser(userCredential);
-
-      if (userCredential.user != null && context.mounted) {
-        Navigator.pop(context);
-      }
-    } on FirebaseAuthException catch (e) {
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text.trim(),
+        birthDate: _birthDateController.text,
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        gender: _genderController.text.trim().toLowerCase() == 'male',
+        password: _passwordController.text.trim());
+    if (res == "success") {
       Navigator.pop(context);
-      displayMessage(e.code);
-    }
-  }
-
-  Future createUser(UserCredential? userCredential) async {
-    if (userCredential != null && userCredential.user != null) {
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userCredential.user!.email)
-          .set({
-        'email': userCredential.user!.email,
-        'first name': _firstNameController.text,
-        'last name': _lastNameController.text,
-        'location': _locationController.text,
-        'gender': _genderController.text,
-        'uid': userCredential.user!.uid,
-      });
     }
   }
 
@@ -153,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _locationController),
                   inputFile(label: "Gender", controller: _genderController),
                   TextField(
-                    controller: _dateController,
+                    controller: _birthDateController,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.calendar_today_rounded),
                       labelText: "Birthdate",
@@ -169,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       if (pickedate != null) {
                         setState(() {
-                          _dateController.text =
+                          _birthDateController.text =
                               DateFormat("dd-MM-yyyy").format(pickedate);
                         });
                       }

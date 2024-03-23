@@ -11,7 +11,7 @@ class AuthMethods {
     User currentUser = _auth.currentUser!;
 
     DocumentSnapshot documentSnapshot =
-        await _firestore.collection('users').doc(currentUser.uid).get();
+        await _firestore.collection('Users').doc(currentUser.uid).get();
 
     return model.User.fromSnap(documentSnapshot);
   }
@@ -24,8 +24,7 @@ class AuthMethods {
     required String firstName,
     required String lastName,
     required String birthDate,
-    required String gender,
-
+    required bool gender,
   }) async {
     String res = "Some error Occurred";
     try {
@@ -33,8 +32,7 @@ class AuthMethods {
           password.isNotEmpty ||
           firstName.isNotEmpty ||
           lastName.isNotEmpty||
-          birthDate.isNotEmpty||
-          gender.isNotEmpty) {
+          birthDate.isNotEmpty) {
         // registering user in auth with email and password
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
@@ -61,12 +59,9 @@ class AuthMethods {
           organizations: [], // Add empty list for organizations
           ownerId: cred.user!.uid
         );
-
-
-
         // adding user in our database
         await _firestore
-            .collection("users")
+            .collection("Users")
             .doc(cred.user!.uid)
             .set(user.toJson());
 
