@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-import 'package:bilmant2a/services/storage_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bilmant2a/models/user.dart' as model;
