@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -18,9 +19,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmpasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _ageController = TextEditingController();
+
   final _locationController = TextEditingController();
   final _genderController = TextEditingController();
+  final _dateController = TextEditingController();
 
   @override
   void dispose() {
@@ -29,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _confirmpasswordController.dispose();
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _ageController.dispose();
+
     _locationController.dispose();
     _genderController.dispose();
     super.dispose();
@@ -75,7 +77,6 @@ class _RegisterPageState extends State<RegisterPage> {
         'email': userCredential.user!.email,
         'first name': _firstNameController.text,
         'last name': _lastNameController.text,
-        'age': int.parse(_ageController.text),
         'location': _locationController.text,
         'gender': _genderController.text,
         'uid': userCredential.user!.uid,
@@ -142,7 +143,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               Column(
                 children: <Widget>[
-                  // inputFile(label: "Username"),
                   inputFile(
                       label: "First Name", controller: _firstNameController),
                   inputFile(
@@ -152,7 +152,33 @@ class _RegisterPageState extends State<RegisterPage> {
                       label: "Location / Area",
                       controller: _locationController),
                   inputFile(label: "Gender", controller: _genderController),
-                  inputFile(label: "Age", controller: _ageController),
+                  TextField(
+                    controller: _dateController,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.calendar_today_rounded),
+                      labelText: "Birthdate",
+                      border: InputBorder.none,
+                    ),
+                    onTap: () async {
+                      DateTime? pickedate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1905),
+                        lastDate: DateTime.now(),
+                      );
+
+                      if (pickedate != null) {
+                        setState(() {
+                          _dateController.text =
+                              DateFormat("dd-MM-yyyy").format(pickedate);
+                        });
+                      }
+                    },
+                    readOnly: true,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   inputFile(
                       label: "Password",
                       controller: _passwordController,
@@ -215,10 +241,11 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-Widget inputFile(
-    {required String label,
-    bool obscureText = false,
-    required TextEditingController controller}) {
+Widget inputFile({
+  required String label,
+  bool obscureText = false,
+  required TextEditingController controller,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
