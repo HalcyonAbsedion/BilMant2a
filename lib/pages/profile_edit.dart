@@ -65,9 +65,16 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
             return ListView(
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
-                Icon(Icons.person, size: 72),
+                Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color.fromARGB(68, 3, 136, 244),
+                    ),
+                    child: Icon(Icons.person, size: 72)),
                 Text(
                   currentUser.email!,
                   textAlign: TextAlign.center,
@@ -84,31 +91,38 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                       Row(
                         children: [
                           Text("First Name:"),
-                          IconButton(
+                          Container(
+                            child: IconButton(
                               onPressed: () => editField("first name"),
                               icon: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.blue,
-                                  ),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  )))
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.blue,
+                                ),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              userData['first name'],
+                            ),
+                          ),
                         ],
                       ),
-                      Container(
-                          width: 100,
-                          height: 50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(userData['first name'])),
                     ],
                   ),
                 ),
@@ -120,30 +134,35 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                         children: [
                           Text("Last Name:"),
                           IconButton(
-                              onPressed: () => editField("last name"),
-                              icon: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.blue,
-                                  ),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  )))
+                            onPressed: () => editField("last name"),
+                            icon: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.blue,
+                              ),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              userData['last name'],
+                            ),
+                          ),
                         ],
                       ),
-                      Container(
-                          width: 100,
-                          height: 50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(userData['last name'])),
                     ],
                   ),
                 ),
@@ -155,30 +174,33 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                         children: [
                           Text("Age:"),
                           IconButton(
-                              onPressed: () {},
-                              icon: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.blue,
-                                  ),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  )))
+                            onPressed: () {},
+                            icon: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.blue,
+                              ),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text('${userData['age'].toString()}'),
+                          ),
                         ],
                       ),
-                      Container(
-                          width: 100,
-                          height: 50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text('${userData['age'].toString()}')),
                     ],
                   ),
                 ),
@@ -191,30 +213,33 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                         children: [
                           Text("Bio:"),
                           IconButton(
-                              onPressed: () {},
-                              icon: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.blue,
-                                  ),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  )))
+                            onPressed: () {},
+                            icon: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.blue,
+                              ),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text("sa7"),
+                          ),
                         ],
                       ),
-                      Container(
-                          width: 100,
-                          height: 50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text("sa7")),
                     ],
                   ),
                 ),
@@ -227,30 +252,32 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                         children: [
                           Text("Location:"),
                           IconButton(
-                              onPressed: () {},
-                              icon: Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.blue,
-                                  ),
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  )))
+                            onPressed: () {},
+                            icon: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.blue,
+                              ),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                              width: 100,
+                              height: 50,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text("lorem")),
                         ],
                       ),
-                      Container(
-                          width: 100,
-                          height: 50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            border: Border.all(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text("lorem")),
                     ],
                   ),
                 ),
