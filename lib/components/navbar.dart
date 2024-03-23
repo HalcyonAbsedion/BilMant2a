@@ -2,9 +2,11 @@ import 'package:bilmant2a/components/top_bar.dart';
 import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/directMessages_page.dart';
 import 'package:bilmant2a/pages/home_page.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -21,6 +23,13 @@ class _NavBarState extends State<NavBar> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    addData();
+  }
+
+  addData() async {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    await userProvider.refreshUser();
   }
 
   @override
