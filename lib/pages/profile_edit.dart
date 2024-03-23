@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:bilmant2a/pages/account_page.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePageEdit extends StatefulWidget {
   const ProfilePageEdit({Key? key}) : super(key: key);
@@ -42,6 +44,9 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
 
     if (newValue.trim().length > 0) {
       await usersColl.doc(currentUser.uid).update({field: newValue.trim()});
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      await userProvider.refreshUser();
     }
   }
 

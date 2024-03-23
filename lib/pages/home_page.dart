@@ -1,8 +1,10 @@
 import 'package:bilmant2a/components/post.dart';
 import 'package:bilmant2a/components/text_field.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   final String postType; // New parameter for post type
@@ -13,6 +15,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    addData();
+  }
+
+  addData() async {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    await userProvider.refreshUser();
+  }
+
   final user = FirebaseAuth.instance.currentUser!;
   final textController = TextEditingController();
   String selectedPostType = 'explore';

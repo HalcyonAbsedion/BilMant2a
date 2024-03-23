@@ -23,13 +23,6 @@ class _NavBarState extends State<NavBar> {
   void initState() {
     super.initState();
     _pageController = PageController();
-    addData();
-  }
-
-  addData() async {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
-    await userProvider.refreshUser();
   }
 
   @override
