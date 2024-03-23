@@ -21,49 +21,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String firstname = "";
-  String lastName = "";
-  String imageURL = "";
-
   @override
   void initState() {
     super.initState();
-
-    print("HELEJSLFJSDFDSFSDFDSFDS");
-    // Check if user is authenticated
-    if (FirebaseAuth.instance.currentUser != null) {
-      // If authenticated, fetch user data
-      getName();
-    } else {
-      // If not authenticated, handle accordingly
-      // For example, navigate back to login screen
-      print("User not authenticated");
-    }
-  }
-
-  void getName() async {
-    try {
-      print("Current user UID: ${FirebaseAuth.instance.currentUser!.uid}");
-      DocumentSnapshot snap = await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
-
-      print("Snapshot data: ${snap.data()}");
-
-      if (snap.exists) {
-        setState(() {
-          firstname = (snap.data() as Map<String, dynamic>)['firstName'];
-          lastName = (snap.data() as Map<String, dynamic>)['lastName'];
-
-          imageURL = (snap.data() as Map<String, dynamic>)['imageURL'] ?? "";
-        });
-      } else {
-        print("Document does not exist");
-      }
-    } catch (e) {
-      print("Error retrieving document: $e");
-    }
   }
 
   var file;
@@ -151,9 +111,9 @@ class _ProfileState extends State<Profile> {
     try {
       await FirebaseFirestore.instance
           .collection('Users')
-          .doc(currentUser!.email)
+          .doc(currentUser!.uid)
           .update({
-        'imageURL': imageUrl,
+        'photoUrl': imageUrl,
       });
     } catch (error) {
       print('Error updating user image: $error');
@@ -217,8 +177,9 @@ class _ProfileState extends State<Profile> {
                     onTap: _selectPhoto,
                     child: CircleAvatar(
                       radius: 50,
-                      backgroundImage:
-                          imageURL != "" ? NetworkImage(imageURL) : null,
+                      backgroundImage: userProvider.getUser.photoUrl != ""
+                          ? NetworkImage(userProvider.getUser.photoUrl)
+                          : null,
                       // Optionally, you can provide a placeholder image here
                       // Placeholder can be a default user avatar or a loading indicator
                       // backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : AssetImage('assets/default_avatar.png'),
@@ -226,9 +187,8 @@ class _ProfileState extends State<Profile> {
                   )
                 ],
               ),
-              Text(userProvider.getUser.firstName),
               Text(
-                "${firstname} ${lastName}",
+                "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,

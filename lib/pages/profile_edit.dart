@@ -41,7 +41,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
     );
 
     if (newValue.trim().length > 0) {
-      await usersColl.doc(currentUser.email).update({field: newValue.trim()});
+      await usersColl.doc(currentUser.uid).update({field: newValue.trim()});
     }
   }
 
@@ -57,7 +57,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection("Users")
-            .doc(currentUser.email)
+            .doc(currentUser.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -93,7 +93,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                           Text("First Name:"),
                           Container(
                             child: IconButton(
-                              onPressed: () => editField("first name"),
+                              onPressed: () => editField("firstName"),
                               icon: Container(
                                 height: 30,
                                 width: 30,
@@ -118,7 +118,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              userData['first name'],
+                              userData['firstName'],
                             ),
                           ),
                         ],
@@ -134,7 +134,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                         children: [
                           Text("Last Name:"),
                           IconButton(
-                            onPressed: () => editField("last name"),
+                            onPressed: () => editField("lastName"),
                             icon: Container(
                               height: 30,
                               width: 30,
@@ -158,7 +158,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
-                              userData['last name'],
+                              userData['lastName'],
                             ),
                           ),
                         ],
