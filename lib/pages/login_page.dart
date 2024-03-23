@@ -246,7 +246,7 @@ class _LoginPageState extends State<LoginPage> {
                                           BorderSide(color: Colors.white),
                                     ),
                                   ),
-                                  obscureText: false,
+                                  obscureText: true,
                                 ),
                               ),
                             ),
