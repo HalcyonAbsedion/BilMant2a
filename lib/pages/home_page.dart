@@ -40,63 +40,74 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        controller: textController,
-                        decoration: InputDecoration(
-                          hintText: "Post Something!",
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide:
-                                BorderSide(color: Colors.cyan, width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.cyan,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: textController,
+                          decoration: InputDecoration(
+                            hintText: "Post Something!",
+                            focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide:
-                                  BorderSide(color: Colors.grey, width: 2.0)),
+                              borderSide: const BorderSide(
+                                  color: Colors.cyan, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(
+                                    color: Colors.grey, width: 2.0)),
+                          ),
+                          obscureText: false,
                         ),
-                        obscureText: false,
                       ),
                     ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: DropdownButton<String>(
-                      value: selectedPostType,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedPostType = newValue!;
-                        });
-                      },
-                      items: <String>['explore', 'donations', 'volunteer']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              value,
-                              style: TextStyle(color: Colors.grey),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: DropdownButton<String>(
+                        value: selectedPostType,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedPostType = newValue!;
+                          });
+                        },
+                        items: <String>['explore', 'donations', 'volunteer']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                value,
+                                style: const TextStyle(color: Colors.grey),
+                              ),
                             ),
-                          ),
-                        );
-                      }).toList(),
+                          );
+                        }).toList(),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () => postSend(selectedPostType),
-                    icon: const Icon(Icons.edit),
-                  ),
-                ],
+                    IconButton(
+                      onPressed: () => postSend(selectedPostType),
+                      icon: const Icon(Icons.edit),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(

@@ -169,10 +169,29 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
-                                child: MyTextField(
-                                    controller: emailTextController,
+                                child: TextField(
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                  controller: emailTextController,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
                                     hintText: 'Email',
-                                    obscureText: false),
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                  ),
+                                  obscureText: false,
+                                ),
                               ),
                             ),
                           ],
@@ -206,10 +225,29 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
-                                child: MyTextField(
-                                    controller: passwordTextController,
+                                child: TextField(
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                  controller: passwordTextController,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
                                     hintText: 'Password',
-                                    obscureText: true),
+                                    hintStyle: const TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                  ),
+                                  obscureText: true,
+                                ),
                               ),
                             ),
                           ],
