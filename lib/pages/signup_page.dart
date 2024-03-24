@@ -15,6 +15,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  String _selectedGender = 'Male';
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
@@ -38,41 +39,76 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void signUp() async {
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+  OverlayEntry? _overlayEntry;
+  bool _isLoading = false;
 
-    if (_passwordController.text != _confirmpasswordController.text) {
-      Navigator.pop(context);
-      displayMessage("Passwords don't match!");
-      return;
-    }
-    String res = await AuthMethods().signUpUser(
+  void signUp() async {
+    if (_isLoading) return;
+    _isLoading = true;
+
+    try {
+      _showProgressIndicator();
+
+      if (_passwordController.text != _confirmpasswordController.text) {
+        _hideProgressIndicator();
+        _isLoading = false;
+        displayMessage("Passwords don't match!");
+        return;
+      }
+
+      String res = await AuthMethods().signUpUser(
         email: _emailController.text.trim(),
         birthDate: _birthDateController.text,
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
-        gender: _genderController.text.trim().toLowerCase() == 'male',
+        gender: _selectedGender,
         password: _passwordController.text.trim(),
-        location: _locationController.text.trim());
-    if (res == "success" && context.mounted) {
-      Navigator.pop(context);
-    } else {
-      Navigator.pop(context);
-      displayMessage(res);
+        location: _locationController.text.trim(),
+      );
+
+      _hideProgressIndicator();
+      _isLoading = false;
+
+      if (res == "success") {
+      } else {
+        displayMessage(res);
+      }
+    } catch (e) {
+      _hideProgressIndicator();
+      _isLoading = false;
+      displayMessage("An error occurred: $e");
+    }
+  }
+
+  void _showProgressIndicator() {
+    if (_overlayEntry == null) {
+      _overlayEntry = OverlayEntry(
+        builder: (context) => Center(
+          child: Container(
+            child: const CircularProgressIndicator(),
+          ),
+        ),
+      );
+      Overlay.of(context)?.insert(_overlayEntry!);
+    }
+  }
+
+  void _hideProgressIndicator() {
+    if (_overlayEntry != null) {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
     }
   }
 
   void displayMessage(String message) {
-    showDialog(
+    if (!_isLoading) {
+      showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text(message),
-            ));
+          title: Text(message),
+        ),
+      );
+    }
   }
 
   Widget build(BuildContext context) {
@@ -134,7 +170,22 @@ class _RegisterPageState extends State<RegisterPage> {
                   inputFile(
                       label: "Location / Area",
                       controller: _locationController),
-                  inputFile(label: "Gender", controller: _genderController),
+                  DropdownButton<String>(
+                    value: _selectedGender,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedGender = newValue!;
+                      });
+                    },
+                    items: <String>['Male', 'Female', 'Do Not Specify']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                  // inputFile(label: "Gender", controller: _genderController),
                   TextField(
                     controller: _birthDateController,
                     decoration: const InputDecoration(

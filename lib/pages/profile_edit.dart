@@ -25,6 +25,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
   @override
   Widget build(BuildContext context) {
     model.User user = Provider.of<UserProvider>(context).getUser;
+    String _selectedGender = "Male";
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -84,11 +85,26 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
             ),
 
             //gender
-            editField(
-              label: "gender",
-              userValue: user.gender ? "Female" : "Male",
-              field: "gender",
+            DropdownButton<String>(
+              value: _selectedGender,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedGender = newValue!;
+                });
+              },
+              items: <String>['Male', 'Female', 'Do Not Specify']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
+            // editField(
+            //   label: "gender",
+            //   userValue: user.gender,
+            //   field: "gender",
+            // ),
 
             //phone number
             editField(
