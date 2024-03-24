@@ -73,6 +73,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
               label: "BrithDate",
               userValue: user.birthDate,
               field: "birthDate",
+              isDate: true,
             ),
 
             //bio
