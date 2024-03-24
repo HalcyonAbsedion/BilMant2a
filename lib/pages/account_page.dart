@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
+import 'package:bilmant2a/services/auth_service.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -21,6 +22,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final AuthMethods _authMethods = AuthMethods();
   @override
   void initState() {
     super.initState();
@@ -142,6 +144,7 @@ class _ProfileState extends State<Profile> {
         actions: [
           IconButton(
             onPressed: () {
+              _authMethods.signOut();
               FirebaseAuth.instance.signOut();
             },
             icon: const Icon(

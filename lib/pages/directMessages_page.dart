@@ -46,14 +46,17 @@ class DirectMessages extends StatelessWidget {
           ],
         ),
       ),
-      body: Row(
+     body: Column(
         children: [
-          UserTile(text: currentlocation, onTap: () {
-            
-          },),
-          _buildUserList(),
+          // Other widgets can be placed here
+          // For example:
+          UserTile(text: currentlocation, onTap: () {}),
+          Expanded(
+            child: _buildUserList(), // Using Expanded to take available space
+          ),
         ],
       ),
+          
     );
   }
 
