@@ -11,7 +11,7 @@ class User {
   final String bio;
   final String phoneNumber;
   final String ownerId;
-  final bool gender;
+  final String gender;
   final bool isOrganization;
   final List followers;
   final List following;
@@ -34,9 +34,6 @@ class User {
     required this.locations,
     required this.organizations,
   });
-  
-
-  
 
   static User fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -61,21 +58,20 @@ class User {
   }
 
   Map<String, dynamic> toJson() => {
-  "uid": uid,
-  "email": email,
-  "photoUrl": photoUrl,
-  "firstName": firstName,
-  "lastName": lastName,
-  "birthDate": birthDate,
-  "bio": bio,
-  "phoneNumber": phoneNumber,
-  "ownerId": ownerId,
-  "gender": gender,
-  "isOrganization": isOrganization,
-  "followers": followers,
-  "following": following,
-  "locations": locations,
-  "organizations": organizations,
-};
-
+        "uid": uid,
+        "email": email,
+        "photoUrl": photoUrl,
+        "firstName": firstName,
+        "lastName": lastName,
+        "birthDate": birthDate,
+        "bio": bio,
+        "phoneNumber": phoneNumber,
+        "ownerId": ownerId,
+        "gender": gender,
+        "isOrganization": isOrganization,
+        "followers": followers,
+        "following": following,
+        "locations": locations,
+        "organizations": organizations,
+      };
 }

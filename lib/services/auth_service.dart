@@ -25,15 +25,15 @@ class AuthMethods {
     required String lastName,
     required String birthDate,
     required String location,
-    required bool gender,
+    required String gender,
   }) async {
     String res = "Some error Occurred";
     try {
       if (email.isNotEmpty ||
           password.isNotEmpty ||
           firstName.isNotEmpty ||
-          lastName.isNotEmpty||
-          birthDate.isNotEmpty||
+          lastName.isNotEmpty ||
+          birthDate.isNotEmpty ||
           location.isNotEmpty) {
         // registering user in auth with email and password
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
@@ -52,8 +52,9 @@ class AuthMethods {
           email: email,
           bio: "",
           phoneNumber: "", // Add an empty string or any default value if needed
-          birthDate: birthDate, // Add an empty string or any default value for birthDate
-          gender: false, // Add a default value for gender if needed
+          birthDate:
+              birthDate, // Add an empty string or any default value for birthDate
+          gender: "Male", // Add a default value for gender if needed
           followers: [], // Add empty list for followers
           following: [], // Add empty list for following
           locations: [location], // Add empty list for locations
