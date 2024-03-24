@@ -50,7 +50,16 @@ class DirectMessages extends StatelessWidget {
         children: [
           // Other widgets can be placed here
           // For example:
-          UserTile(text: currentlocation, onTap: () {}),
+          UserTile(text: currentlocation, onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatPage(
+                  receiverName:currentlocation,
+                  receiverID: currentlocation.toString().toLowerCase(),
+                ),
+              ));
+        },),
           Expanded(
             child: _buildUserList(), // Using Expanded to take available space
           ),
@@ -81,18 +90,17 @@ class DirectMessages extends StatelessWidget {
 
   Widget _buildUserListItem(
       Map<String, dynamic> userData, BuildContext context) {
-    String s = userData['firstName'] + " " + userData['lastName'];
-    String email = userData["email"].toString();
+    String receiverName = userData['firstName'] + " " + userData['lastName'];
     String uid = userData["uid"].toString();
     if (userData['email'] != _chatService.getCurrentUser()!.email) {
       return UserTile(
-        text: s,
+        text: receiverName,
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ChatPage(
-                  receiverEmail: email,
+                  receiverName:receiverName,
                   receiverID: uid,
                 ),
               ));

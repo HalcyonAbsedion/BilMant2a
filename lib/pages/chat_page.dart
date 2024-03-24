@@ -6,11 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatelessWidget {
-  final String receiverEmail;
+  final String receiverName;
   final String receiverID;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  ChatPage({super.key, required this.receiverEmail, required this.receiverID});
+  ChatPage({super.key, required this.receiverName, required this.receiverID});
 
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
@@ -40,7 +40,7 @@ class ChatPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  receiverEmail,
+                  receiverName,
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -95,6 +95,7 @@ class ChatPage extends StatelessWidget {
         alignment: alignment,
         child:
             ChatBubble(message: data["message"], isCurrentUser: isCurrentUser));
+            
   }
 
   Widget _buildUserInput() {

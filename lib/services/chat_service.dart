@@ -21,18 +21,21 @@ class ChatService {
 
   Future<void> sendMessage(String receiverID, String message) async {
     final String currentUserID = _auth.currentUser!.uid;
-    final String currentUserEmail = _auth.currentUser!.email!;
+
     final Timestamp timestamp = Timestamp.now();
-    print(message);
+    String chatRoomID = receiverID;
+    if (receiverID.length > 10) {
+      List<String> ids = [currentUserID, receiverID];
+      ids.sort();
+      chatRoomID = ids.join('_');
+    }
+
     Message newMessage = Message(
         senderID: currentUserID,
-        senderEmail: currentUserEmail,
         message: message,
-        receiverId: receiverID.toString(),
+        chatRoomID: chatRoomID,
         timestamp: timestamp);
-    List<String> ids = [currentUserID, receiverID];
-    ids.sort();
-    String chatRoomID = ids.join('_');
+
     await _firestore
         .collection("chat_rooms")
         .doc(chatRoomID)
@@ -41,9 +44,12 @@ class ChatService {
   }
 
   Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
-    List<String> ids = [userID, otherUserID];
-    ids.sort();
-    String chatRoomID = ids.join('_');
+    String chatRoomID = userID;
+    if (userID.length > 10) {
+      List<String> ids = [userID, otherUserID];
+      ids.sort();
+      chatRoomID = ids.join('_');
+    }
     return _firestore
         .collection("chat_rooms")
         .doc(chatRoomID)
