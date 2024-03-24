@@ -1,5 +1,6 @@
 import 'package:bilmant2a/components/post.dart';
 import 'package:bilmant2a/components/text_field.dart';
+import 'package:bilmant2a/pages/postCreationPage.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -119,6 +120,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                     IconButton(
                       onPressed: () => postSend(selectedPostType),
+                      icon: const Icon(Icons.send),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => postCreationPage(),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.edit),
                     ),
                   ],
