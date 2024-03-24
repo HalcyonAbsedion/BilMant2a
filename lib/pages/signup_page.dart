@@ -57,7 +57,8 @@ class _RegisterPageState extends State<RegisterPage> {
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         gender: _genderController.text.trim().toLowerCase() == 'male',
-        password: _passwordController.text.trim());
+        password: _passwordController.text.trim(),
+        location: _locationController.text.trim());
     if (res == "success" && context.mounted) {
       Navigator.pop(context);
     } else {

@@ -1,5 +1,7 @@
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../components/user_tile.dart';
 import 'chat_page.dart';
@@ -10,6 +12,8 @@ class DirectMessages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    dynamic currentlocation= userProvider.getUser.locations.last.toString();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -42,7 +46,14 @@ class DirectMessages extends StatelessWidget {
           ],
         ),
       ),
-      body: _buildUserList(),
+      body: Row(
+        children: [
+          UserTile(text: currentlocation, onTap: () {
+            
+          },),
+          _buildUserList(),
+        ],
+      ),
     );
   }
 
