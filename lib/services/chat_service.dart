@@ -1,6 +1,8 @@
 import 'package:bilmant2a/models/message.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -19,9 +21,8 @@ class ChatService {
     });
   }
 
-  Future<void> sendMessage(String receiverID, String message) async {
+  Future<void> sendMessage(String receiverID, String message,String senderName ) async {
     final String currentUserID = _auth.currentUser!.uid;
-
     final Timestamp timestamp = Timestamp.now();
     String chatRoomID = receiverID;
     if (receiverID.length > 10) {
@@ -31,6 +32,7 @@ class ChatService {
     }
 
     Message newMessage = Message(
+        senderName: senderName ,
         senderID: currentUserID,
         message: message,
         chatRoomID: chatRoomID,

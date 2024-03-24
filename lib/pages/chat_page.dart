@@ -1,16 +1,19 @@
 import 'package:bilmant2a/components/chat_bubble.dart';
 import 'package:bilmant2a/components/text_field.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatPage extends StatelessWidget {
+  final String senderName;
   final String receiverName;
   final String receiverID;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  ChatPage({super.key, required this.receiverName, required this.receiverID});
+  ChatPage({super.key, required this.receiverName, required this.receiverID, required this.senderName});
 
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
@@ -18,13 +21,14 @@ class ChatPage extends StatelessWidget {
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessage(
-          receiverID.toString(), _messageController.text);
+          receiverID.toString(), _messageController.text, senderName);
       _messageController.clear();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 24, 24, 24),
         appBar: AppBar(
@@ -60,7 +64,7 @@ class ChatPage extends StatelessWidget {
             Expanded(
               child: _buildMessageList(),
             ),
-            _buildUserInput(),
+            _buildUserInput(context),
           ],
         ));
   }
@@ -86,7 +90,6 @@ class ChatPage extends StatelessWidget {
 
   Widget _buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
     bool isCurrentUser = data['senderID'] == _chatService.getCurrentUser()!.uid;
     var alignment =
         isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
@@ -94,11 +97,11 @@ class ChatPage extends StatelessWidget {
     return Container(
         alignment: alignment,
         child:
-            ChatBubble(message: data["message"], isCurrentUser: isCurrentUser));
+            ChatBubble(senderName: data["senderName"] ,message: data["message"], isCurrentUser: isCurrentUser));
             
   }
 
-  Widget _buildUserInput() {
+  Widget _buildUserInput(BuildContext context) {
     return Row(
       children: [
         Expanded(

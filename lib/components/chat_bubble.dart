@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class ChatBubble extends StatelessWidget {
   final String message;
   final bool isCurrentUser;
+  final String senderName;
   const ChatBubble(
-      {super.key, required this.message, required this.isCurrentUser});
+      {super.key, required this.message, required this.isCurrentUser, required this.senderName});
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +33,14 @@ class ChatBubble extends StatelessWidget {
         vertical: 2.5,
         horizontal: 25,
       ),
-      child: Text(
-        message,
-        style: TextStyle(color: Colors.white),
+      child: Row(
+        children: [
+          Text(isCurrentUser? senderName: senderName),
+          Text(
+            message,
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
       ),
     );
   }

@@ -9,11 +9,13 @@ import 'chat_page.dart';
 class DirectMessages extends StatelessWidget {
   DirectMessages({super.key});
   final ChatService _chatService = ChatService();
+  String senderName = "";
 
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    dynamic currentlocation= userProvider.getUser.locations.last.toString();
+    senderName=userProvider.getUser.firstName+" "+userProvider.getUser.lastName;
+    dynamic currentlocation = userProvider.getUser.locations.last.toString();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -46,26 +48,31 @@ class DirectMessages extends StatelessWidget {
           ],
         ),
       ),
-     body: Column(
+      body: Column(
         children: [
           // Other widgets can be placed here
           // For example:
-          UserTile(text: currentlocation, onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChatPage(
-                  receiverName:currentlocation,
-                  receiverID: currentlocation.toString().toLowerCase(),
-                ),
-              ));
-        },),
+          UserTile(
+            text: currentlocation,
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatPage(
+                      senderName: userProvider.getUser.firstName +
+                          " " +
+                          userProvider.getUser.lastName,
+                      receiverName: currentlocation,
+                      receiverID: currentlocation.toString().toLowerCase(),
+                    ),
+                  ));
+            },
+          ),
           Expanded(
             child: _buildUserList(), // Using Expanded to take available space
           ),
         ],
       ),
-          
     );
   }
 
@@ -100,7 +107,8 @@ class DirectMessages extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => ChatPage(
-                  receiverName:receiverName,
+                  senderName: "",
+                  receiverName: receiverName,
                   receiverID: uid,
                 ),
               ));
