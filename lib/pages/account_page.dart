@@ -196,6 +196,14 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               SizedBox(height: 10),
+              Text(
+                "Bio: ${userProvider.getUser.bio} ",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
