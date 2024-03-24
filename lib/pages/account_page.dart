@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/uploadImg.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -23,16 +24,13 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final AuthMethods _authMethods = AuthMethods();
+  final uploadMethods _uploadMethods = uploadMethods();
   @override
   void initState() {
     super.initState();
   }
 
-  var file;
-
   final currentUser = FirebaseAuth.instance.currentUser!;
-
-  final ImagePicker _imagePicker = ImagePicker();
 
   Future _selectPhoto() async {
     await showModalBottomSheet(
@@ -46,7 +44,7 @@ class _ProfileState extends State<Profile> {
                     title: Text("Camera"),
                     onTap: () {
                       Navigator.of(context).pop();
-                      _picksImage(ImageSource.camera);
+                      _uploadMethods.picksImage(ImageSource.camera);
                     },
                   ),
                   ListTile(
@@ -54,83 +52,13 @@ class _ProfileState extends State<Profile> {
                     title: Text("Choose a File"),
                     onTap: () {
                       Navigator.of(context).pop();
-                      _picksImage(ImageSource.gallery);
+                      _uploadMethods.picksImage(ImageSource.gallery);
                     },
                   )
                 ],
               ),
               onClosing: () {},
             ));
-  }
-
-  final ImageCropper _imageCropper = ImageCropper();
-
-  Future _picksImage(ImageSource source) async {
-    final pickedFile = await _imagePicker.pickImage(
-      source: source,
-      imageQuality: 50,
-    );
-
-    if (pickedFile == null) {
-      return;
-    }
-
-    file = await _imageCropper.cropImage(
-      sourcePath: pickedFile.path,
-      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-    );
-
-    if (file == null) {
-      return;
-    }
-
-    file = (await compressImage(file.path, 35));
-
-    await _uploadFile(file.path);
-  }
-
-  Future<String> _uploadFile(String path) async {
-    try {
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('images')
-          .child('${DateTime.now().toIso8601String() + p.basename(path)}');
-
-      final result = await ref.putFile(File(path));
-      final fileUrl = await result.ref.getDownloadURL();
-      updateUserImage(fileUrl);
-
-      return fileUrl;
-    } catch (error) {
-      // Handle any errors that occur during the file upload process
-      print('Error uploading file: $error');
-      // Optionally, you can throw the error to propagate it to the caller
-      throw error;
-    }
-  }
-
-  Future<void> updateUserImage(String imageUrl) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(currentUser!.uid)
-          .update({
-        'photoUrl': imageUrl,
-      });
-    } catch (error) {
-      print('Error updating user image: $error');
-      throw error;
-    }
-  }
-
-  Future<File> compressImage(String path, int quality) async {
-    final newPath = p.join((await getTemporaryDirectory()).path,
-        '${DateTime.now()}.${p.extension(path)}');
-
-    final result = await FlutterImageCompress.compressAndGetFile(path, newPath,
-        quality: quality);
-
-    return result!;
   }
 
   @override
