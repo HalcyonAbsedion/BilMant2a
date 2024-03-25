@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.bilmant2a"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -58,6 +58,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    
 }
 
 flutter {

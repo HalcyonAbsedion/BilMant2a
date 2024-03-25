@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:bilmant2a/components/post_widget.dart';
 import 'package:bilmant2a/models/media.dart';
 import 'package:bilmant2a/pages/picker_screen.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
@@ -8,8 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:bilmant2a/models/post.dart' as model;
+import 'package:bilmant2a/models/user.dart' as model2;
+import 'package:uuid/uuid.dart';
 
 class postCreationPage extends StatefulWidget {
   const postCreationPage({super.key});
@@ -23,23 +24,19 @@ class _postCreationPageState extends State<postCreationPage> {
 
   final user = FirebaseAuth.instance.currentUser!;
   final textController = TextEditingController();
+  var uid;
+  var username;
+  var profileUrl;
   String selectedPostType = 'explore';
   final ImagePicker _imagePicker = ImagePicker();
   final List<Media> _selectedMedias = [];
   void _updateSelectedMedias(List<Media> entities) {
     setState(() {
-      // Clear existing selected media items
       _selectedMedias.clear();
-      // Add newly selected media items
       _selectedMedias.addAll(entities);
-      print("FDSALFKSAJF;LAKSDJFLSDJFLSDA;FJSADLFJSAS");
-      print(_selectedMedias[0].getFilePath());
-      print("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
-      print(pickedFile?.path);
       _selectedMedias[0].printFilePath();
     });
     _selectedMedias[0].printFilePath();
-    // _selectedMedias[0].uploadToFirebaseStorage();
   }
 
   Future _selectPhoto() async {
@@ -93,17 +90,30 @@ class _postCreationPageState extends State<postCreationPage> {
     }
   }
 
-  void postSend(String selectedPostType) {
-    if (textController.text.isNotEmpty) {
-      FirebaseFirestore.instance.collection("User Posts").add({
-        'UserEmail': user.email,
-        'Message': textController.text,
-        'TimeStamp': Timestamp.now(),
-        'Likes': [],
-        'PostType': selectedPostType, // New field for post type
-      });
+  void postSend(String location) async {
+    List<String> mediaUrl = [];
+    for (var media in _selectedMedias) {
+      String? url = await media.uploadToFirebaseStorage();
+      if (url != null) {
+        mediaUrl.add(url);
+      }
     }
-
+    String postId = const Uuid().v1();
+    model.Post post = model.Post(
+        description: textController.text.trim(),
+        postType: selectedPostType,
+        uid: uid,
+        username: username,
+        likes: [],
+        postId: postId,
+        datePublished: DateTime.now(),
+        mediaUrl: mediaUrl,
+        profImage: profileUrl,
+        location: location);
+    FirebaseFirestore.instance
+        .collection("Posts")
+        .doc(postId)
+        .set(post.toJson());
     setState(() {
       textController.clear();
     });
@@ -111,14 +121,17 @@ class _postCreationPageState extends State<postCreationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final model2.User user = Provider.of<UserProvider>(context).getUser;
+    username = "${user.firstName} ${user.lastName}";
+    uid = user.uid;
+    profileUrl = user.photoUrl;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text("Post to"),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () => postSend(user.locations.last),
             child: const Text(
               "Post",
               style: TextStyle(
@@ -137,12 +150,12 @@ class _postCreationPageState extends State<postCreationPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                backgroundImage: userProvider.getUser.photoUrl != ""
-                    ? NetworkImage(userProvider.getUser.photoUrl)
-                    : null,
+                backgroundImage:
+                    profileUrl != "" ? NetworkImage(profileUrl) : null,
               ),
               Expanded(
                 child: TextField(
+                  controller: textController,
                   decoration: const InputDecoration(
                     hintText: "Write a caption...",
                     border: InputBorder.none,
