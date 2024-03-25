@@ -20,6 +20,7 @@ class postCreationPage extends StatefulWidget {
 
 class _postCreationPageState extends State<postCreationPage> {
   XFile? pickedFile;
+
   final user = FirebaseAuth.instance.currentUser!;
   final textController = TextEditingController();
   String selectedPostType = 'explore';
@@ -31,7 +32,49 @@ class _postCreationPageState extends State<postCreationPage> {
       _selectedMedias.clear();
       // Add newly selected media items
       _selectedMedias.addAll(entities);
+      print("FDSALFKSAJF;LAKSDJFLSDJFLSDA;FJSADLFJSAS");
+      print(_selectedMedias[0].getFilePath());
+      print("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+      print(pickedFile?.path);
+      _selectedMedias[0].printFilePath();
     });
+    _selectedMedias[0].printFilePath();
+    // _selectedMedias[0].uploadToFirebaseStorage();
+  }
+
+  Future _selectPhoto() async {
+    await showModalBottomSheet(
+        context: context,
+        builder: (context) => BottomSheet(
+              builder: (context) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.camera),
+                    title: Text("Camera"),
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      pickedFile = await _imagePicker.pickImage(
+                        source: ImageSource.camera,
+                        imageQuality: 50,
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.photo),
+                    title: Text("Choose a File"),
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      pickedFile = await _imagePicker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 50,
+                      );
+                    },
+                  )
+                ],
+              ),
+              onClosing: () {},
+            ));
   }
 
   Future<void> _handleFloatingActionButton() async {
@@ -137,6 +180,20 @@ class _postCreationPageState extends State<postCreationPage> {
               const Divider()
             ],
           ),
+          // GestureDetector(
+          //   onTap: _selectPhoto,
+          //   child: Container(
+          //     width: 200,
+          //     height: 200,
+          //     color: Colors.grey[200],
+          //     child: pickedFile == null
+          //         ? Center(child: Icon(Icons.camera_alt, size: 50))
+          //         : Image.file(
+          //             File(pickedFile!.path),
+          //             fit: BoxFit.cover,
+          //           ),
+          //   ),
+          // ),
           Expanded(
             // Add Expanded widget here
             child: ListView.builder(
