@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:bilmant2a/models/media.dart';
+import 'package:bilmant2a/pages/picker_screen.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 
 class postCreationPage extends StatefulWidget {
@@ -21,49 +24,30 @@ class _postCreationPageState extends State<postCreationPage> {
   final textController = TextEditingController();
   String selectedPostType = 'explore';
   final ImagePicker _imagePicker = ImagePicker();
-  Future _selectPhoto() async {
-    await showModalBottomSheet(
-        context: context,
-        builder: (context) => BottomSheet(
-              builder: (context) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.camera),
-                    title: Text("Camera"),
-                    onTap: () async {
-                      Navigator.of(context).pop();
+  final List<Media> _selectedMedias = [];
+  void _updateSelectedMedias(List<Media> entities) {
+    setState(() {
+      // Clear existing selected media items
+      _selectedMedias.clear();
+      // Add newly selected media items
+      _selectedMedias.addAll(entities);
+    });
+  }
 
-                      pickedFile = await _imagePicker.pickImage(
-                        source: ImageSource.camera,
-                        imageQuality: 50,
-                      );
-
-                      if (pickedFile == null) {
-                        return;
-                      }
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.photo),
-                    title: Text("Choose a File"),
-                    onTap: () async {
-                      Navigator.of(context).pop();
-
-                      pickedFile = await _imagePicker.pickImage(
-                        source: ImageSource.gallery,
-                        imageQuality: 50,
-                      );
-
-                      if (pickedFile == null) {
-                        return;
-                      }
-                    },
-                  )
-                ],
-              ),
-              onClosing: () {},
-            ));
+  Future<void> _handleFloatingActionButton() async {
+    final List<Media>? result = await Navigator.push<List<Media>>(
+      // Navigate to the picker screen
+      context,
+      MaterialPageRoute(
+        builder: (context) => PickerScreen(
+            selectedMedias:
+                _selectedMedias), // Pass the selected media items to the picker screen
+      ),
+    );
+    if (result != null) {
+      // Update selected media items with the result from the picker screen
+      _updateSelectedMedias(result);
+    }
   }
 
   void postSend(String selectedPostType) {
@@ -91,14 +75,16 @@ class _postCreationPageState extends State<postCreationPage> {
         title: const Text("Post to"),
         actions: [
           TextButton(
-              onPressed: () {},
-              child: const Text(
-                "Post",
-                style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ))
+            onPressed: () {},
+            child: const Text(
+              "Post",
+              style: TextStyle(
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          )
         ],
       ),
       body: Column(
@@ -121,22 +107,6 @@ class _postCreationPageState extends State<postCreationPage> {
                   maxLines: 8,
                 ),
               ),
-              // SizedBox(
-              //   height: 45,
-              //   width: 45,
-              //   child: AspectRatio(
-              //     aspectRatio: 487 / 451,
-              //     child: Container(
-              //       decoration: BoxDecoration(
-              //           image: DecorationImage(
-              //         image: NetworkImage(userProvider.getUser.photoUrl),
-              //         fit: BoxFit.fill,
-              //         alignment: FractionalOffset.topCenter,
-              //       )),
-              //     ),
-              //   ),
-              // ),
-
               Container(
                 decoration: BoxDecoration(
                   color: Colors.black,
@@ -167,21 +137,33 @@ class _postCreationPageState extends State<postCreationPage> {
               const Divider()
             ],
           ),
-          GestureDetector(
-            onTap: _selectPhoto,
-            child: Container(
-              width: 200,
-              height: 200,
-              color: Colors.grey[200],
-              child: pickedFile == null
-                  ? Center(child: Icon(Icons.camera_alt, size: 50))
-                  : Image.file(
-                      File(pickedFile!.path),
-                      fit: BoxFit.cover,
-                    ),
+          Expanded(
+            // Add Expanded widget here
+            child: ListView.builder(
+              // Number of selected media items
+              itemCount: _selectedMedias.length,
+              // Apply bouncing scroll physics
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    // Apply padding to each selected media item
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  // Display selected media widget
+                  child: _selectedMedias[index].widget,
+                );
+              },
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        // Call _handleFloatingActionButton method when FloatingActionButton is pressed
+        onPressed: _handleFloatingActionButton,
+        // Floating action button icon
+        child: const Icon(Icons.image_rounded),
       ),
     );
   }
