@@ -1,4 +1,4 @@
-import 'package:bilmant2a/components/post.dart';
+import 'package:bilmant2a/components/post_widget.dart';
 import 'package:bilmant2a/components/text_field.dart';
 import 'package:bilmant2a/pages/postCreationPage.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
