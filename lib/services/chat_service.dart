@@ -23,7 +23,7 @@ class ChatService {
 
   Future<void> sendMessage(String receiverID, String message,String senderName ) async {
     final String currentUserID = _auth.currentUser!.uid;
-    final Timestamp timestamp = Timestamp.now();
+    final Timestamp timeStamp = Timestamp.now();
     String chatRoomID = receiverID;
     if (receiverID.length > 10) {
       List<String> ids = [currentUserID, receiverID];
@@ -36,7 +36,7 @@ class ChatService {
         senderID: currentUserID,
         message: message,
         chatRoomID: chatRoomID,
-        timestamp: timestamp);
+        timeStamp: timeStamp);
 
     await _firestore
         .collection("chat_rooms")
@@ -56,7 +56,7 @@ class ChatService {
         .collection("chat_rooms")
         .doc(chatRoomID)
         .collection("messages")
-        .orderBy("timestamp", descending: false)
+        .orderBy("timeStamp", descending: false)
         .snapshots();
   }
 }

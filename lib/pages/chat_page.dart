@@ -97,7 +97,7 @@ class ChatPage extends StatelessWidget {
     return Container(
         alignment: alignment,
         child:
-            ChatBubble(senderName: data["senderName"] ,message: data["message"], isCurrentUser: isCurrentUser));
+            ChatBubble(senderName: data["senderName"] ,message: data["message"], isCurrentUser: isCurrentUser, timeStamp: data["timeStamp"],));
             
   }
 
