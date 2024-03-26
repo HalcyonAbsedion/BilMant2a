@@ -1,17 +1,9 @@
-import 'dart:io';
-
 import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/uploadImg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import 'package:bilmant2a/services/auth_service.dart';
 

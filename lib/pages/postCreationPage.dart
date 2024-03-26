@@ -1,4 +1,3 @@
-import 'package:bilmant2a/components/post_widget.dart';
 import 'package:bilmant2a/models/media.dart';
 import 'package:bilmant2a/pages/picker_screen.dart';
 import 'package:bilmant2a/providers/user_provider.dart';

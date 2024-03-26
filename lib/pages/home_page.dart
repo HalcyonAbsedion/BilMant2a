@@ -1,11 +1,6 @@
 import 'package:bilmant2a/components/post_widget.dart';
-import 'package:bilmant2a/components/text_field.dart';
-import 'package:bilmant2a/pages/postCreationPage.dart';
-import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   final String postType; // New parameter for post type
@@ -19,34 +14,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
-    addData();
-  }
-
-  addData() async {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
-    await userProvider.refreshUser();
-  }
-
-  final user = FirebaseAuth.instance.currentUser!;
-  final textController = TextEditingController();
-  String selectedPostType = 'Explore';
-
-  void postSend(String selectedPostType) {
-    if (textController.text.isNotEmpty) {
-      FirebaseFirestore.instance.collection("User Posts").add({
-        'UserEmail': user.email,
-        'Message': textController.text,
-        'TimeStamp': Timestamp.now(),
-        'Likes': [],
-        'PostType': selectedPostType.toLowerCase(), // New field for post type
-      });
-    }
-
-    setState(() {
-      textController.clear();
-    });
   }
 
   @override
@@ -64,76 +31,6 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: Colors.cyan,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextField(
-                          controller: textController,
-                          decoration: InputDecoration(
-                            hintText: "Post Something!",
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: const BorderSide(
-                                  color: Colors.cyan, width: 2.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(
-                                    color: Colors.grey, width: 2.0)),
-                          ),
-                          obscureText: false,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: DropdownButton<String>(
-                        value: selectedPostType,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedPostType = newValue!;
-                          });
-                        },
-                        items: <String>['Explore', 'Donations', 'Volunteer']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                value,
-                                style: const TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => postSend(selectedPostType),
-                      icon: const Icon(Icons.send),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => postCreationPage(),
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.edit),
-                    ),
-                  ],
                 ),
               ),
             ),

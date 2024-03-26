@@ -1,11 +1,8 @@
 import 'package:bilmant2a/components/chat_bubble.dart';
-import 'package:bilmant2a/components/text_field.dart';
-import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ChatPage extends StatelessWidget {
   final String senderName;
