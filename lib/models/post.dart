@@ -27,19 +27,20 @@ class Post {
 
   static Post fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
-
     return Post(
-        description: snapshot["description"],
-        postType: snapshot["postType"],
-        uid: snapshot["uid"],
-        likes: snapshot["likes"],
-        postId: snapshot["postId"],
-        datePublished: snapshot["datePublished"],
-        username: snapshot["username"],
-        mediaUrl: snapshot['mediaUrl'],
-        profImage: snapshot['profImage'],
-        location: snapshot['location'],
-        );
+      description: snapshot["description"],
+      postType: snapshot["postType"],
+      uid: snapshot["uid"],
+      likes: snapshot["likes"],
+      postId: snapshot["postId"],
+      datePublished: (snapshot["datePublished"] as Timestamp).toDate(),
+      username: snapshot["username"],
+      mediaUrl: (snapshot['mediaUrl'] as List<dynamic>)
+          .map((url) => url.toString())
+          .toList(),
+      profImage: snapshot['profImage'],
+      location: snapshot['location'],
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -52,6 +53,6 @@ class Post {
         "datePublished": datePublished,
         'mediaUrl': mediaUrl,
         'profImage': profImage,
-        'location' : location,
+        'location': location,
       };
 }

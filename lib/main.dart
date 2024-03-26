@@ -1,5 +1,8 @@
 import 'package:bilmant2a/auth/auth.dart';
 import 'package:bilmant2a/firebase_options.dart';
+import 'package:bilmant2a/pages/home_page.dart';
+import 'package:bilmant2a/pages/test.dart';
+import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +25,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => PostProvider(),
+        ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AuthPage(),
       ),

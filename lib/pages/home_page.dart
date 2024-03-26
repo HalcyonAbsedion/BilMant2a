@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
 
   final user = FirebaseAuth.instance.currentUser!;
   final textController = TextEditingController();
-  String selectedPostType = 'explore';
+  String selectedPostType = 'Explore';
 
   void postSend(String selectedPostType) {
     if (textController.text.isNotEmpty) {
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         'Message': textController.text,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
-        'PostType': selectedPostType, // New field for post type
+        'PostType': selectedPostType.toLowerCase(), // New field for post type
       });
     }
 
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                             selectedPostType = newValue!;
                           });
                         },
-                        items: <String>['explore', 'donations', 'volunteer']
+                        items: <String>['Explore', 'Donations', 'Volunteer']
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
