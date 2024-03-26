@@ -4,7 +4,9 @@ import 'package:bilmant2a/pages/directMessages_page.dart';
 import 'package:bilmant2a/pages/test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../pages/postCreationPage.dart';
+import '../providers/post_provider.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -22,6 +24,8 @@ class _NavBarState extends State<NavBar> {
     super.initState();
     pageController = PageController();
   }
+
+  
 
   @override
   void dispose() {

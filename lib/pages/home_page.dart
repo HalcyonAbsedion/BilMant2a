@@ -1,6 +1,9 @@
 import 'package:bilmant2a/components/post_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/post_provider.dart';
 
 class HomePage extends StatefulWidget {
   final String postType; // New parameter for post type
@@ -14,10 +17,18 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    addData();
+  }
+
+  addData() async {
+    PostProvider postProvider =
+        Provider.of<PostProvider>(context, listen: false);
+    await postProvider.fetchPosts();
   }
 
   @override
   Widget build(BuildContext context) {
+    final postProvider = Provider.of<PostProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -35,38 +46,15 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("User Posts")
-                    .where('PostType',
-                        isEqualTo: widget.postType) // Filter by post type
-                    .orderBy(
-                      "TimeStamp",
-                      descending: false,
-                    )
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final post = snapshot.data!.docs[index];
-                        return PostWidget(
-                          message: post['Message'],
-                          userEmail: post['UserEmail'],
-                          postId: post.id,
-                          likes: List<String>.from(post['Likes'] ?? []),
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
+              child: ListView.builder(
+                itemCount: postProvider.posts.length,
+                itemBuilder: (context, index) {
+                  final post = postProvider.posts[index];
+                  if (post.postType == widget.postType) {
+                    return PostWidget(
+                      post: post,
                     );
                   }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
                 },
               ),
             ),

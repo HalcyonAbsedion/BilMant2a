@@ -1,3 +1,4 @@
+import 'package:bilmant2a/components/post_widget.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,9 +33,8 @@ class _TestScreenState extends State<TestScreen> {
         itemCount: postProvider.posts.length,
         itemBuilder: (context, index) {
           final post = postProvider.posts[index];
-          return ListTile(
-            title: Text(post.postType),
-            subtitle: Text(post.description),
+          return PostWidget(
+            post: post,
           );
         },
       ),

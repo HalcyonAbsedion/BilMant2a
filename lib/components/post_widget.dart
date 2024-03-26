@@ -1,32 +1,25 @@
 import 'package:bilmant2a/components/like_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:bilmant2a/models/user.dart' as model;
+import 'package:provider/provider.dart';
+import '../models/post.dart';
+import '../providers/user_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostWidget extends StatefulWidget {
-  final String message;
-  final String userEmail;
-  final String postId;
-  final List<String> likes;
-
-  const PostWidget(
-      {super.key,
-      required this.message,
-      required this.userEmail,
-      required this.postId,
-      required this.likes});
+  final Post post;
+  const PostWidget({super.key, required this.post});
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
 }
 
 class _PostWidgetState extends State<PostWidget> {
-  final currentUser = FirebaseAuth.instance.currentUser;
   bool isLiked = false;
-
   void initState() {
     super.initState();
-    isLiked = widget.likes.contains(currentUser?.email);
+    // isLiked = widget.post.likes.contains();
   }
 
   void toggleLike() {
@@ -34,15 +27,14 @@ class _PostWidgetState extends State<PostWidget> {
       isLiked = !isLiked;
     });
     DocumentReference postRef =
-        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
-
+        FirebaseFirestore.instance.collection('Posts').doc(widget.post.postId);
     if (isLiked) {
       postRef.update({
-        'Likes': FieldValue.arrayUnion([currentUser?.email])
+        'Likes': FieldValue.arrayUnion([widget.post.uid])
       });
     } else {
       postRef.update({
-        'Likes': FieldValue.arrayRemove([currentUser?.email])
+        'Likes': FieldValue.arrayRemove([widget.post.uid])
       });
     }
   }
@@ -52,61 +44,72 @@ class _PostWidgetState extends State<PostWidget> {
     // ignore: prefer_const_constructors
     final _textController = TextEditingController();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Color.fromARGB(148, 204, 204, 204),
-        border: Border.all(color: Colors.cyan),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      margin: EdgeInsets.only(top: 25, left: 25, right: 25),
-      padding: EdgeInsets.all(25),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.userEmail,
-                style: TextStyle(color: Colors.grey[500]),
-              ),
-              const SizedBox(height: 10),
-              Text(widget.message),
-            ],
-          ),
-          Row(
-            children: [
-              likeComponent(),
-              commentComponent(),
-              shareComponent(),
-            ],
-          ),
-          SizedBox(
-            height: 50,
-            child: TextField(
-              controller: _textController,
-              style: TextStyle(),
-              decoration: InputDecoration(
-                hintText: 'Comment Here...',
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.cyan, width: 2.0),
+    return 
+      Container(
+        decoration: BoxDecoration(
+          color: Color.fromARGB(148, 204, 204, 204),
+          border: Border.all(color: Colors.cyan),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        margin: EdgeInsets.only(top: 25, left: 25, right: 25),
+        padding: EdgeInsets.all(25),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.post.username,
+                  style: TextStyle(color: Colors.grey[500]),
                 ),
-                enabledBorder: OutlineInputBorder(
+                const SizedBox(height: 10),
+                Text(widget.post.description),
+              ],
+            ),
+            if (widget.post.mediaUrl.isNotEmpty)
+              Column(
+                children: widget.post.mediaUrl.map((url) {
+                  return CachedNetworkImage(
+                    imageUrl: url,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  );
+                }).toList(),
+              ),
+            Row(
+              children: [
+                likeComponent(),
+                commentComponent(),
+                shareComponent(),
+              ],
+            ),
+            SizedBox(
+              height: 50,
+              child: TextField(
+                controller: _textController,
+                style: TextStyle(),
+                decoration: InputDecoration(
+                  hintText: 'Comment Here...',
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.grey, width: 2.0)),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    _textController.clear();
-                  },
-                  icon: Icon(Icons.clear),
+                    borderSide: BorderSide(color: Colors.cyan, width: 2.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.grey, width: 2.0)),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      _textController.clear();
+                    },
+                    icon: Icon(Icons.clear),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
   }
 
   Widget likeComponent() {
@@ -121,7 +124,7 @@ class _PostWidgetState extends State<PostWidget> {
           const SizedBox(
             width: 3,
           ),
-          Text(widget.likes.length.toString()),
+          Text(widget.post.likes.length.toString()),
         ],
       ),
     );

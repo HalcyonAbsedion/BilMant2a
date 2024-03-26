@@ -13,6 +13,12 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  @override
+  void initState() {
+    super.initState();
+    addData();
+  }
+  
   addData() async {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
