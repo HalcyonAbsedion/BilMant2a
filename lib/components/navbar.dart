@@ -1,13 +1,9 @@
 import 'package:bilmant2a/components/top_bar.dart';
 import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/directMessages_page.dart';
-import 'package:bilmant2a/pages/test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../pages/postCreationPage.dart';
-import '../providers/post_provider.dart';
-
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
 
@@ -52,7 +48,9 @@ class _NavBarState extends State<NavBar> {
         onPageChanged: onPageChanged,
         children: [
           const TopBar(),
-          TestScreen(),
+          Container(
+              color: Colors.green,
+              child: const Center(child: Text('Discover Page'))),
           const postCreationPage(),
           DirectMessages(),
           // Wrap Profile with Builder

@@ -1,4 +1,5 @@
 import 'package:bilmant2a/components/post_widget.dart';
+import 'package:bilmant2a/models/post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,21 +15,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Post> posts = [];
   @override
   void initState() {
     super.initState();
-    addData();
-  }
-
-  addData() async {
-    PostProvider postProvider =
-        Provider.of<PostProvider>(context, listen: false);
-    await postProvider.fetchPosts();
   }
 
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
+    posts = postProvider.getPosts;
+    if (widget.postType != 'explore') {
+      posts = posts.where((post) => post.postType == widget.postType).toList();
+    }
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -46,16 +45,17 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: postProvider.posts.length,
-                itemBuilder: (context, index) {
-                  final post = postProvider.posts[index];
-                  if (post.postType == widget.postType) {
+              child: RefreshIndicator(
+                onRefresh: () => postProvider.fetchPosts(),
+                child: ListView.builder(
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts[index];
                     return PostWidget(
                       post: post,
                     );
-                  }
-                },
+                  },
+                ),
               ),
             ),
           ],

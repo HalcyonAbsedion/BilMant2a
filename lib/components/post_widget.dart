@@ -1,10 +1,7 @@
 import 'package:bilmant2a/components/like_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:bilmant2a/models/user.dart' as model;
-import 'package:provider/provider.dart';
 import '../models/post.dart';
-import '../providers/user_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PostWidget extends StatefulWidget {
@@ -62,6 +59,9 @@ class _PostWidgetState extends State<PostWidget> {
                 Text(
                   widget.post.username,
                   style: TextStyle(color: Colors.grey[500]),
+                ),
+                Text(
+                  widget.post.location,
                 ),
                 const SizedBox(height: 10),
                 Text(widget.post.description),

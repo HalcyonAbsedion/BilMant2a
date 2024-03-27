@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class PostProvider extends ChangeNotifier {
   List<Post> _posts = [];
 
-  List<Post> get posts => _posts;
+  List<Post> get getPosts => _posts;
 
   Future<void> fetchPosts() async {
     try {
@@ -13,7 +13,6 @@ class PostProvider extends ChangeNotifier {
           await FirebaseFirestore.instance.collection('Posts').get();
 
       _posts = querySnapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
-
       notifyListeners();
     } catch (e) {
       print('Error fetching posts: $e');

@@ -1,7 +1,5 @@
 import 'package:bilmant2a/auth/auth.dart';
 import 'package:bilmant2a/firebase_options.dart';
-import 'package:bilmant2a/pages/home_page.dart';
-import 'package:bilmant2a/pages/test.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';

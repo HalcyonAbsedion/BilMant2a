@@ -11,6 +11,8 @@ import 'package:bilmant2a/models/post.dart' as model;
 import 'package:bilmant2a/models/user.dart' as model2;
 import 'package:uuid/uuid.dart';
 
+import '../providers/post_provider.dart';
+
 class postCreationPage extends StatefulWidget {
   const postCreationPage({super.key});
 
@@ -121,6 +123,7 @@ class _postCreationPageState extends State<postCreationPage> {
   @override
   Widget build(BuildContext context) {
     final model2.User user = Provider.of<UserProvider>(context).getUser;
+    final postProvider = Provider.of<PostProvider>(context);
     username = "${user.firstName} ${user.lastName}";
     uid = user.uid;
     profileUrl = user.photoUrl;
@@ -130,7 +133,10 @@ class _postCreationPageState extends State<postCreationPage> {
         title: const Text("Post to"),
         actions: [
           TextButton(
-            onPressed: () => postSend(user.locations.last),
+            onPressed: () => {
+              postSend(user.locations.last),
+              postProvider.fetchPosts(),
+            },
             child: const Text(
               "Post",
               style: TextStyle(
