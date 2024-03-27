@@ -1,6 +1,10 @@
 import 'package:bilmant2a/components/like_button.dart';
+import 'package:bilmant2a/providers/post_provider.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -14,9 +18,14 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   bool isLiked = false;
+  var postProvider;
+  var currentUserUid = "";
   void initState() {
     super.initState();
     // isLiked = widget.post.likes.contains();
+    currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+    isLiked = widget.post.likes.contains(currentUserUid);
+    print(currentUserUid);
   }
 
   void toggleLike() {
@@ -26,12 +35,15 @@ class _PostWidgetState extends State<PostWidget> {
     DocumentReference postRef =
         FirebaseFirestore.instance.collection('Posts').doc(widget.post.postId);
     if (isLiked) {
+      widget.post.likes.add(currentUserUid);
+
       postRef.update({
-        'Likes': FieldValue.arrayUnion([widget.post.uid])
+        'likes': FieldValue.arrayUnion([currentUserUid])
       });
     } else {
+      widget.post.likes.remove(currentUserUid);
       postRef.update({
-        'Likes': FieldValue.arrayRemove([widget.post.uid])
+        'likes': FieldValue.arrayRemove([currentUserUid])
       });
     }
   }
@@ -40,76 +52,76 @@ class _PostWidgetState extends State<PostWidget> {
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
     final _textController = TextEditingController();
+    postProvider = Provider.of<PostProvider>(context);
 
-    return 
-      Container(
-        decoration: BoxDecoration(
-          color: Color.fromARGB(148, 204, 204, 204),
-          border: Border.all(color: Colors.cyan),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        margin: EdgeInsets.only(top: 25, left: 25, right: 25),
-        padding: EdgeInsets.all(25),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return Container(
+      decoration: BoxDecoration(
+        color: Color.fromARGB(148, 204, 204, 204),
+        border: Border.all(color: Colors.cyan),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      margin: EdgeInsets.only(top: 25, left: 25, right: 25),
+      padding: EdgeInsets.all(25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.post.username,
+                style: TextStyle(color: Colors.grey[500]),
+              ),
+              Text(
+                widget.post.location,
+              ),
+              const SizedBox(height: 10),
+              Text(widget.post.description),
+            ],
+          ),
+          if (widget.post.mediaUrl.isNotEmpty)
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.post.username,
-                  style: TextStyle(color: Colors.grey[500]),
-                ),
-                Text(
-                  widget.post.location,
-                ),
-                const SizedBox(height: 10),
-                Text(widget.post.description),
-              ],
+              children: widget.post.mediaUrl.map((url) {
+                return CachedNetworkImage(
+                  imageUrl: url,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                );
+              }).toList(),
             ),
-            if (widget.post.mediaUrl.isNotEmpty)
-              Column(
-                children: widget.post.mediaUrl.map((url) {
-                  return CachedNetworkImage(
-                    imageUrl: url,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  );
-                }).toList(),
-              ),
-            Row(
-              children: [
-                likeComponent(),
-                commentComponent(),
-                shareComponent(),
-              ],
-            ),
-            SizedBox(
-              height: 50,
-              child: TextField(
-                controller: _textController,
-                style: TextStyle(),
-                decoration: InputDecoration(
-                  hintText: 'Comment Here...',
-                  focusedBorder: OutlineInputBorder(
+          Row(
+            children: [
+              likeComponent(),
+              commentComponent(),
+              shareComponent(),
+            ],
+          ),
+          SizedBox(
+            height: 50,
+            child: TextField(
+              controller: _textController,
+              style: TextStyle(),
+              decoration: InputDecoration(
+                hintText: 'Comment Here...',
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.cyan, width: 2.0),
+                ),
+                enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.cyan, width: 2.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.grey, width: 2.0)),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      _textController.clear();
-                    },
-                    icon: Icon(Icons.clear),
-                  ),
+                    borderSide: BorderSide(color: Colors.grey, width: 2.0)),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _textController.clear();
+                  },
+                  icon: Icon(Icons.clear),
                 ),
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 
   Widget likeComponent() {
