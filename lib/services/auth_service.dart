@@ -61,6 +61,8 @@ class AuthMethods {
           isOrganization: false,
           organizations: [], // Add empty list for organizations
           ownerId: cred.user!.uid,
+          postIds: [],
+          
         );
         // adding user in our database
         await _firestore
@@ -104,4 +106,21 @@ class AuthMethods {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  Future<void> addUserToList({
+  required String userId,
+  required String fieldName,
+  required dynamic elementToAdd,
+}) async {
+  try {
+    DocumentReference userRef = FirebaseFirestore.instance.collection("Users").doc(userId);
+    await userRef.update({
+      fieldName: FieldValue.arrayUnion([elementToAdd])
+    });
+
+    print("Element $elementToAdd added to $fieldName for user $userId");
+  } catch (error) {
+    print("Error adding element to $fieldName for user $userId: $error");
+  }
+}
 }

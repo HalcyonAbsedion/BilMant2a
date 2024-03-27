@@ -4,12 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:bilmant2a/models/user.dart' as model;
+
+import '../providers/post_provider.dart';
 
 class editField extends StatefulWidget {
   final String label;
   String userValue;
   final String field;
   bool isDate;
+  bool usernameChange = false;
 
   editField({
     Key? key,
@@ -26,6 +30,7 @@ class editField extends StatefulWidget {
 class _editFieldState extends State<editField> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final usersColl = FirebaseFirestore.instance.collection("Users");
+  List postIds = [];
   Future<void> edit(String field) async {
     String newValue = "";
     final _birthDateController = TextEditingController();
@@ -80,8 +85,25 @@ class _editFieldState extends State<editField> {
       await usersColl.doc(currentUser.uid).update({field: newValue.trim()});
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
+
       await userProvider.refreshUser();
       widget.userValue = newValue;
+      if (field == 'firstName' || field == 'lastName') {
+        UserProvider userProvider =
+            Provider.of<UserProvider>(context, listen: false);
+        postIds = userProvider.getUser.postIds;
+        PostProvider postProvider =
+            Provider.of<PostProvider>(context, listen: false);
+        for (var postId in postIds) {
+          print(postId);
+          DocumentReference postRef =
+              FirebaseFirestore.instance.collection("Posts").doc(postId);
+          final model.User user = userProvider.getUser;
+          String username = "${user.firstName} ${user.lastName}";
+          await postRef.update({'username': username});
+        }
+        postProvider.fetchPosts();
+      }
     }
   }
 

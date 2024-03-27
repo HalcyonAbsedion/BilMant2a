@@ -17,6 +17,7 @@ class User {
   final List following;
   final List locations;
   final List organizations;
+  final List postIds;
   User({
     required this.email,
     required this.uid,
@@ -33,6 +34,7 @@ class User {
     required this.following,
     required this.locations,
     required this.organizations,
+    required this.postIds,
   });
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -54,6 +56,7 @@ class User {
       ownerId: snapshot["ownerId"],
       organizations: snapshot["organizations"],
       isOrganization: snapshot["isOrganization"],
+      postIds: snapshot["postIds"],
     );
   }
 
@@ -73,5 +76,6 @@ class User {
         "following": following,
         "locations": locations,
         "organizations": organizations,
+        "postIds": postIds,
       };
 }

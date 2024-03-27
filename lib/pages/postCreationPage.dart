@@ -1,6 +1,7 @@
 import 'package:bilmant2a/models/media.dart';
 import 'package:bilmant2a/pages/picker_screen.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _postCreationPageState extends State<postCreationPage> {
 
   final user = FirebaseAuth.instance.currentUser!;
   final textController = TextEditingController();
+  final AuthMethods authMethods = AuthMethods();
   var uid;
   var username;
   var profileUrl;
@@ -115,6 +117,8 @@ class _postCreationPageState extends State<postCreationPage> {
         .collection("Posts")
         .doc(postId)
         .set(post.toJson());
+    authMethods.addUserToList(
+        elementToAdd: postId, fieldName: 'postIds', userId: uid);
     setState(() {
       textController.clear();
     });
@@ -122,7 +126,8 @@ class _postCreationPageState extends State<postCreationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final model2.User user = Provider.of<UserProvider>(context).getUser;
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final model2.User user = userProvider.getUser;
     final postProvider = Provider.of<PostProvider>(context);
     username = "${user.firstName} ${user.lastName}";
     uid = user.uid;
@@ -136,6 +141,7 @@ class _postCreationPageState extends State<postCreationPage> {
             onPressed: () => {
               postSend(user.locations.last),
               postProvider.fetchPosts(),
+              userProvider.refreshUser(),
             },
             child: const Text(
               "Post",
