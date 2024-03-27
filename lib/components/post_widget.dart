@@ -34,18 +34,18 @@ class _PostWidgetState extends State<PostWidget> {
     });
     DocumentReference postRef =
         FirebaseFirestore.instance.collection('Posts').doc(widget.post.postId);
-    // if (isLiked) {
-    //   widget.post.likes.add(currentUserUid);
+    if (isLiked) {
+      widget.post.likes.add(currentUserUid);
 
-    //   postRef.update({
-    //     'likes': FieldValue.arrayUnion([currentUserUid])
-    //   });
-    // } else {
-    //   widget.post.likes.remove(currentUserUid);
-    //   postRef.update({
-    //     'likes': FieldValue.arrayRemove([currentUserUid])
-    //   });
-    // }
+      postRef.update({
+        'likes': FieldValue.arrayUnion([currentUserUid])
+      });
+    } else {
+      widget.post.likes.remove(currentUserUid);
+      postRef.update({
+        'likes': FieldValue.arrayRemove([currentUserUid])
+      });
+    }
   }
 
   @override
@@ -79,16 +79,16 @@ class _PostWidgetState extends State<PostWidget> {
               Text(widget.post.description),
             ],
           ),
-          if (widget.post.mediaUrl.isNotEmpty)
-            Column(
-              children: widget.post.mediaUrl.map((url) {
-                return CachedNetworkImage(
-                  imageUrl: url,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                );
-              }).toList(),
-            ),
+          // if (widget.post.mediaUrl.isNotEmpty)
+          //   Column(
+          //     children: widget.post.mediaUrl.map((url) {
+          //       return CachedNetworkImage(
+          //         imageUrl: url,
+          //         placeholder: (context, url) => CircularProgressIndicator(),
+          //         errorWidget: (context, url, error) => Icon(Icons.error),
+          //       );
+          //     }).toList(),
+          //   ),
           Row(
             children: [
               likeComponent(),
