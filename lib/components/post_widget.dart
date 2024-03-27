@@ -34,18 +34,18 @@ class _PostWidgetState extends State<PostWidget> {
     });
     DocumentReference postRef =
         FirebaseFirestore.instance.collection('Posts').doc(widget.post.postId);
-    if (isLiked) {
-      widget.post.likes.add(currentUserUid);
+    // if (isLiked) {
+    //   widget.post.likes.add(currentUserUid);
 
-      postRef.update({
-        'likes': FieldValue.arrayUnion([currentUserUid])
-      });
-    } else {
-      widget.post.likes.remove(currentUserUid);
-      postRef.update({
-        'likes': FieldValue.arrayRemove([currentUserUid])
-      });
-    }
+    //   postRef.update({
+    //     'likes': FieldValue.arrayUnion([currentUserUid])
+    //   });
+    // } else {
+    //   widget.post.likes.remove(currentUserUid);
+    //   postRef.update({
+    //     'likes': FieldValue.arrayRemove([currentUserUid])
+    //   });
+    // }
   }
 
   @override

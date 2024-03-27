@@ -11,7 +11,6 @@ class PostProvider extends ChangeNotifier {
   List<Post> get getPosts => _posts;
 
   PostProvider() {
-    // Initialize the stream subscription in the constructor
     _subscription = FirebaseFirestore.instance
         .collection('Posts')
         .snapshots()
@@ -23,7 +22,6 @@ class PostProvider extends ChangeNotifier {
 
   @override
   void dispose() {
-    // Cancel the stream subscription when the provider is disposed
     _subscription.cancel();
     super.dispose();
   }
@@ -48,10 +46,8 @@ class PostProvider extends ChangeNotifier {
           .get();
 
       if (postSnapshot.exists) {
-        // Find the index of the post in the _posts list
         int index = _posts.indexWhere((post) => post.postId == postId);
         if (index != -1) {
-          // Update the post data in the _posts list
           _posts[index] = Post.fromSnap(postSnapshot);
           notifyListeners();
         }
