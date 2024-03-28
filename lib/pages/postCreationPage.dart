@@ -134,8 +134,11 @@ class _postCreationPageState extends State<postCreationPage> {
     profileUrl = user.photoUrl;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Post Zone"),
+        backgroundColor: Color.fromARGB(255, 43, 48, 58),
+        title: const Text(
+          "Post To Neighbors",
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           TextButton(
             onPressed: () => {
@@ -154,8 +157,12 @@ class _postCreationPageState extends State<postCreationPage> {
           )
         ],
       ),
+      backgroundColor: Colors.black,
       body: Column(
         children: [
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +190,7 @@ class _postCreationPageState extends State<postCreationPage> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 43, 48, 58),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: DropdownButton<String>(
