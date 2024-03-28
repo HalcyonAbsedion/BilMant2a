@@ -1,16 +1,12 @@
-import 'package:bilmant2a/models/post.dart';
 import 'package:bilmant2a/pages/DisplayPosts.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
-import 'package:bilmant2a/services/uploadImg.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:provider/provider.dart';
 import 'package:bilmant2a/services/auth_service.dart';
-
-import '../components/post_widget.dart';
-import '../providers/post_provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -21,7 +17,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final AuthMethods _authMethods = AuthMethods();
-  final uploadMethods _uploadMethods = uploadMethods();
+
   @override
   void initState() {
     super.initState();
@@ -29,39 +25,10 @@ class _ProfileState extends State<Profile> {
 
   final currentUser = FirebaseAuth.instance.currentUser!;
 
-  Future _selectPhoto() async {
-    await showModalBottomSheet(
-        context: context,
-        builder: (context) => BottomSheet(
-              builder: (context) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.camera),
-                    title: Text("Camera"),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      _uploadMethods.picksImage(ImageSource.camera);
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.photo),
-                    title: Text("Choose a File"),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      _uploadMethods.picksImage(ImageSource.gallery);
-                    },
-                  )
-                ],
-              ),
-              onClosing: () {},
-            ));
-  }
-
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final PostProvider postProvider = Provider.of<PostProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 43, 48, 58),
@@ -101,25 +68,20 @@ class _ProfileState extends State<Profile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    InkWell(
-                      onTap: _selectPhoto,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: userProvider.getUser.photoUrl != ""
-                              ? NetworkImage(userProvider.getUser.photoUrl)
-                              : null,
-                          // Optionally, you can provide a placeholder image here
-                          // Placeholder can be a default user avatar or a loading indicator
-                          // backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : AssetImage('assets/default_avatar.png'),
-                        ),
-                      ),
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green, width: 2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: userProvider.getUser.photoUrl != ""
+                          ? NetworkImage(userProvider.getUser.photoUrl)
+                          : null,
+                    ),
+                  ),
                 ),
                 Text(
                   "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}",
@@ -183,7 +145,10 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-          Expanded(child: DisplayPosts(postUserId: userProvider.getUser.uid,)),
+          Expanded(
+              child: DisplayPosts(
+            postUserId: userProvider.getUser.uid,
+          )),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bilmant2a/components/post_widget.dart';
@@ -36,9 +37,9 @@ class _DiplayPostsState extends State<DisplayPosts> {
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    uid = userProvider.getUser.uid;
+    uid = FirebaseAuth.instance.currentUser?.uid;
     if (isUserPage) {
-      if (widget.postUserId == userProvider.getUser.uid) {
+      if (widget.postUserId == uid) {
         posts = postProvider.currentUserPosts;
       }
     } else {
@@ -55,6 +56,7 @@ class _DiplayPostsState extends State<DisplayPosts> {
             child: ListView.builder(
               itemCount: posts.length,
               itemBuilder: (context, index) {
+                // print(posts.length);
                 final post = posts[index];
                 return PostWidget(
                   post: post,

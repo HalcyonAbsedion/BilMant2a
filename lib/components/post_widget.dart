@@ -69,10 +69,16 @@ class _PostWidgetState extends State<PostWidget> {
               Row(
                 children: [
                   Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green, width: 2),
-                          shape: BoxShape.circle),
-                      child: const CircleAvatar()),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green, width: 2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: widget.post.profImage != ""
+                          ? NetworkImage(widget.post.profImage)
+                          : null,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(

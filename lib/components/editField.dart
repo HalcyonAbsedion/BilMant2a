@@ -100,6 +100,8 @@ class _editFieldState extends State<editField> {
           await postRef.update({'username': username});
         }
         postProvider.fetchPosts();
+        postProvider
+            .fetchCurrentUserFilteredPosts(userProvider.getUser.postIds);
       }
     }
   }

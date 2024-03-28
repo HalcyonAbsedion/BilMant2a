@@ -143,8 +143,10 @@ class _postCreationPageState extends State<postCreationPage> {
           TextButton(
             onPressed: () => {
               postSend(user.locations.last),
-              postProvider.fetchPosts(),
               userProvider.refreshUser(),
+              postProvider.fetchPosts(),
+              postProvider
+                  .fetchCurrentUserFilteredPosts(userProvider.getUser.postIds),
             },
             child: const Text(
               "Post",
