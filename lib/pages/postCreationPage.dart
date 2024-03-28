@@ -135,7 +135,7 @@ class _postCreationPageState extends State<postCreationPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text("Post to"),
+        title: const Text("Post Zone"),
         actions: [
           TextButton(
             onPressed: () => {
@@ -160,18 +160,25 @@ class _postCreationPageState extends State<postCreationPage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundImage:
-                    profileUrl != "" ? NetworkImage(profileUrl) : null,
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: CircleAvatar(
+                  backgroundImage:
+                      profileUrl != "" ? NetworkImage(profileUrl) : null,
+                ),
               ),
               Expanded(
-                child: TextField(
-                  controller: textController,
-                  decoration: const InputDecoration(
-                    hintText: "Write a caption...",
-                    border: InputBorder.none,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: TextField(
+                    controller: textController,
+                    decoration: const InputDecoration(
+                      hintText: "Write here...",
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: InputBorder.none,
+                    ),
+                    maxLines: 8,
                   ),
-                  maxLines: 8,
                 ),
               ),
               Container(
