@@ -1,3 +1,4 @@
+import 'package:bilmant2a/pages/DisplayPosts.dart';
 import 'package:bilmant2a/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,9 @@ class TopBar extends StatelessWidget {
         backgroundColor: Colors.grey[300],
         body: const TabBarView(
           children: [
-            HomePage(postType: 'explore'),
-            HomePage(postType: 'donations'),
-            HomePage(postType: 'volunteer'),
+            DisplayPosts(postType: 'explore'),
+            DisplayPosts(postType: 'donations'),
+            DisplayPosts(postType: 'volunteer'),
           ],
         ),
       ),

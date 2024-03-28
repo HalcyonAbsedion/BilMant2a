@@ -1,4 +1,5 @@
 import 'package:bilmant2a/models/post.dart';
+import 'package:bilmant2a/pages/DisplayPosts.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/uploadImg.dart';
@@ -182,35 +183,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-          Expanded(
-                child: FutureBuilder<List<Post>>(
-                    future: postProvider.getFilteredPosts(userProvider.getUser.postIds), // Assuming postIds is available
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      } else {
-                        List<Post> posts = snapshot.data ?? [];
-                        return Expanded(
-                          child: ListView.builder(
-                            itemCount: posts.length,
-                            itemBuilder: (context, index) {
-                              final post = posts[index];
-                              return PostWidget(
-                                post: post,
-                              );
-                            },
-                          ),
-                        );
-                      }
-                    },
-                  ),
-              ),
+          Expanded(child: DisplayPosts()),
         ],
       ),
     );

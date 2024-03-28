@@ -1,30 +1,17 @@
-import 'dart:async';
-
-import 'package:bilmant2a/models/post.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bilmant2a/models/post.dart';
 
 class PostProvider extends ChangeNotifier {
   List<Post> _posts = [];
-  late StreamSubscription<QuerySnapshot> _subscription;
+  List<Post> _currentUserPosts = [];
+  List<Post> _otherUserPosts = [];
 
-  List<Post> get getPosts => _posts;
+  List<Post> get posts => _posts;
+  List<Post> get currentUserPosts => _currentUserPosts;
+  List<Post> get otherUserPosts => _otherUserPosts;
 
-  PostProvider() {
-    _subscription = FirebaseFirestore.instance
-        .collection('Posts')
-        .snapshots()
-        .listen((querySnapshot) {
-      _posts = querySnapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
-      notifyListeners();
-    });
-  }
-
-  @override
-  void dispose() {
-    _subscription.cancel();
-    super.dispose();
-  }
+  PostProvider();
 
   Future<void> fetchPosts() async {
     try {
@@ -38,50 +25,48 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> refreshPost(String postId) async {
+  Future<void> fetchCurrentUserFilteredPosts(List<dynamic> postIds) async {
     try {
-      final DocumentSnapshot postSnapshot = await FirebaseFirestore.instance
-          .collection('Posts')
-          .doc(postId)
-          .get();
-
-      if (postSnapshot.exists) {
-        int index = _posts.indexWhere((post) => post.postId == postId);
-        if (index != -1) {
-          _posts[index] = Post.fromSnap(postSnapshot);
-          notifyListeners();
-        }
-      }
-    } catch (e) {
-      print('Error refreshing post: $e');
-    }
-  }
-  
-  Future<List<Post>> getFilteredPosts(List<dynamic> postIds) async {
-    List<Post> posts = [];
-
-    try {
-      List<Future<DocumentSnapshot>> futures = postIds.map((postId) {
-        return FirebaseFirestore.instance
-            .collection("Posts")
+      _currentUserPosts.clear();
+      for (String postId in postIds) {
+        DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+            .collection('Posts')
             .doc(postId)
             .get();
-      }).toList();
 
-      List<DocumentSnapshot> snapshots = await Future.wait(futures);
-
-      for (var snapshot in snapshots) {
-        Post post = Post.fromSnap(snapshot);
-        posts.add(post);
+        if (docSnapshot.exists) {
+          Post post = Post.fromSnap(docSnapshot);
+          _currentUserPosts.add(post);
+        }
       }
-    } catch (error) {
-      // Handle any potential errors, such as Firebase errors
-      print("Error fetching posts: $error");
-      // You may want to throw an error or return an empty list here
-      // depending on your use case
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching current user posts: $e');
     }
-
-    return posts;
   }
 
+  Future<void> fetchOtherUserFilteredPosts(List<dynamic> otherPostIds) async {
+    try {
+      _otherUserPosts.clear();
+      for (String postId in otherPostIds) {
+        DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+            .collection('Posts')
+            .doc(postId)
+            .get();
+
+        if (docSnapshot.exists) {
+          Post post = Post.fromSnap(docSnapshot);
+          _otherUserPosts.add(post);
+        }
+      }
+      notifyListeners();
+    } catch (e) {
+      print('Error fetching other user posts: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
