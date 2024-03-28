@@ -10,7 +10,7 @@ class TopBar extends StatelessWidget {
       length: 3, // Adjusted length to match the number of tabs
       child: Scaffold(
         appBar: _appBar(),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.black,
         body: const TabBarView(
           children: [
             HomePage(postType: 'explore'),
@@ -46,7 +46,7 @@ class TopBar extends StatelessWidget {
       borderRadius: BorderRadius.vertical(
         bottom: Radius.circular(20),
       ),
-      color: Colors.black,
+      color: Color.fromARGB(255, 43, 48, 58),
     );
   }
 
