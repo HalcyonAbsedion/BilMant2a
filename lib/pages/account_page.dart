@@ -64,7 +64,7 @@ class _ProfileState extends State<Profile> {
     final PostProvider postProvider = Provider.of<PostProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 43, 48, 58),
         elevation: 0,
         actions: [
           IconButton(
@@ -75,7 +75,7 @@ class _ProfileState extends State<Profile> {
             icon: const Icon(
               Icons.logout,
               size: 30,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
           const SizedBox(
@@ -86,13 +86,14 @@ class _ProfileState extends State<Profile> {
             child: IconButton(
               onPressed: () {},
               icon: const Icon(
-                Icons.help,
-                color: Colors.black,
+                Icons.settings,
+                color: Colors.white,
               ),
             ),
           ),
         ],
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Padding(
@@ -105,14 +106,17 @@ class _ProfileState extends State<Profile> {
                   children: [
                     InkWell(
                       onTap: _selectPhoto,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: userProvider.getUser.photoUrl != ""
-                            ? NetworkImage(userProvider.getUser.photoUrl)
-                            : null,
-                        // Optionally, you can provide a placeholder image here
-                        // Placeholder can be a default user avatar or a loading indicator
-                        // backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : AssetImage('assets/default_avatar.png'),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: userProvider.getUser.photoUrl != ""
+                              ? NetworkImage(userProvider.getUser.photoUrl)
+                              : null,
+                          // Optionally, you can provide a placeholder image here
+                          // Placeholder can be a default user avatar or a loading indicator
+                          // backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : AssetImage('assets/default_avatar.png'),
+                        ),
                       ),
                     )
                   ],
@@ -126,7 +130,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "Bio: ${userProvider.getUser.bio} ",
+                  "${userProvider.getUser.bio} ",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -145,31 +149,27 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.white)),
-                  child: ElevatedButton(
-                    child: const Text(
-                      "Edit Profile",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfilePageEdit(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(0),
-                      fixedSize: const Size(300, 50),
-                      backgroundColor: Colors.grey[300],
-                      textStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                ElevatedButton(
+                  child: const Text(
+                    "Edit Profile",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePageEdit(),
                       ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    fixedSize: const Size(300, 50),
+                    backgroundColor: Colors.grey[300],
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
