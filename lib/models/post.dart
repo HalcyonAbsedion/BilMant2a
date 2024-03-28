@@ -5,7 +5,7 @@ class Post {
   final String postType;
   final String uid;
   final String username;
-  final likes;
+  final List<String> likes;
   final String postId;
   final DateTime datePublished;
   final List<String> mediaUrl;
@@ -31,7 +31,7 @@ class Post {
       description: snapshot["description"],
       postType: snapshot["postType"],
       uid: snapshot["uid"],
-      likes: snapshot["likes"],
+      likes: List<String>.from(snapshot["likes"]),
       postId: snapshot["postId"],
       datePublished: (snapshot["datePublished"] as Timestamp).toDate(),
       username: snapshot["username"],
