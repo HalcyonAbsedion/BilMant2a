@@ -77,26 +77,59 @@ class TopBar extends StatelessWidget {
   }
 
   Widget _tabBar() {
-    return const TabBar(
+    return TabBar(
       labelPadding: EdgeInsets.all(0),
       labelColor: Colors.lightGreen,
       indicatorColor: Colors.white,
       unselectedLabelColor: Colors.white,
       tabs: [
-        Tab(
-          iconMargin: EdgeInsets.all(0),
-          icon: Icon(Icons.explore),
-          text: 'Explore',
+        Container(
+          height: 70,
+          width: 100,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Tab(
+            iconMargin: EdgeInsets.all(0),
+            icon: Icon(Icons.explore),
+            text: 'Explore',
+          ),
         ),
-        Tab(
-          iconMargin: EdgeInsets.all(0),
-          icon: Icon(Icons.volunteer_activism),
-          text: 'Donations',
+        Container(
+          height: 70,
+          width: 100,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Tab(
+            iconMargin: EdgeInsets.all(0),
+            icon: Icon(Icons.volunteer_activism),
+            text: 'Donations',
+          ),
         ),
-        Tab(
-          iconMargin: EdgeInsets.all(0),
-          icon: Icon(Icons.handshake),
-          text: 'Volunteer',
+        Container(
+          height: 70,
+          width: 100,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Tab(
+            iconMargin: EdgeInsets.all(0),
+            icon: Icon(Icons.handshake),
+            text: 'Volunteer',
+          ),
         ),
       ],
     );

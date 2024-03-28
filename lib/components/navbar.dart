@@ -4,6 +4,7 @@ import 'package:bilmant2a/pages/directMessages_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../pages/postCreationPage.dart';
+
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
 
@@ -20,8 +21,6 @@ class _NavBarState extends State<NavBar> {
     super.initState();
     pageController = PageController();
   }
-
-  
 
   @override
   void dispose() {
@@ -78,8 +77,11 @@ class _NavBarState extends State<NavBar> {
               label: '',
               backgroundColor: Colors.blue),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle,
-                  color: (_page == 2) ? Colors.blue : Colors.white),
+              icon: Icon(
+                Icons.add_circle,
+                color: (_page == 2) ? Colors.blue : Colors.white,
+                size: 40,
+              ),
               label: '',
               backgroundColor: Colors.blue),
           BottomNavigationBarItem(

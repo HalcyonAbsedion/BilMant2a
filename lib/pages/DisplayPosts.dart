@@ -39,25 +39,14 @@ class _DiplayPostsState extends State<DisplayPosts> {
     //     // posts = postProvider.otherUserPosts;
     //   }
     // } else {
-      postProvider.fetchPosts();
-      posts = postProvider.posts;
+    postProvider.fetchPosts();
+    posts = postProvider.posts;
     // }
     if (widget.postType != 'explore') {
       posts = posts.where((post) => post.postType == widget.postType).toList();
     }
     return Column(
       children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.cyan,
-            ),
-          ),
-        ),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => postProvider.fetchPosts(),
