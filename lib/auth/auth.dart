@@ -18,17 +18,14 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
   }
-
-  addUserData() async {
+  addData() async {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     await userProvider.refreshUser();
-  }
-
-  addPostData() async {
     PostProvider postProvider =
         Provider.of<PostProvider>(context, listen: false);
     await postProvider.fetchPosts();
+    await postProvider.fetchCurrentUserFilteredPosts(userProvider.getUser.postIds);
   }
 
   @override
@@ -38,8 +35,7 @@ class _AuthPageState extends State<AuthPage> {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                addUserData();
-                addPostData();
+                addData();
                 return Builder(
                   builder: (context) => NavBar(),
                 );

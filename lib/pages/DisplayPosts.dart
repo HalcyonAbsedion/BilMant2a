@@ -1,13 +1,9 @@
-import 'package:bilmant2a/components/post_widget.dart';
-import 'package:bilmant2a/models/post.dart';
-import 'package:bilmant2a/services/auth_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:bilmant2a/components/post_widget.dart';
+import 'package:bilmant2a/models/post.dart';
 import '../providers/post_provider.dart';
 import '../providers/user_provider.dart';
-import 'package:bilmant2a/models/user.dart' as model;
 
 class DisplayPosts extends StatefulWidget {
   final String postType; // New parameter for post type
@@ -29,19 +25,18 @@ class _DiplayPostsState extends State<DisplayPosts> {
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    // if (widget.userId.isNotEmpty) {
-    //   if (widget.userId == userProvider.getUser.uid) {
-    //     postProvider
-    //         .fetchCurrentUserFilteredPosts(userProvider.getUser.postIds);
-    //     posts = postProvider.currentUserPosts;
-    //   } else {
-    //     // postProvider.fetchOtherUserFilteredPosts(userProvider.getOtherUser.postIds);
-    //     // posts = postProvider.otherUserPosts;
-    //   }
-    // } else {
-    postProvider.fetchPosts();
+    if (widget.userId.isNotEmpty) {
+      if (widget.userId == userProvider.getUser.uid) {
+        postProvider
+            .fetchCurrentUserFilteredPosts(userProvider.getUser.postIds);
+        posts = postProvider.currentUserPosts;
+      } else {
+        // postProvider.fetchOtherUserFilteredPosts(userProvider.getOtherUser.postIds);
+        // posts = postProvider.otherUserPosts;
+      }
+    } else {
     posts = postProvider.posts;
-    // }
+    }
     if (widget.postType != 'explore') {
       posts = posts.where((post) => post.postType == widget.postType).toList();
     }
