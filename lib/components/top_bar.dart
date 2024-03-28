@@ -11,7 +11,7 @@ class TopBar extends StatelessWidget {
       length: 3, // Adjusted length to match the number of tabs
       child: Scaffold(
         appBar: _appBar(),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.black,
         body: const TabBarView(
           children: [
             DisplayPosts(postType: 'explore'),
@@ -47,7 +47,7 @@ class TopBar extends StatelessWidget {
       borderRadius: BorderRadius.vertical(
         bottom: Radius.circular(20),
       ),
-      color: Colors.black,
+      color: Color.fromARGB(255, 43, 48, 58),
     );
   }
 
@@ -57,8 +57,20 @@ class TopBar extends StatelessWidget {
         Expanded(
           child: Text(
             'BIL MANT2A',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(
+            Icons.speaker,
+            color: Colors.white,
+          ),
+        ),
+        Icon(
+          Icons.backup,
+          color: Colors.white,
         ),
       ],
     );

@@ -56,8 +56,7 @@ class _PostWidgetState extends State<PostWidget> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromARGB(148, 204, 204, 204),
-        border: Border.all(color: Colors.cyan),
+        color: Color.fromARGB(255, 43, 48, 58),
         borderRadius: BorderRadius.circular(12),
       ),
       margin: EdgeInsets.only(top: 25, left: 25, right: 25),
@@ -68,15 +67,39 @@ class _PostWidgetState extends State<PostWidget> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.post.username,
-                style: TextStyle(color: Colors.grey[500]),
+              Row(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.green, width: 2),
+                          shape: BoxShape.circle),
+                      child: const CircleAvatar()),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      widget.post.username,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                widget.post.location,
+              Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: Text(
+                  widget.post.location,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.blue,
+                  ),
+                ),
               ),
               const SizedBox(height: 10),
-              Text(widget.post.description),
+              Text(
+                widget.post.description,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ],
           ),
           // if (widget.post.mediaUrl.isNotEmpty)
@@ -103,6 +126,9 @@ class _PostWidgetState extends State<PostWidget> {
               style: TextStyle(),
               decoration: InputDecoration(
                 hintText: 'Comment Here...',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(color: Colors.cyan, width: 2.0),
@@ -136,7 +162,12 @@ class _PostWidgetState extends State<PostWidget> {
           const SizedBox(
             width: 3,
           ),
-          Text(widget.post.likes.length.toString()),
+          Text(
+            widget.post.likes.length.toString(),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
     );
@@ -146,8 +177,17 @@ class _PostWidgetState extends State<PostWidget> {
     return Container(
       child: const Row(
         children: [
-          IconButton(onPressed: null, icon: Icon(Icons.comment)),
-          Text("999"),
+          IconButton(
+            onPressed: null,
+            icon: Icon(
+              Icons.comment,
+              color: Colors.white,
+            ),
+          ),
+          Text(
+            "999",
+            style: TextStyle(color: Colors.white),
+          ),
         ],
       ),
     );
@@ -157,8 +197,16 @@ class _PostWidgetState extends State<PostWidget> {
     return Container(
       child: const Row(
         children: [
-          IconButton(onPressed: null, icon: Icon(Icons.share)),
-          Text("999"),
+          IconButton(
+              onPressed: null,
+              icon: Icon(
+                Icons.share,
+                color: Colors.white,
+              )),
+          Text(
+            "999",
+            style: TextStyle(color: Colors.white),
+          ),
         ],
       ),
     );
