@@ -18,4 +18,32 @@ class PostProvider extends ChangeNotifier {
       print('Error fetching posts: $e');
     }
   }
+  
+  Future<List<Post>> getFilteredPosts(List<dynamic> postIds) async {
+    List<Post> posts = [];
+
+    try {
+      List<Future<DocumentSnapshot>> futures = postIds.map((postId) {
+        return FirebaseFirestore.instance
+            .collection("Posts")
+            .doc(postId)
+            .get();
+      }).toList();
+
+      List<DocumentSnapshot> snapshots = await Future.wait(futures);
+
+      for (var snapshot in snapshots) {
+        Post post = Post.fromSnap(snapshot);
+        posts.add(post);
+      }
+    } catch (error) {
+      // Handle any potential errors, such as Firebase errors
+      print("Error fetching posts: $error");
+      // You may want to throw an error or return an empty list here
+      // depending on your use case
+    }
+
+    return posts;
+  }
+
 }
