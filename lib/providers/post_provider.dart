@@ -5,7 +5,7 @@ import 'package:bilmant2a/models/post.dart';
 class PostProvider extends ChangeNotifier {
   List<Post> _posts = [];
   List<Post> _currentUserPosts = [];
-  List<Post> _otherUserPosts = [];
+  final List<Post> _otherUserPosts = [];
 
   List<Post> get posts => _posts;
   List<Post> get currentUserPosts => _currentUserPosts;
@@ -26,8 +26,8 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> fetchCurrentUserFilteredPosts(List<dynamic> postIds) async {
+    _currentUserPosts = [];
     try {
-      _currentUserPosts.clear();
       for (String postId in postIds) {
         DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
             .collection('Posts')
