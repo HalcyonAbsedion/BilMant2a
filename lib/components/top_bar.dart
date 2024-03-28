@@ -56,8 +56,20 @@ class TopBar extends StatelessWidget {
         Expanded(
           child: Text(
             'BIL MANT2A',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(
+            Icons.speaker,
+            color: Colors.white,
+          ),
+        ),
+        Icon(
+          Icons.backup,
+          color: Colors.white,
         ),
       ],
     );

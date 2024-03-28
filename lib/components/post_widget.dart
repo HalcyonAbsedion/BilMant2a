@@ -68,12 +68,32 @@ class _PostWidgetState extends State<PostWidget> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.post.username,
-                style: TextStyle(color: Colors.grey[500]),
+              Row(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.lightGreen),
+                          shape: BoxShape.circle),
+                      child: const CircleAvatar()),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      widget.post.username,
+                      style: TextStyle(
+                          color: const Color.fromARGB(255, 134, 132, 132)),
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                widget.post.location,
+              Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: Text(
+                  widget.post.location,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.blue,
+                  ),
+                ),
               ),
               const SizedBox(height: 10),
               Text(widget.post.description),

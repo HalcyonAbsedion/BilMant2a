@@ -36,14 +36,6 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.cyan,
-                ),
-              ),
-            ),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () => postProvider.fetchPosts(),
