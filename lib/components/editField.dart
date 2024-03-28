@@ -85,12 +85,9 @@ class _editFieldState extends State<editField> {
       await usersColl.doc(currentUser.uid).update({field: newValue.trim()});
       UserProvider userProvider =
           Provider.of<UserProvider>(context, listen: false);
-
       await userProvider.refreshUser();
       widget.userValue = newValue;
       if (field == 'firstName' || field == 'lastName') {
-        UserProvider userProvider =
-            Provider.of<UserProvider>(context, listen: false);
         postIds = userProvider.getUser.postIds;
         PostProvider postProvider =
             Provider.of<PostProvider>(context, listen: false);

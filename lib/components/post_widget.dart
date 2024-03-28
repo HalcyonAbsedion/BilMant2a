@@ -25,7 +25,6 @@ class _PostWidgetState extends State<PostWidget> {
     // isLiked = widget.post.likes.contains();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     isLiked = widget.post.likes.contains(currentUserUid);
-    print(currentUserUid);
   }
 
   void toggleLike() {

@@ -183,7 +183,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-          Expanded(child: DisplayPosts()),
+          Expanded(child: DisplayPosts(postUserId: userProvider.getUser.uid,)),
         ],
       ),
     );
