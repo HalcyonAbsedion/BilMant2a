@@ -5,13 +5,17 @@ import 'package:bilmant2a/models/post.dart';
 class PostProvider extends ChangeNotifier {
   List<Post> _posts = [];
   List<Post> _currentUserPosts = [];
-  List<Post> _otherUserPosts = [];
+  final List<Post> _otherUserPosts = [];
 
   List<Post> get posts => _posts;
   List<Post> get currentUserPosts => _currentUserPosts;
   List<Post> get otherUserPosts => _otherUserPosts;
 
   PostProvider();
+  Post getPostByPostID(String postID) {
+    return _posts.firstWhere((post) => post.postId == postID,
+        orElse: () => Post.empty());
+  }
 
   Future<void> fetchPosts() async {
     try {
@@ -26,8 +30,8 @@ class PostProvider extends ChangeNotifier {
   }
 
   Future<void> fetchCurrentUserFilteredPosts(List<dynamic> postIds) async {
+    _currentUserPosts = [];
     try {
-      _currentUserPosts.clear();
       for (String postId in postIds) {
         DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
             .collection('Posts')

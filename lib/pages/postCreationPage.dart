@@ -117,8 +117,12 @@ class _postCreationPageState extends State<postCreationPage> {
         .collection("Posts")
         .doc(postId)
         .set(post.toJson());
+
     authMethods.addUserToList(
         elementToAdd: postId, fieldName: 'postIds', userId: uid);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    userProvider.getUser.postIds.add(postId);
     setState(() {
       textController.clear();
     });

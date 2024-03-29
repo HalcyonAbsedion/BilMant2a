@@ -43,6 +43,21 @@ class Post {
     );
   }
 
+  static Post empty() {
+    return Post(
+      description: "",
+      postType: "",
+      uid: "",
+      likes: List<String>.from([]),
+      postId: "",
+      datePublished: ("" as Timestamp).toDate(),
+      username: "",
+      mediaUrl: ("" as List<dynamic>).map((url) => url.toString()).toList(),
+      profImage: "",
+      location: "",
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         "description": description,
         "postType": postType,

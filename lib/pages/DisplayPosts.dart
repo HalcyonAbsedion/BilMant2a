@@ -27,6 +27,7 @@ class _DiplayPostsState extends State<DisplayPosts> {
   @override
   void initState() {
     super.initState();
+
     isUserPage = widget.postUserId.isNotEmpty;
     if (isUserPage) {
       isOtherUserPage = widget.postUserId != uid;
@@ -44,10 +45,12 @@ class _DiplayPostsState extends State<DisplayPosts> {
       }
     } else {
       posts = postProvider.posts;
+      if (widget.postType != 'explore') {
+        posts =
+            posts.where((post) => post.postType == widget.postType).toList();
+      }
     }
-    if (widget.postType != 'explore') {
-      posts = posts.where((post) => post.postType == widget.postType).toList();
-    }
+
     return Column(
       children: [
         Expanded(
@@ -56,7 +59,7 @@ class _DiplayPostsState extends State<DisplayPosts> {
             child: ListView.builder(
               itemCount: posts.length,
               itemBuilder: (context, index) {
-                // print(posts.length);
+                print(posts.length);
                 final post = posts[index];
                 return PostWidget(
                   post: post,
