@@ -1,6 +1,7 @@
 import 'package:bilmant2a/components/top_bar.dart';
 import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/directMessages_page.dart';
+import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../pages/postCreationPage.dart';
@@ -47,9 +48,7 @@ class _NavBarState extends State<NavBar> {
         onPageChanged: onPageChanged,
         children: [
           const TopBar(),
-          Container(
-              color: Colors.green,
-              child: const Center(child: Text('Discover Page'))),
+          WeatherPage(),
           const postCreationPage(),
           DirectMessages(),
           // Wrap Profile with Builder
