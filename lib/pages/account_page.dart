@@ -1,6 +1,10 @@
+import 'package:bilmant2a/components/post_widget.dart';
+import 'package:bilmant2a/models/post.dart';
 import 'package:bilmant2a/pages/DisplayPosts.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
+import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -146,9 +150,21 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           Expanded(
-              child: DisplayPosts(
-            postUserId: userProvider.getUser.uid,
-          )),
+            child: Consumer<UserProvider>(
+              builder: (context, userProvider, _) {
+                return ListView.builder(
+                  itemCount: userProvider.getUser.postIds.length,
+                  itemBuilder: (context, index) {
+                    final postID = userProvider.getUser.postIds[index];
+                    final postProvider = Provider.of<PostProvider>(context);
+                    return PostWidget(
+                      post: postProvider.getPostByPostID(postID),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

@@ -12,6 +12,10 @@ class PostProvider extends ChangeNotifier {
   List<Post> get otherUserPosts => _otherUserPosts;
 
   PostProvider();
+  Post getPostByPostID(String postID) {
+    return _posts.firstWhere((post) => post.postId == postID,
+        orElse: () => Post.empty());
+  }
 
   Future<void> fetchPosts() async {
     try {
