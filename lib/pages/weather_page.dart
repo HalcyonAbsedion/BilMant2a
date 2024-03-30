@@ -2,6 +2,7 @@ import 'package:bilmant2a/services/weather_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../models/weather.dart';
 
@@ -27,6 +28,29 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
+  String getWeatherAnimation(String? mainCondition) {
+    if (mainCondition == null) return 'assests/sunny.json';
+    switch (mainCondition.toLowerCase()) {
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'dust':
+      case 'fog':
+        return 'assets/cloud.json';
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+        return 'assets/rainy.json';
+      case 'thuderstorm':
+        return 'assets/thuder.json';
+      case 'clear':
+        return 'assets/sunny.json';
+      default:
+        return 'assets/sunny.json';
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,10 +60,11 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return Center(
+      child: Column(
         children: [
           Text(_weather?.areaName ?? "loading location..."),
+          Container(child: Lottie.asset(getWeatherAnimation(_weather?.mainCondition ?? "")), width: 500,),
           Text('${_weather?.temperature.round()}°C')
         ],
       ),
