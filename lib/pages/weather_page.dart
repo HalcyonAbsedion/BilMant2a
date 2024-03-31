@@ -69,7 +69,7 @@ class _WeatherPageState extends State<WeatherPage> {
               children: [
                 const Icon(Icons.location_on),
                 Text(
-                  _weather?.areaName ?? "Loading location...",
+                  _weather?.areaName ?? "Loading Location...",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
