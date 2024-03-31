@@ -1,4 +1,5 @@
 import 'package:bilmant2a/components/like_button.dart';
+import 'package:bilmant2a/components/videoComponent.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -107,16 +108,38 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ],
           ),
-          // if (widget.post.mediaUrl.isNotEmpty)
-          //   Column(
-          //     children: widget.post.mediaUrl.map((url) {
-          //       return CachedNetworkImage(
-          //         imageUrl: url,
-          //         placeholder: (context, url) => CircularProgressIndicator(),
-          //         errorWidget: (context, url, error) => Icon(Icons.error),
-          //       );
-          //     }).toList(),
-          //   ),
+          if (widget.post.mediaUrl.isNotEmpty)
+            SingleChildScrollView(
+              child: Column(
+                children: widget.post.mediaUrl.map((url) {
+                  // Extract file name from URL
+                  String fileName = url.split('/').last.split('?').first;
+                  int lastIndex = fileName.lastIndexOf('.');
+                  String ext = fileName.substring(lastIndex + 1);
+                  print(url);
+                  print(ext);
+                  if (ext == "mp4") {
+                    // Video case
+                    // return Text("TEST video");
+                    return SizedBox(
+                      height: 300, // Adjust the height as needed
+                      child: VideoPlayerPage(
+                        videoUrl: url,
+                      ),
+                    );
+                  } else {
+                    // Image case
+                    // return Text("TEST image");
+                    return CachedNetworkImage(
+                      imageUrl: url,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    );
+                  }
+                }).toList(),
+              ),
+            ),
           Row(
             children: [
               likeComponent(),
@@ -124,7 +147,6 @@ class _PostWidgetState extends State<PostWidget> {
               shareComponent(),
             ],
           ),
-
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Container(

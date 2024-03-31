@@ -23,10 +23,21 @@ class Media {
     return null;
   }
 
+  Future<String?> getFileNameWithExtension() async {
+    File? file = await assetEntity.file;
+    if (file != null) {
+      return file.path.split('/').last;
+    }
+    return null;
+  }
+
   Future<void> printFilePath() async {
     String? filePath = await getFilePath();
+    String? fileName = await getFileNameWithExtension();
+
     if (filePath != null) {
       print('File Path: $filePath');
+      print('NAME $fileName');
     } else {
       print('File Path is null');
     }
@@ -35,6 +46,7 @@ class Media {
   Future<String?> uploadToFirebaseStorage() async {
     // Get the file path
     String? filePath = await getFilePath();
+    String? ext = await getFileNameWithExtension();
     if (filePath == null) {
       print('File Path is null. Cannot upload to Firebase Storage.');
       return "";
@@ -44,8 +56,9 @@ class Media {
     FirebaseStorage storage = FirebaseStorage.instance;
 
     // Create a reference to the file in Firebase Storage
-    Reference ref =
-        storage.ref().child('postMedia/${DateTime.now().millisecondsSinceEpoch}');
+    Reference ref = storage
+        .ref()
+        .child('postMedia/${DateTime.now().millisecondsSinceEpoch}$ext');
 
     try {
       // Upload the file to Firebase Storage

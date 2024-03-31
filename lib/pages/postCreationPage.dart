@@ -42,41 +42,6 @@ class _postCreationPageState extends State<postCreationPage> {
     _selectedMedias[0].printFilePath();
   }
 
-  Future _selectPhoto() async {
-    await showModalBottomSheet(
-        context: context,
-        builder: (context) => BottomSheet(
-              builder: (context) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.camera),
-                    title: Text("Camera"),
-                    onTap: () async {
-                      Navigator.of(context).pop();
-                      pickedFile = await _imagePicker.pickImage(
-                        source: ImageSource.camera,
-                        imageQuality: 50,
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.photo),
-                    title: Text("Choose a File"),
-                    onTap: () async {
-                      Navigator.of(context).pop();
-                      pickedFile = await _imagePicker.pickImage(
-                        source: ImageSource.gallery,
-                        imageQuality: 50,
-                      );
-                    },
-                  )
-                ],
-              ),
-              onClosing: () {},
-            ));
-  }
-
   Future<void> _handleFloatingActionButton() async {
     final List<Media>? result = await Navigator.push<List<Media>>(
       // Navigate to the picker screen

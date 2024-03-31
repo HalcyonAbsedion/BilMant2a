@@ -92,15 +92,16 @@ class _ProfileState extends State<Profile> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
+                    color: Colors.black,
                   ),
                 ),
                 SizedBox(height: 10),
                 Text(
                   "${userProvider.getUser.bio} ",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.black),
                 ),
                 SizedBox(height: 10),
                 Row(

@@ -48,11 +48,11 @@ class Post {
       description: "",
       postType: "",
       uid: "",
-      likes: List<String>.from([]),
+      likes: List<String>.empty(),
       postId: "",
-      datePublished: ("" as Timestamp).toDate(),
+      datePublished: DateTime.now(), // Set to current date and time
       username: "",
-      mediaUrl: ("" as List<dynamic>).map((url) => url.toString()).toList(),
+      mediaUrl: List<String>.empty(),
       profImage: "",
       location: "",
     );
