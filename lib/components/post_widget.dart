@@ -141,7 +141,7 @@ class _PostWidgetState extends State<PostWidget> {
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(10),
-                hintText: 'Comment Here...',
+                hintText: 'Comment Here..',
                 hintStyle: TextStyle(
                   color: Colors.grey,
                 ),
@@ -150,13 +150,17 @@ class _PostWidgetState extends State<PostWidget> {
                   borderSide: BorderSide(color: Colors.cyan, width: 2.0),
                 ),
                 enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Colors.grey, width: 2.0)),
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                ),
                 suffixIcon: IconButton(
                   onPressed: () {
                     _textController.clear();
                   },
-                  icon: Icon(Icons.clear),
+                  icon: Icon(
+                    Icons.clear,
+                    color: Colors.red,
+                  ),
                 ),
               ),
             ),

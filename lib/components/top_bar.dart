@@ -77,18 +77,21 @@ class TopBar extends StatelessWidget {
 
   Widget _tabBar() {
     return TabBar(
-      labelPadding: EdgeInsets.all(0),
-      labelColor: Colors.lightGreen,
-      indicatorColor: Colors.white,
-      unselectedLabelColor: Colors.white,
+      labelPadding: EdgeInsets.all(1),
+      labelColor: Colors.white,
+      indicatorColor: Colors.transparent,
+      indicatorPadding: EdgeInsets.zero,
+      indicatorWeight: double.minPositive,
+      dividerHeight: 0,
+      unselectedLabelColor: Colors.grey[700],
       tabs: [
         Container(
           height: 70,
           width: 100,
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey,
-              width: 1,
+              color: Colors.cyan,
+              width: 2,
             ),
             borderRadius: BorderRadius.circular(20),
           ),
@@ -103,7 +106,7 @@ class TopBar extends StatelessWidget {
           width: 100,
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey,
+              color: Colors.red,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(20),
@@ -119,7 +122,7 @@ class TopBar extends StatelessWidget {
           width: 100,
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.grey,
+              color: Colors.lightGreen,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(20),
