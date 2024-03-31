@@ -43,6 +43,11 @@ class TopBar extends StatelessWidget {
 
   BoxDecoration _boxDecoration() {
     return const BoxDecoration(
+      border: Border(
+        bottom: BorderSide(
+          color: Color.fromARGB(255, 66, 74, 90),
+        ),
+      ),
       borderRadius: BorderRadius.vertical(
         bottom: Radius.circular(20),
       ),

@@ -58,43 +58,60 @@ class _NavBarState extends State<NavBar> {
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
-        backgroundColor: Colors.black,
+        border: Border.all(
+          color: Color.fromARGB(255, 66, 74, 90),
+        ),
+        backgroundColor: Color.fromARGB(255, 43, 48, 58),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: (_page == 0) ? Colors.blue : Colors.white,
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.home,
+                color: (_page == 0) ? Colors.green : Colors.white,
+              ),
+            ),
+            label: '',
+            backgroundColor: Colors.cyan,
+          ),
+          BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.search,
+                  color: (_page == 1) ? Colors.yellow : Colors.white,
+                ),
+              ),
+              label: '',
+              backgroundColor: Colors.blue),
+          BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.add_circle,
+                  color: (_page == 2) ? Colors.deepPurple : Colors.white,
+                ),
+              ),
+              label: '',
+              backgroundColor: Colors.blue),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.people,
+                color: (_page == 3) ? Colors.orange : Colors.white,
+              ),
             ),
             label: '',
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search,
-                color: (_page == 1) ? Colors.blue : Colors.white,
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.person,
+                color: (_page == 4) ? Colors.red : Colors.white,
               ),
-              label: '',
-              backgroundColor: Colors.blue),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.add_circle,
-                color: (_page == 2) ? Colors.blue : Colors.white,
-                size: 40,
-              ),
-              label: '',
-              backgroundColor: Colors.blue),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.people,
-              color: (_page == 3) ? Colors.blue : Colors.white,
-            ),
-            label: '',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              color: (_page == 4) ? Colors.blue : Colors.white,
             ),
             label: '',
             backgroundColor: Colors.blue,
