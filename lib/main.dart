@@ -2,6 +2,7 @@ import 'package:bilmant2a/auth/auth.dart';
 import 'package:bilmant2a/firebase_options.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: AuthPage(),
+        home: const AuthPage(),
+        theme: lightMode,
+        darkTheme: darkMode,
       ),
     );
   }
