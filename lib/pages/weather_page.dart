@@ -60,13 +60,34 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Text(_weather?.areaName ?? "loading location..."),
-          Container(child: Lottie.asset(getWeatherAnimation(_weather?.mainCondition ?? "")), width: 500,),
-          Text('${_weather?.temperature.round()}°C')
-        ],
+    return SafeArea(
+      child: Center(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.location_on),
+                Text(
+                  _weather?.areaName ?? "Loading location...",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              width: 200,
+              child: Lottie.asset(
+                  getWeatherAnimation(_weather?.mainCondition ?? "")),
+            ),
+            Text('${_weather?.temperature.round()}°C',
+                style: const TextStyle(
+                  fontSize: 20,
+                ))
+          ],
+        ),
       ),
     );
   }

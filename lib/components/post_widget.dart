@@ -124,12 +124,23 @@ class _PostWidgetState extends State<PostWidget> {
               shareComponent(),
             ],
           ),
+
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Container(
+              height: 1,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(162, 255, 255, 255),
+              ),
+            ),
+          ),
           SizedBox(
-            height: 50,
+            height: 40,
             child: TextField(
               controller: _textController,
-              style: TextStyle(),
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10),
                 hintText: 'Comment Here...',
                 hintStyle: TextStyle(
                   color: Colors.grey,
