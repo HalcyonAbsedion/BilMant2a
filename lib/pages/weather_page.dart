@@ -1,8 +1,6 @@
 import 'package:bilmant2a/services/weather_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import '../models/weather.dart';
 
@@ -37,17 +35,17 @@ class _WeatherPageState extends State<WeatherPage> {
       case 'haze':
       case 'dust':
       case 'fog':
-        return 'assets/cloudy.json';
+        return 'assets/cloudy.png';
       case 'rain':
       case 'drizzle':
       case 'shower rain':
-        return 'assets/rainy.json';
+        return 'assets/rainy.png';
       case 'thuderstorm':
-        return 'assets/thunder.json';
+        return 'assets/thunder.png';
       case 'clear':
-        return 'assets/sunny.json';
+        return 'assets/sunny.png';
       default:
-        return 'assets/sunny.json';
+        return 'assets/sunny.png';
     }
   }
 
@@ -60,35 +58,22 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.location_on),
-                Text(
-                  _weather?.areaName ?? "Loading Location...",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              width: 200,
-              child: Lottie.asset(
-                  getWeatherAnimation(_weather?.mainCondition ?? "")),
-            ),
-            Text('${_weather?.temperature.round()}°C',
-                style: const TextStyle(
-                  fontSize: 20,
-                ))
-          ],
-        ),
-      ),
-    );
+    if (_weather == null) {
+      return Icon(Icons.location_disabled_outlined,color: Colors.red,);
+    } else {
+      return Row(
+        children: [
+          Image.asset(
+            getWeatherAnimation(_weather?.mainCondition ?? ""),
+            height: 30.0,
+            width: 30.0,
+          ),
+          Text('${_weather?.temperature.round()}°C',
+              style: const TextStyle(
+                fontSize: 10,
+              ))
+        ],
+      );
+    }
   }
 }

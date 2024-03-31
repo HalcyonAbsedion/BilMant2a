@@ -1,4 +1,5 @@
 import 'package:bilmant2a/pages/DisplayPosts.dart';
+import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/material.dart';
 
 class TopBar extends StatelessWidget {
@@ -76,6 +77,7 @@ class TopBar extends StatelessWidget {
           Icons.backup,
           color: Colors.white,
         ),
+        WeatherPage(),
       ],
     );
   }
