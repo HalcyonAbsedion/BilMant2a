@@ -58,7 +58,23 @@ class _postCreationPageState extends State<postCreationPage> {
     }
   }
 
-  void postSend(String location) async {
+  void postSend(BuildContext context, String location) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent user from dismissing dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("Sending post..."),
+            ],
+          ),
+        );
+      },
+    );
+
     List<String> mediaUrl = [];
     for (var media in _selectedMedias) {
       String? url = await media.uploadToFirebaseStorage();
@@ -66,31 +82,43 @@ class _postCreationPageState extends State<postCreationPage> {
         mediaUrl.add(url);
       }
     }
+
     String postId = const Uuid().v1();
     model.Post post = model.Post(
-        description: textController.text.trim(),
-        postType: selectedPostType,
-        uid: uid,
-        username: username,
-        likes: [],
-        postId: postId,
-        datePublished: DateTime.now(),
-        mediaUrl: mediaUrl,
-        profImage: profileUrl,
-        location: location);
-    FirebaseFirestore.instance
+      description: textController.text.trim(),
+      postType: selectedPostType,
+      uid: uid,
+      username: username,
+      likes: [],
+      postId: postId,
+      datePublished: DateTime.now(),
+      mediaUrl: mediaUrl,
+      profImage: profileUrl,
+      location: location,
+    );
+
+    await FirebaseFirestore.instance
         .collection("Posts")
         .doc(postId)
         .set(post.toJson());
 
-    authMethods.addUserToList(
-        elementToAdd: postId, fieldName: 'postIds', userId: uid);
+    await authMethods.addUserToList(
+      elementToAdd: postId,
+      fieldName: 'postIds',
+      userId: uid,
+    );
+
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     userProvider.getUser.postIds.add(postId);
+
     setState(() {
       textController.clear();
+      _selectedMedias.clear();
     });
+
+    // Dismiss the loading dialog
+    Navigator.pop(context);
   }
 
   @override
@@ -111,7 +139,7 @@ class _postCreationPageState extends State<postCreationPage> {
         actions: [
           TextButton(
             onPressed: () => {
-              postSend(user.locations.last),
+              postSend(context, user.locations.last),
               userProvider.refreshUser(),
               postProvider.fetchPosts(),
               postProvider
