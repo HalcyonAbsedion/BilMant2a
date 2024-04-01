@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 //   ),
 // );
 
-ThemeData darkMode = ThemeData(
+ThemeData BMtheme = ThemeData(
   brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
     background: Colors.black,

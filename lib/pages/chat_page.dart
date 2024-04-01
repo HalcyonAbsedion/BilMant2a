@@ -10,7 +10,11 @@ class ChatPage extends StatelessWidget {
   final String receiverID;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  ChatPage({super.key, required this.receiverName, required this.receiverID, required this.senderName});
+  ChatPage(
+      {super.key,
+      required this.receiverName,
+      required this.receiverID,
+      required this.senderName});
 
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
@@ -25,13 +29,12 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 24, 24, 24),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
-          shape: Border(
+          shape: const Border(
             bottom: BorderSide(
-              color: const Color.fromARGB(139, 255, 255, 255),
+              color: Color.fromARGB(139, 255, 255, 255),
               width: 1,
             ),
           ),
@@ -52,7 +55,7 @@ class ChatPage extends StatelessWidget {
               ),
             ],
           ),
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           foregroundColor: Colors.white,
           elevation: 4,
         ),
@@ -93,9 +96,12 @@ class ChatPage extends StatelessWidget {
 
     return Container(
         alignment: alignment,
-        child:
-            ChatBubble(senderName: data["senderName"] ,message: data["message"], isCurrentUser: isCurrentUser, timeStamp: data["timeStamp"],));
-            
+        child: ChatBubble(
+          senderName: data["senderName"],
+          message: data["message"],
+          isCurrentUser: isCurrentUser,
+          timeStamp: data["timeStamp"],
+        ));
   }
 
   Widget _buildUserInput(BuildContext context) {
@@ -113,7 +119,9 @@ class ChatPage extends StatelessWidget {
                 borderRadius: new BorderRadius.circular(25.7),
               ),
               enabledBorder: UnderlineInputBorder(
-                borderSide: new BorderSide(color: Colors.white),
+                borderSide: new BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
                 borderRadius: new BorderRadius.circular(25.7),
               ),
             ),

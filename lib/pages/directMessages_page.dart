@@ -1,6 +1,7 @@
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
 import '../components/user_tile.dart';
@@ -14,37 +15,45 @@ class DirectMessages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    senderName=userProvider.getUser.firstName+" "+userProvider.getUser.lastName;
+    senderName =
+        userProvider.getUser.firstName + " " + userProvider.getUser.lastName;
     dynamic currentlocation = userProvider.getUser.locations.last.toString();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
         toolbarHeight: 150,
-        title: const Column(
+        title: Column(
           children: [
-            Text(
-              "Logo Here",
-              style: TextStyle(
-                color: Color.fromARGB(47, 202, 202, 202),
+            Animate(
+              effects: [
+                SlideEffect(
+                  duration: 500.ms,
+                  delay: 500.ms,
+                ),
+                const FadeEffect(),
+              ],
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.chat,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    'Direct Messages',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.chat,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  'Direct Messages',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
+            IconButton.filled(
+              onPressed: () {},
+              icon: Icon(Icons.location_pin),
+            ).animate().fadeIn(delay: 500.ms),
           ],
         ),
       ),
