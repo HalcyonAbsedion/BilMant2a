@@ -9,12 +9,15 @@ class ChatPage extends StatelessWidget {
   final String receiverName;
   final String receiverID;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final String receiverPhotoUrl;
 
   ChatPage(
-      {super.key,
+      {Key? key,
       required this.receiverName,
       required this.receiverID,
-      required this.senderName});
+      required this.senderName,
+      required this.receiverPhotoUrl})
+      : super(key: key);
 
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
@@ -22,7 +25,10 @@ class ChatPage extends StatelessWidget {
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessage(
-          receiverID.toString(), _messageController.text, senderName);
+        receiverID.toString(),
+        _messageController.text,
+        senderName,
+      );
       _messageController.clear();
     }
   }
@@ -30,43 +36,47 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        appBar: AppBar(
-          shape: const Border(
-            bottom: BorderSide(
-              color: Color.fromARGB(139, 255, 255, 255),
-              width: 1,
-            ),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      appBar: AppBar(
+        shape: const Border(
+          bottom: BorderSide(
+            color: Color.fromARGB(139, 255, 255, 255),
+            width: 1,
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  receiverName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                receiverName,
+                style: const TextStyle(
+                  fontSize: 18,
                 ),
               ),
-              CircleAvatar(
-                backgroundColor: Colors.white,
-              ),
-            ],
-          ),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          foregroundColor: Colors.white,
-          elevation: 4,
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: _buildMessageList(),
             ),
-            _buildUserInput(context),
+            CircleAvatar(
+              radius: 25,
+              backgroundImage: receiverPhotoUrl != ""
+                  ? NetworkImage(receiverPhotoUrl)
+                  : null,
+            ),
           ],
-        ));
+        ),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Colors.white,
+        elevation: 4,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: _buildMessageList(),
+          ),
+          _buildUserInput(context),
+        ],
+      ),
+    );
   }
 
   Widget _buildMessageList() {
@@ -80,28 +90,85 @@ class ChatPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading..");
         }
+
+        List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
+        List<Widget> messageWidgets = [];
+
+        Map<DateTime, List<QueryDocumentSnapshot>> groupedMessages =
+            _groupMessagesByDate(messages);
+
+        groupedMessages.forEach((date, messageList) {
+          messageWidgets.add(
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Center(
+                //DATE
+                child: Text(
+                  _formatDate(date),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+
+          messageWidgets.addAll(
+            messageList.map((doc) => _buildMessageItem(doc)).toList(),
+          );
+        });
+
         return ListView(
-          children:
-              snapshot.data!.docs.map((doc) => _buildMessageItem(doc)).toList(),
+          children: messageWidgets,
         );
       },
     );
   }
 
-  Widget _buildMessageItem(DocumentSnapshot doc) {
+  Map<DateTime, List<QueryDocumentSnapshot>> _groupMessagesByDate(
+      List<QueryDocumentSnapshot> messages) {
+    Map<DateTime, List<QueryDocumentSnapshot>> groupedMessages = {};
+
+    for (var message in messages) {
+      Map<String, dynamic> data = message.data() as Map<String, dynamic>;
+      DateTime messageDate = (data['timeStamp'] as Timestamp).toDate();
+
+      DateTime dateWithoutTime =
+          DateTime(messageDate.year, messageDate.month, messageDate.day);
+
+      if (!groupedMessages.containsKey(dateWithoutTime)) {
+        groupedMessages[dateWithoutTime] = [];
+      }
+
+      groupedMessages[dateWithoutTime]!.add(message);
+    }
+
+    // groupedMessages.forEach((date, messageList) {
+    //   print('Date: $date');
+    //   messageList.forEach((message) {
+    //     print('Message: ${message.data()}');
+    //   });
+    // });
+
+    return groupedMessages;
+  }
+
+  Widget _buildMessageItem(QueryDocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     bool isCurrentUser = data['senderID'] == _chatService.getCurrentUser()!.uid;
     var alignment =
         isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
 
     return Container(
-        alignment: alignment,
-        child: ChatBubble(
-          senderName: data["senderName"],
-          message: data["message"],
-          isCurrentUser: isCurrentUser,
-          timeStamp: data["timeStamp"],
-        ));
+      alignment: alignment,
+      child: ChatBubble(
+        senderName: receiverName,
+        message: data["message"],
+        isCurrentUser: isCurrentUser,
+        timeStamp: data["timeStamp"],
+      ),
+    );
   }
 
   Widget _buildUserInput(BuildContext context) {
@@ -135,14 +202,25 @@ class ChatPage extends StatelessWidget {
               color: Colors.blue,
             ),
             child: IconButton(
-                onPressed: sendMessage,
-                icon: const Icon(
-                  Icons.send,
-                  color: Colors.white,
-                )),
+              onPressed: sendMessage,
+              icon: const Icon(
+                Icons.send,
+                color: Colors.white,
+              ),
+            ),
           ),
         )
       ],
     );
+  }
+
+  String _formatDate(DateTime dateTime) {
+    if (DateTime.now().day == dateTime.day &&
+        DateTime.now().month == dateTime.month &&
+        DateTime.now().year == dateTime.year) {
+      return 'Today';
+    } else {
+      return "${dateTime.day}/${dateTime.month}/${dateTime.year}";
+    }
   }
 }

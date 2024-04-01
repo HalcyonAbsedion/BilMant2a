@@ -62,6 +62,7 @@ class DirectMessages extends StatelessWidget {
           // Other widgets can be placed here
           // For example:
           UserTile(
+            url: "",
             text: currentlocation,
             onTap: () {
               Navigator.push(
@@ -73,6 +74,7 @@ class DirectMessages extends StatelessWidget {
                           userProvider.getUser.lastName,
                       receiverName: currentlocation,
                       receiverID: currentlocation.toString().toLowerCase(),
+                      receiverPhotoUrl: "",
                     ),
                   ));
             },
@@ -108,9 +110,11 @@ class DirectMessages extends StatelessWidget {
       Map<String, dynamic> userData, BuildContext context) {
     String receiverName = userData['firstName'] + " " + userData['lastName'];
     String uid = userData["uid"].toString();
+    String photoUrl = userData['photoUrl'];
     if (userData['email'] != _chatService.getCurrentUser()!.email) {
       return UserTile(
         text: receiverName,
+        url: photoUrl,
         onTap: () {
           Navigator.push(
               context,
@@ -119,6 +123,7 @@ class DirectMessages extends StatelessWidget {
                   senderName: "",
                   receiverName: receiverName,
                   receiverID: uid,
+                  receiverPhotoUrl: photoUrl,
                 ),
               ));
         },

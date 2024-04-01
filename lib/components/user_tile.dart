@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class UserTile extends StatelessWidget {
   final String text;
+  final String url;
   final void Function()? onTap;
-  const UserTile({super.key, required this.text, required this.onTap});
+  const UserTile(
+      {super.key, required this.text, required this.onTap, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,10 @@ class UserTile extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 25),
         padding: EdgeInsets.all(20),
         child: Row(children: [
-          CircleAvatar(),
+          CircleAvatar(
+            radius: 25,
+            backgroundImage: url != "" ? NetworkImage(url) : null,
+          ),
           const SizedBox(
             width: 20,
           ),
