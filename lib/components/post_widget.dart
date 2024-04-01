@@ -123,7 +123,7 @@ class _PostWidgetState extends State<PostWidget> {
                       child: SizedBox(
                         child: AspectRatio(
                           aspectRatio: MediaQuery.of(context).size.width *
-                              01.2 /
+                              01 /
                               MediaQuery.of(context).size.height *
                               1,
                           child: VideoPlayerPage(
