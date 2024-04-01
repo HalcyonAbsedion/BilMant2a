@@ -119,12 +119,17 @@ class _PostWidgetState extends State<PostWidget> {
                   print(url);
                   print(ext);
                   if (ext == "mp4") {
-                    // Video case
-                    // return Text("TEST video");
-                    return SizedBox(
-                      height: 300, // Adjust the height as needed
-                      child: VideoPlayerPage(
-                        videoUrl: url,
+                    return Center(
+                      child: SizedBox(
+                        child: AspectRatio(
+                          aspectRatio: MediaQuery.of(context).size.width *
+                              01.2 /
+                              MediaQuery.of(context).size.height *
+                              1,
+                          child: VideoPlayerPage(
+                            videoUrl: url,
+                          ),
+                        ),
                       ),
                     );
                   } else {

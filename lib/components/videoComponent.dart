@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
 
@@ -11,29 +13,28 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  late VideoPlayerController _videoPlayerController;
   late CustomVideoPlayerController _customVideoPlayerController;
   late bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _videoPlayerController = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {
-          isLoading = false;
-        });
-      });
-
+    VideoPlayerController videoPlayerController =
+        VideoPlayerController.network(widget.videoUrl);
     _customVideoPlayerController = CustomVideoPlayerController(
       context: context,
-      videoPlayerController: _videoPlayerController,
+      videoPlayerController: videoPlayerController,
     );
+
+    videoPlayerController.initialize().then((_) {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
     _customVideoPlayerController.dispose();
     super.dispose();
   }
