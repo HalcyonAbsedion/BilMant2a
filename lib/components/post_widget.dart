@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
@@ -110,8 +111,14 @@ class _PostWidgetState extends State<PostWidget> {
           ),
           if (widget.post.mediaUrl.isNotEmpty)
             SingleChildScrollView(
-              child: Column(
-                children: widget.post.mediaUrl.map((url) {
+              child: ExpandableCarousel(
+                options: CarouselOptions(
+                  height: 50,
+                  autoPlay: false,
+                  viewportFraction: 1.0,
+                  aspectRatio: 16 / 9,
+                ),
+                items: widget.post.mediaUrl.map((url) {
                   // Extract file name from URL
                   String fileName = url.split('/').last.split('?').first;
                   int lastIndex = fileName.lastIndexOf('.');
@@ -123,7 +130,7 @@ class _PostWidgetState extends State<PostWidget> {
                       child: SizedBox(
                         child: AspectRatio(
                           aspectRatio: MediaQuery.of(context).size.width *
-                              01 /
+                              1.85 /
                               MediaQuery.of(context).size.height *
                               1,
                           child: VideoPlayerPage(
@@ -135,11 +142,17 @@ class _PostWidgetState extends State<PostWidget> {
                   } else {
                     // Image case
                     // return Text("TEST image");
-                    return CachedNetworkImage(
-                      imageUrl: url,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    return AspectRatio(
+                      aspectRatio: MediaQuery.of(context).size.width *
+                          1.85 /
+                          MediaQuery.of(context).size.height *
+                          1,
+                      child: CachedNetworkImage(
+                        imageUrl: url,
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     );
                   }
                 }).toList(),
