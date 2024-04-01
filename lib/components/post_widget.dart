@@ -93,6 +93,17 @@ class _PostWidgetState extends State<PostWidget> {
               Padding(
                 padding: const EdgeInsets.only(left: 50.0),
                 child: Text(
+                  _getTimeDifference(widget
+                      .post.datePublished), // Display time difference here
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 50.0),
+                child: Text(
                   widget.post.location,
                   style: TextStyle(
                     fontSize: 10,
@@ -270,5 +281,20 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       ),
     );
+  }
+
+  String _getTimeDifference(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inHours < 1) {
+      return '${difference.inMinutes} min';
+    } else if (difference.inDays < 1) {
+      return '${difference.inHours} hr';
+    } else {
+      return '${difference.inDays} day';
+    }
   }
 }
