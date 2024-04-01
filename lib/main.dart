@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const AuthPage(),
-        theme: lightMode,
         darkTheme: darkMode,
       ),
     );
