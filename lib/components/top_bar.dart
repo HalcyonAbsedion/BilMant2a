@@ -1,6 +1,7 @@
 import 'package:bilmant2a/pages/DisplayPosts.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({Key? key}) : super(key: key);
@@ -57,27 +58,67 @@ class TopBar extends StatelessWidget {
   }
 
   Widget _topBar() {
-    return const Row(
+    return Row(
       children: [
-        Expanded(
-          child: Text(
-            'BIL MANT2A',
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        Animate(
+          effects: [
+            ShimmerEffect(
+              duration: 1500.ms,
+              delay: 1000.ms,
+              color: Colors.cyan,
+            ),
+          ],
+          child: Expanded(
+            child: const Text(
+              'BIL MANT2A',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ).animate().fadeOut(delay: 3000.ms).swap(
+                  //animates text in top bar
+                  duration: 1500.ms,
+                  builder: (_, __) => const Text(
+                    "Welcome!",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                      .animate()
+                      .fadeIn(duration: 500.ms, delay: 500.ms)
+                      .fadeOut(delay: 3000.ms)
+                      .swap(
+                        duration: 1000.ms,
+                        builder: (_, __) => const Text(
+                          'BIL MANT2A',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ).animate().fadeIn(duration: 1500.ms, delay: 500.ms),
+                      ),
+                ),
           ),
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.all(8.0),
           child: Icon(
-            Icons.speaker,
+            Icons.help,
             color: Colors.white,
           ),
         ),
-        Icon(
-          Icons.backup,
+        const Icon(
+          Icons.notifications,
           color: Colors.white,
         ),
-        WeatherPage(),
+        const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: WeatherPage(),
+        ),
       ],
     );
   }
@@ -92,52 +133,79 @@ class TopBar extends StatelessWidget {
       dividerHeight: 0,
       unselectedLabelColor: Colors.grey[700],
       tabs: [
-        Container(
-          height: 70,
-          width: 100,
-          decoration: BoxDecoration(
-            border: Border.all(
+        Animate(
+          effects: [
+            ShimmerEffect(
+              duration: 1500.ms,
+              delay: 1000.ms,
               color: Colors.cyan,
-              width: 2,
+            )
+          ],
+          child: Container(
+            height: 70,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(20),
             ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Tab(
-            iconMargin: EdgeInsets.all(0),
-            icon: Icon(Icons.explore),
-            text: 'Explore',
+            child: const Tab(
+              iconMargin: EdgeInsets.all(0),
+              icon: Icon(Icons.explore),
+              text: 'Explore',
+            ),
           ),
         ),
-        Container(
-          height: 70,
-          width: 100,
-          decoration: BoxDecoration(
-            border: Border.all(
+        Animate(
+          effects: [
+            ShimmerEffect(
+              duration: 1500.ms,
+              delay: 1500.ms,
               color: Colors.red,
-              width: 1,
+            )
+          ],
+          child: Container(
+            height: 70,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(20),
             ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Tab(
-            iconMargin: EdgeInsets.all(0),
-            icon: Icon(Icons.volunteer_activism),
-            text: 'Donations',
+            child: const Tab(
+              iconMargin: EdgeInsets.all(0),
+              icon: Icon(Icons.volunteer_activism),
+              text: 'Donations',
+            ),
           ),
         ),
-        Container(
-          height: 70,
-          width: 100,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.lightGreen,
-              width: 1,
+        Animate(
+          effects: [
+            ShimmerEffect(
+              duration: 1500.ms,
+              delay: 2000.ms,
+              color: Colors.green,
+            )
+          ],
+          child: Container(
+            height: 70,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(20),
             ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Tab(
-            iconMargin: EdgeInsets.all(0),
-            icon: Icon(Icons.handshake),
-            text: 'Volunteer',
+            child: Tab(
+              iconMargin: EdgeInsets.all(0),
+              icon: Icon(Icons.handshake),
+              text: 'Volunteer',
+            ),
           ),
         ),
       ],
