@@ -12,7 +12,7 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 class PostWidget extends StatefulWidget {
   final Post post;
-  const PostWidget({super.key, required this.post});
+  const PostWidget({Key? key, required this.post}) : super(key: key);
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -20,13 +20,22 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   bool isLiked = false;
-  var postProvider;
-  var currentUserUid = "";
+  late TextEditingController _textController;
+  late PostProvider postProvider;
+  late String currentUserUid;
+
+  @override
   void initState() {
     super.initState();
-    // isLiked = widget.post.likes.contains();
+    _textController = TextEditingController();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     isLiked = widget.post.likes.contains(currentUserUid);
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 
   void toggleLike() {
@@ -37,7 +46,6 @@ class _PostWidgetState extends State<PostWidget> {
         FirebaseFirestore.instance.collection('Posts').doc(widget.post.postId);
     if (isLiked) {
       widget.post.likes.add(currentUserUid);
-
       postRef.update({
         'likes': FieldValue.arrayUnion([currentUserUid])
       });
@@ -51,9 +59,8 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_constructors
-    final _textController = TextEditingController();
-    postProvider = Provider.of<PostProvider>(context);
+    postProvider = PostProvider();
+    final size = MediaQuery.of(context).size;
 
     return Container(
       decoration: BoxDecoration(
@@ -153,55 +160,23 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ],
           ),
+          // Display media (images or videos)
           if (widget.post.mediaUrl.isNotEmpty)
-            SingleChildScrollView(
+            SizedBox(
+              height: size.height * 0.4,
               child: ExpandableCarousel(
                 options: CarouselOptions(
-                  height: 50,
+                  height: size.height * 0.4,
                   autoPlay: false,
                   viewportFraction: 1.0,
                   aspectRatio: 16 / 9,
                 ),
                 items: widget.post.mediaUrl.map((url) {
-                  // Extract file name from URL
-                  String fileName = url.split('/').last.split('?').first;
-                  int lastIndex = fileName.lastIndexOf('.');
-                  String ext = fileName.substring(lastIndex + 1);
-                  print(url);
-                  print(ext);
-                  if (ext == "mp4") {
-                    return Center(
-                      child: SizedBox(
-                        child: AspectRatio(
-                          aspectRatio: MediaQuery.of(context).size.width *
-                              1.85 /
-                              MediaQuery.of(context).size.height *
-                              1,
-                          child: VideoPlayerPage(
-                            videoUrl: url,
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    // Image case
-                    // return Text("TEST image");
-                    return AspectRatio(
-                      aspectRatio: MediaQuery.of(context).size.width *
-                          1.85 /
-                          MediaQuery.of(context).size.height *
-                          1,
-                      child: CachedNetworkImage(
-                        imageUrl: url,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      ),
-                    );
-                  }
+                  return _buildMediaItem(url);
                 }).toList(),
               ),
             ),
+
           Row(
             children: [
               likeComponent(),
@@ -323,6 +298,34 @@ class _PostWidgetState extends State<PostWidget> {
       return '${difference.inHours} hr ago';
     } else {
       return '${difference.inDays} day ago';
+    }
+  }
+
+  Widget _buildMediaItem(String url) {
+    String ext = url.split('/').last.split('?').first.split('.').last;
+
+    if (ext.toLowerCase() == 'mp4') {
+      // Video case
+      return AspectRatio(
+        aspectRatio: MediaQuery.of(context).size.width *
+            1.85 /
+            MediaQuery.of(context).size.height *
+            1,
+        child: VideoPlayerPage(videoUrl: url),
+      );
+    } else {
+      // Image case
+      return AspectRatio(
+        aspectRatio: MediaQuery.of(context).size.width *
+            1.85 /
+            MediaQuery.of(context).size.height *
+            1,
+        child: CachedNetworkImage(
+          imageUrl: url,
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
+      );
     }
   }
 }

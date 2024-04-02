@@ -56,7 +56,11 @@ class _DiplayPostsState extends State<DisplayPosts> {
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => postProvider.fetchPosts(),
-            child: ListView.builder(
+            child: ListView.separated(
+              physics: ScrollPhysics(parent: BouncingScrollPhysics()),
+              separatorBuilder: (context, int) => Container(
+                height: 5,
+              ),
               itemCount: posts.length,
               itemBuilder: (context, index) {
                 print(posts.length);
