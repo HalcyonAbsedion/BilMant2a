@@ -7,11 +7,10 @@ import 'package:flutter/material.dart';
 import '../models/message.dart';
 import '../storage/message_storage.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   final String senderName;
   final String receiverName;
   final String receiverID;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final String receiverPhotoUrl;
 
   ChatPage(
@@ -22,15 +21,46 @@ class ChatPage extends StatelessWidget {
       required this.receiverPhotoUrl})
       : super(key: key);
 
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final TextEditingController _messageController = TextEditingController();
+
   final ChatService _chatService = ChatService();
+  var senderId;
+  @override
+  void dispose() {
+    // _chatService.storeNewMessages(widget.receiverID, senderId);
+    super.dispose();
+  }
 
   void sendMessage() async {
+    final String currentUserID = _auth.currentUser!.uid;
+    final Timestamp timeStamp = Timestamp.now();
+    String chatRoomID = widget.receiverID;
+    if (widget.receiverID.length > 10) {
+      List<String> ids = [currentUserID, widget.receiverID];
+      ids.sort();
+      chatRoomID = ids.join('_');
+    }
+
+    
     if (_messageController.text.isNotEmpty) {
+      Message newMessage = Message(
+      senderName: widget.senderName,
+      senderID: currentUserID,
+      message: _messageController.text,
+      chatRoomID: chatRoomID,
+      timeStamp: timeStamp,
+      received: false,
+    );
       await _chatService.sendMessage(
-        receiverID.toString(),
-        _messageController.text,
-        senderName,
+        newMessage,
+        chatRoomID
       );
       _messageController.clear();
     }
@@ -38,6 +68,7 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
@@ -53,7 +84,7 @@ class ChatPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
-                receiverName,
+                widget.receiverName,
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -61,8 +92,8 @@ class ChatPage extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 25,
-              backgroundImage: receiverPhotoUrl != ""
-                  ? NetworkImage(receiverPhotoUrl)
+              backgroundImage: widget.receiverPhotoUrl != ""
+                  ? NetworkImage(widget.receiverPhotoUrl)
                   : null,
             ),
           ],
@@ -74,6 +105,9 @@ class ChatPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
+            child: _buildPreviousMessageList(),
+          ),
+          Expanded(
             child: _buildMessageList(),
           ),
           _buildUserInput(context),
@@ -82,37 +116,77 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMessageList() {
-    String senderID = _auth.currentUser!.uid;
-    List<String> ids = [receiverID, senderID];
+  Widget _buildPreviousMessageList() {
+    senderId = _auth.currentUser!.uid;
+    List<String> ids = [widget.receiverID, senderId];
     ids.sort();
     String chatRoomID = ids.join('_');
     MessageStorage messageStorage = MessageStorage(chatId: chatRoomID);
-    Future<List<Message>> messages = messageStorage.getStoredMessages();
+
+    return FutureBuilder<List<Message>>(
+      future: messageStorage.getStoredMessages(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading..");
+        } else if (snapshot.hasError) {
+          return Text("Error: ${snapshot.error}");
+        } else {
+          List<Message> messages = snapshot.data!;
+          return ListView.builder(
+            itemCount: messages.length,
+            itemBuilder: (context, index) {
+              return _buildMessageItem(messages[index]);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildMessageList() {
+    String senderID = _auth.currentUser!.uid;
     return StreamBuilder(
-      stream: _chatService.getMessages(receiverID, senderID),
+      stream: _chatService.getMessages(widget.receiverID, senderID),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Error");
         }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading..");
+        }
 
-        return FutureBuilder<List<Message>>(
-          future: messageStorage.getStoredMessages(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container();
-            } else if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
-            } else {
-              List<Message> messages = snapshot.data!;
-              return ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return _buildMessageItem(messages[index]);
-                },
-              );
-            }
-          },
+        List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
+        List<Widget> messageWidgets = [];
+
+        Map<DateTime, List<QueryDocumentSnapshot>> groupedMessages =
+            _groupMessagesByDate(messages);
+
+        groupedMessages.forEach((date, messageList) {
+          messageWidgets.add(
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Center(
+                //DATE
+                child: Text(
+                  _formatDate(date),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+
+          messageWidgets.addAll(
+            messageList
+                .map((doc) => _buildMessageItem(Message.fromSnap(doc)))
+                .toList(),
+          );
+        });
+
+        return ListView(
+          children: messageWidgets,
         );
       },
     );
@@ -155,7 +229,7 @@ class ChatPage extends StatelessWidget {
     return Container(
       alignment: alignment,
       child: ChatBubble(
-        senderName: receiverName,
+        senderName: widget.receiverName,
         message: data["message"],
         isCurrentUser: isCurrentUser,
         timeStamp: data["timeStamp"],
