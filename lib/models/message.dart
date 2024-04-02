@@ -21,4 +21,15 @@ class Message {
       'received': received,
     };
   }
+  static Message fromSnap(DocumentSnapshot snapshot) {
+    final data = snapshot.data() as Map<String, dynamic>;
+    return Message(
+      senderID: data['senderID'],
+      message: data['message'],
+      chatRoomID: data['chatRoomID'],
+      timeStamp: data['timeStamp'] as Timestamp,
+      senderName: data['senderName'],
+      received: data['received'] ?? false, // Default value if 'received' field is not present
+    );
+  }
 }

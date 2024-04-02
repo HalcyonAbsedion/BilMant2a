@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../models/message.dart';
+import '../storage/message_storage.dart';
+
 class ChatPage extends StatelessWidget {
   final String senderName;
   final String receiverName;
@@ -81,46 +84,35 @@ class ChatPage extends StatelessWidget {
 
   Widget _buildMessageList() {
     String senderID = _auth.currentUser!.uid;
+    List<String> ids = [receiverID, senderID];
+    ids.sort();
+    String chatRoomID = ids.join('_');
+    MessageStorage messageStorage = MessageStorage(chatId: chatRoomID);
+    Future<List<Message>> messages = messageStorage.getStoredMessages();
     return StreamBuilder(
       stream: _chatService.getMessages(receiverID, senderID),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Error");
         }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading..");
-        }
 
-        List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
-        List<Widget> messageWidgets = [];
-
-        Map<DateTime, List<QueryDocumentSnapshot>> groupedMessages =
-            _groupMessagesByDate(messages);
-
-        groupedMessages.forEach((date, messageList) {
-          messageWidgets.add(
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Center(
-                //DATE
-                child: Text(
-                  _formatDate(date),
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          );
-
-          messageWidgets.addAll(
-            messageList.map((doc) => _buildMessageItem(doc)).toList(),
-          );
-        });
-
-        return ListView(
-          children: messageWidgets,
+        return FutureBuilder<List<Message>>(
+          future: messageStorage.getStoredMessages(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container();
+            } else if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            } else {
+              List<Message> messages = snapshot.data!;
+              return ListView.builder(
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return _buildMessageItem(messages[index]);
+                },
+              );
+            }
+          },
         );
       },
     );
@@ -154,8 +146,8 @@ class ChatPage extends StatelessWidget {
     return groupedMessages;
   }
 
-  Widget _buildMessageItem(QueryDocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  Widget _buildMessageItem(Message message) {
+    Map<String, dynamic> data = message.toMap();
     bool isCurrentUser = data['senderID'] == _chatService.getCurrentUser()!.uid;
     var alignment =
         isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
