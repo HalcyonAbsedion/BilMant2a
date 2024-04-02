@@ -67,7 +67,7 @@ class _PostWidgetState extends State<PostWidget> {
         color: const Color.fromARGB(255, 43, 48, 58),
         borderRadius: BorderRadius.circular(12),
       ),
-      margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
+      margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
       padding: const EdgeInsets.all(25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,10 +152,16 @@ class _PostWidgetState extends State<PostWidget> {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
-                widget.post.description,
-                style: const TextStyle(
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 8.0,
+                  top: 8.0,
+                ),
+                child: Text(
+                  widget.post.description,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],

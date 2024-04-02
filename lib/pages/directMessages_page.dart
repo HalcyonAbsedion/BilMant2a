@@ -1,3 +1,4 @@
+import 'package:bilmant2a/components/customSearchDelegate.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class DirectMessages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     senderName =
         userProvider.getUser.firstName + " " + userProvider.getUser.lastName;
     dynamic currentlocation = userProvider.getUser.locations.last.toString();
@@ -56,6 +58,13 @@ class DirectMessages extends StatelessWidget {
             ).animate().fadeIn(delay: 500.ms),
           ],
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: CustomSearchDelegate());
+              },
+              icon: const Icon(Icons.search)),
+        ],
       ),
       body: Column(
         children: [
