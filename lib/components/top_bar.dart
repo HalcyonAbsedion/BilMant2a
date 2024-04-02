@@ -26,7 +26,7 @@ class TopBar extends StatelessWidget {
 
   PreferredSizeWidget _appBar() {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(120),
+      preferredSize: const Size.fromHeight(130),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: _boxDecoration(),
@@ -104,17 +104,36 @@ class TopBar extends StatelessWidget {
                 ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(
-            Icons.help,
-            color: Colors.white,
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          child: IconButton.filled(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ),
           ),
         ),
-        const Icon(
-          Icons.notifications,
-          color: Colors.white,
+
+        Badge(
+          isLabelVisible: true,
+          backgroundColor: Colors.cyan,
+          label: const Text(
+            "idk",
+            style: TextStyle(color: Colors.black),
+          ),
+          child: IconButton.filled(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications,
+              color: Colors.white,
+            ),
+          ),
         ),
+        // const Icon(
+        //   Icons.notifications,
+        //   color: Colors.white,
+        // ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: WeatherPage(),
