@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 // );
 
 ThemeData BMtheme = ThemeData(
-  brightness: Brightness.dark,
   colorScheme: const ColorScheme.dark(
     background: Colors.black,
     primary: Color.fromARGB(255, 43, 48, 58),
     secondary: Color.fromARGB(255, 74, 82, 99),
+    tertiary: Colors.cyan,
   ),
 );

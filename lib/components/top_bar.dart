@@ -2,6 +2,7 @@ import 'package:bilmant2a/pages/DisplayPosts.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:badges/badges.dart' as badges;
 
 class TopBar extends StatelessWidget {
   const TopBar({Key? key}) : super(key: key);
@@ -104,39 +105,34 @@ class TopBar extends StatelessWidget {
                 ),
           ),
         ),
+
+        const Padding(
+          padding: EdgeInsets.only(left: 8.0),
+          child: WeatherPage(),
+        ),
+        // badges.Badge(
+        //   badgeAnimation: const badges.BadgeAnimation.slide(),
+        //   badgeContent: const Text(
+        //     "0",
+        //     style: TextStyle(color: Colors.black),
+        //   ),
+        //   child: IconButton(
+        //     onPressed: () {},
+        //     icon: const Icon(
+        //       Icons.notifications,
+        //       color: Colors.white,
+        //     ),
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-          child: IconButton.filled(
+          child: IconButton(
             onPressed: () {},
             icon: const Icon(
               Icons.more_vert,
               color: Colors.white,
             ),
           ),
-        ),
-
-        Badge(
-          isLabelVisible: true,
-          backgroundColor: Colors.cyan,
-          label: const Text(
-            "idk",
-            style: TextStyle(color: Colors.black),
-          ),
-          child: IconButton.filled(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        // const Icon(
-        //   Icons.notifications,
-        //   color: Colors.white,
-        // ),
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: WeatherPage(),
         ),
       ],
     );

@@ -179,9 +179,11 @@ class _PostWidgetState extends State<PostWidget> {
 
           Row(
             children: [
-              likeComponent(),
-              commentComponent(),
+              Expanded(
+                child: likeComponent(),
+              ),
               shareComponent(),
+              commentComponent(),
             ],
           ),
           Padding(

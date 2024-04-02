@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
@@ -73,45 +73,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Column(
                       children: [
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.star,
-                              size: 20,
-                              color: Colors.black54,
-                            ),
-                            Icon(
-                              Icons.star,
-                              size: 20,
-                              color: Colors.black54,
-                            ),
-                            Icon(
-                              Icons.star,
-                              size: 20,
-                              color: Colors.black54,
-                            ),
-                            Icon(
-                              Icons.star,
-                              size: 20,
-                              color: Colors.black54,
-                            ),
-                          ],
-                        ),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.apartment_sharp,
-                              size: 80,
-                              color: Colors.black54,
-                            ),
-                          ],
-                        ),
                         const Text(
                           'BilMant2a',
                           style: TextStyle(
-                            color: Colors.blueGrey,
+                            color: Colors.cyan,
                             fontWeight: FontWeight.bold,
                             fontSize: 40,
                           ),
@@ -167,8 +132,10 @@ class _LoginPageState extends State<LoginPage> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
                                 child: TextField(
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 13,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                   controller: emailTextController,
                                   decoration: InputDecoration(
@@ -223,9 +190,11 @@ class _LoginPageState extends State<LoginPage> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
                                 child: TextField(
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                  ),
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
                                   controller: passwordTextController,
                                   decoration: InputDecoration(
                                     filled: true,
