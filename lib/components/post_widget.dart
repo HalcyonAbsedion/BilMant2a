@@ -152,10 +152,16 @@ class _PostWidgetState extends State<PostWidget> {
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
-                widget.post.description,
-                style: const TextStyle(
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 8.0,
+                  top: 8.0,
+                ),
+                child: Text(
+                  widget.post.description,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
