@@ -132,4 +132,21 @@ class ChatService {
     print("$l---------------------------------------------------");
     return fetchedMessages;
   }
+
+  Stream<List<Message>> listenForMessages(String receiverID, String senderId) {
+    String chatRoomID = receiverID;
+    if (chatRoomID.length > 10) {
+      List<String> ids = [receiverID, senderId];
+      ids.sort();
+      chatRoomID = ids.join('_');
+    }
+
+    return _firestore
+        .collection("chat_rooms")
+        .doc(chatRoomID)
+        .collection("messages")
+        .orderBy("timeStamp", descending: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Message.fromSnap(doc)).toList());
+  }
 }
