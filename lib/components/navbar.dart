@@ -1,4 +1,5 @@
 import 'package:bilmant2a/components/top_bar.dart';
+import 'package:bilmant2a/pages/DiscoverPage.dart';
 import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/directMessages_page.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
@@ -44,13 +45,22 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
+        physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,
         children: [
-          const TopBar(),
-          WeatherPage(),
-          const postCreationPage(),
-          DirectMessages(),
+          Builder(
+            builder: (context) => TopBar(),
+          ),
+          Builder(
+            builder: (context) => AnimateCameraPage(),
+          ),
+          Builder(
+            builder: (context) => postCreationPage(),
+          ),
+          Builder(
+            builder: (context) => DirectMessages(),
+          ),
           // Wrap Profile with Builder
           Builder(
             builder: (context) => Profile(),

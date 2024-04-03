@@ -24,15 +24,15 @@ class _DiplayPostsState extends State<DisplayPosts> {
   var uid;
   bool isUserPage = false;
   bool isOtherUserPage = false;
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    isUserPage = widget.postUserId.isNotEmpty;
-    if (isUserPage) {
-      isOtherUserPage = widget.postUserId != uid;
-    }
-  }
+  //   isUserPage = widget.postUserId.isNotEmpty;
+  //   if (isUserPage) {
+  //     isOtherUserPage = widget.postUserId != uid;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
