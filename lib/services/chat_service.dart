@@ -1,7 +1,9 @@
-import 'package:bilmant2a/models/message.dart';
-import 'package:bilmant2a/storage/message_storage.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:bilmant2a/models/message.dart';
+import 'package:bilmant2a/storage/message_storage.dart';
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -10,7 +12,6 @@ class ChatService {
   User? getCurrentUser() {
     return _auth.currentUser;
   }
-
   Stream<List<Map<String, dynamic>>> getUsersStream() {
     return _firestore.collection("Users").snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -19,35 +20,33 @@ class ChatService {
       }).toList();
     });
   }
-
-  Future<void> sendMessage(
-      String receiverID, String message, String senderName) async {
-    final String currentUserID = _auth.currentUser!.uid;
-    final Timestamp timeStamp = Timestamp.now();
-    String chatRoomID = receiverID;
-    if (receiverID.length > 10) {
-      List<String> ids = [currentUserID, receiverID];
-      ids.sort();
-      chatRoomID = ids.join('_');
-    }
-
-    Message newMessage = Message(
-      senderName: senderName,
-      senderID: currentUserID,
-      message: message,
-      chatRoomID: chatRoomID,
-      timeStamp: timeStamp,
-      received: false,
-    );
-
+  Future<void> sendMessage(Message newMessage, String chatRoomID) async {
     await _firestore
         .collection("chat_rooms")
         .doc(chatRoomID)
         .collection("messages")
         .add(newMessage.toMap());
+    MessageStorage messageStorage = MessageStorage(chatId: chatRoomID);
+    messageStorage.addMessage(newMessage);
   }
 
   Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
+    String chatRoomID = userID;
+    if (userID.length > 10) {
+      List<String> ids = [userID, otherUserID];
+      ids.sort();
+      chatRoomID = ids.join('_');
+    }
+
+    return _firestore
+        .collection("chat_rooms")
+        .doc(chatRoomID)
+        .collection("messages")
+        .orderBy("timeStamp", descending: false)
+        .snapshots();
+  }
+
+  void storeNewMessages(String userID, String otherUserID) {
     String chatRoomID = userID;
     bool isGroupChat = userID.length < 10;
     if (!isGroupChat) {
@@ -65,21 +64,25 @@ class ChatService {
     messages.snapshots().listen((QuerySnapshot snapshot) async {
       for (DocumentSnapshot doc in snapshot.docs) {
         DocumentReference docRef = doc.reference;
-        if (otherUserID != getSenderIdFromMessage(doc)) {
-          try {
-            Future<List<Message>> messagesM =
-                fetchMessages(messages, chatRoomID);
-            messageStorage.addMessages(messagesM);
-            print("documents added to text file successfuly");
+        try {
+          Message message = Message.fromSnap(doc);
+          if (otherUserID != getSenderIdFromMessage(doc)) {
+            await docRef.update({'received': true});
+            print("document marked as received");
+            messageStorage.addMessage(message);
+            print("document added to text file successfuly");
             await docRef.delete();
             print('Document deleted successfuly');
-          } catch (e) {
-            print('Error marking document as received: $e');
+          } else {
+            if (message.received) {
+              docRef.delete();
+            }
           }
+        } catch (e) {
+          print('Error marking document as received: $e');
         }
       }
     });
-    return messages.snapshots();
   }
 
   Future<List<Message>> markMessagesAsReceived(
@@ -128,5 +131,22 @@ class ChatService {
     int l = fetchedMessages.length;
     print("$l---------------------------------------------------");
     return fetchedMessages;
+  }
+
+  Stream<List<Message>> listenForMessages(String receiverID, String senderId) {
+    String chatRoomID = receiverID;
+    if (chatRoomID.length > 10) {
+      List<String> ids = [receiverID, senderId];
+      ids.sort();
+      chatRoomID = ids.join('_');
+    }
+
+    return _firestore
+        .collection("chat_rooms")
+        .doc(chatRoomID)
+        .collection("messages")
+        .orderBy("timeStamp", descending: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Message.fromSnap(doc)).toList());
   }
 }
