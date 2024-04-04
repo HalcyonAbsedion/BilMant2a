@@ -2,6 +2,7 @@ import 'package:bilmant2a/components/post_widget.dart';
 import 'package:bilmant2a/models/post.dart';
 import 'package:bilmant2a/pages/DisplayPosts.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
+import 'package:bilmant2a/pages/settings_page.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -61,7 +62,12 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
               icon: const Icon(
                 Icons.settings,
                 color: Colors.white,

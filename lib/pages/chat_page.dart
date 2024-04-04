@@ -122,7 +122,7 @@ class ChatPage extends StatelessWidget {
                     // DATE
                     child: Text(
                       _formatDate(date),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
                       ),
