@@ -5,63 +5,34 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/message.dart';
-import '../storage/message_storage.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatPage extends StatelessWidget {
   final String senderName;
   final String receiverName;
+  final String senderID;
   final String receiverID;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final String receiverPhotoUrl;
+  ChatService _chatService = ChatService();
 
   ChatPage(
       {Key? key,
       required this.receiverName,
       required this.receiverID,
+      required this.senderID,
       required this.senderName,
-      required this.receiverPhotoUrl})
-      : super(key: key);
-
-  @override
-  State<ChatPage> createState() => _ChatPageState();
-}
-
-class _ChatPageState extends State<ChatPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+      required this.receiverPhotoUrl}) {
+    _chatService = ChatService(senderId: senderID, receiverId: receiverID);
+    _chatService.getChatRoomKey();
+  }
 
   final TextEditingController _messageController = TextEditingController();
 
-  final ChatService _chatService = ChatService();
-  var senderId;
-  List<Message> _displayedMessages = [];
-  @override
-  void dispose() {
-    // _chatService.storeNewMessages(widget.receiverID, senderId);
-    super.dispose();
-  }
-
   void sendMessage() async {
-    final String currentUserID = _auth.currentUser!.uid;
-    final Timestamp timeStamp = Timestamp.now();
-    String chatRoomID = widget.receiverID;
-    if (widget.receiverID.length > 10) {
-      List<String> ids = [currentUserID, widget.receiverID];
-      ids.sort();
-      chatRoomID = ids.join('_');
-    }
-
-    
     if (_messageController.text.isNotEmpty) {
-      Message newMessage = Message(
-      senderName: widget.senderName,
-      senderID: currentUserID,
-      message: _messageController.text,
-      chatRoomID: chatRoomID,
-      timeStamp: timeStamp,
-      received: false,
-    );
       await _chatService.sendMessage(
-        newMessage,
-        chatRoomID
+        _messageController.text,
+        senderName,
       );
       _messageController.clear();
     }
@@ -69,7 +40,6 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       appBar: AppBar(
@@ -85,7 +55,7 @@ class _ChatPageState extends State<ChatPage> {
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
-                widget.receiverName,
+                receiverName,
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -93,8 +63,8 @@ class _ChatPageState extends State<ChatPage> {
             ),
             CircleAvatar(
               radius: 25,
-              backgroundImage: widget.receiverPhotoUrl != ""
-                  ? NetworkImage(widget.receiverPhotoUrl)
+              backgroundImage: receiverPhotoUrl != ""
+                  ? NetworkImage(receiverPhotoUrl)
                   : null,
             ),
           ],
@@ -105,9 +75,6 @@ class _ChatPageState extends State<ChatPage> {
       ),
       body: Column(
         children: [
-          // Expanded(
-          //   child: _buildPreviousMessageList(),
-          // ),
           Expanded(
             child: _buildMessageList(),
           ),
@@ -116,93 +83,113 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
-Widget _buildMessageList() {
-  String senderId = _auth.currentUser!.uid;
-  List<String> ids = [widget.receiverID, senderId];
-  ids.sort();
-  String chatRoomID = ids.join('_');
-  MessageStorage messageStorage = MessageStorage(chatId: chatRoomID);
 
-  final ScrollController _scrollController = ScrollController();
-
-  return StreamBuilder<List<Message>>(
-    stream: _chatService.listenForMessages(widget.receiverID, senderId),
-    builder: (context, streamSnapshot) {
-      if (streamSnapshot.hasError) {
-        return Text("Error: ${streamSnapshot.error}");
-      }
-      if (streamSnapshot.connectionState == ConnectionState.waiting) {
-        if (_displayedMessages.isNotEmpty) {
-          // If there are already displayed messages, return them
-          return _buildMessageListView(_displayedMessages, _scrollController);
-        } else {
-          // Otherwise, show loading widget
-          return _buildLoadingWidget();
+  Widget _buildMessageList() {
+    String senderID = _auth.currentUser!.uid;
+    return StreamBuilder(
+      stream: _chatService.getMessages(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Error");
         }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading..");
+        }
+
+        List<QueryDocumentSnapshot> querySnapshot = snapshot.data!.docs;
+        List<Message> messages =
+            querySnapshot.map((doc) => Message.fromSnap(doc)).toList();
+
+        return FutureBuilder(
+          future: _decryptMessages(messages),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Text("Decrypting..");
+            }
+
+            List<Message> decryptedMessages = snapshot.data as List<Message>;
+
+            List<Widget> messageWidgets = [];
+
+            Map<DateTime, List<Message>> groupedMessages =
+                _groupMessagesByDate(decryptedMessages);
+
+            groupedMessages.forEach((date, messageList) {
+              messageWidgets.add(
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Center(
+                    // DATE
+                    child: Text(
+                      _formatDate(date),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+
+              messageWidgets.addAll(
+                messageList.map((doc) => _buildMessageItem(doc)).toList(),
+              );
+            });
+
+            return ListView(
+              children: messageWidgets,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<List<Message>> _decryptMessages(List<Message> messages) async {
+    List<Message> decryptedMessages = [];
+    for (var message in messages) {
+      // print(message.message);
+      // // message.message = await _chatService.decryptMessage(message.message);
+      // print(message.message);
+      decryptedMessages.add(message);
+    }
+    return decryptedMessages;
+  }
+
+  Map<DateTime, List<Message>> _groupMessagesByDate(List<Message> messages) {
+    Map<DateTime, List<Message>> groupedMessages = {};
+
+    for (var message in messages) {
+      DateTime messageDate = message.timeStamp.toDate();
+
+      DateTime dateWithoutTime =
+          DateTime(messageDate.year, messageDate.month, messageDate.day);
+
+      if (!groupedMessages.containsKey(dateWithoutTime)) {
+        groupedMessages[dateWithoutTime] = [];
       }
 
-      List<Message> storedMessages = streamSnapshot.data ?? [];
+      groupedMessages[dateWithoutTime]!.add(message);
+    }
 
-      return FutureBuilder<List<Message>>(
-        future: messageStorage.getStoredMessages(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            if (_displayedMessages.isNotEmpty) {
-              // If there are already displayed messages, return them
-              return _buildMessageListView(_displayedMessages, _scrollController);
-            } else {
-              // Otherwise, show loading widget
-              return _buildLoadingWidget();
-            }
-          } else if (snapshot.hasError) {
-            return Text("Error: ${snapshot.error}");
-          }
+    return groupedMessages;
+  }
 
-          List<Message> storedMessages = snapshot.data ?? [];
-          List<Message> allMessages = [...storedMessages, ...streamSnapshot.data!];
+  Widget _buildMessageItem(Message doc) {
+    bool isCurrentUser = doc.senderID == senderID;
+    var alignment =
+        isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
 
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-          });
-
-          _displayedMessages = allMessages;
-
-          return _buildMessageListView(allMessages, _scrollController);
-        },
-      );
-    },
-  );
-}
-
-
-Widget _buildMessageListView(List<Message> messages, ScrollController scrollController) {
-  List<Widget> messageWidgets = messages.map((message) => _buildMessageItem(message)).toList();
-  return ListView(
-    controller: scrollController,
-    children: messageWidgets,
-  );
-}
-
-Widget _buildMessageItem(Message message) {
-  Map<String, dynamic> data = message.toMap();
-  bool isCurrentUser = data['senderID'] == _chatService.getCurrentUser()!.uid;
-  var alignment = isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
-
-  return Container(
-    alignment: alignment,
-    child: ChatBubble(
-      senderName: widget.receiverName,
-      message: data["message"],
-      isCurrentUser: isCurrentUser,
-      timeStamp: data["timeStamp"],
-    ),
-  );
-}
-
-Widget _buildLoadingWidget() {
-  return Center(child: CircularProgressIndicator());
-}
-
+    return Container(
+      alignment: alignment,
+      child: ChatBubble(
+        senderName: receiverName,
+        message: doc.message,
+        isCurrentUser: isCurrentUser,
+        timeStamp: doc.timeStamp,
+      ),
+    );
+  }
 
   Widget _buildUserInput(BuildContext context) {
     return Row(
@@ -245,5 +232,15 @@ Widget _buildLoadingWidget() {
         )
       ],
     );
+  }
+
+  String _formatDate(DateTime dateTime) {
+    if (DateTime.now().day == dateTime.day &&
+        DateTime.now().month == dateTime.month &&
+        DateTime.now().year == dateTime.year) {
+      return 'Today';
+    } else {
+      return "${dateTime.day}/${dateTime.month}/${dateTime.year}";
+    }
   }
 }

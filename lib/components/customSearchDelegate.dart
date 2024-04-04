@@ -1,6 +1,8 @@
 import 'package:bilmant2a/pages/chat_page.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   final ChatService _chatService = ChatService();
@@ -34,6 +36,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return StreamBuilder<List<Map<String, dynamic>>>(
       stream: _chatService.getUsersStream(),
       builder: (context, snapshot) {
@@ -64,7 +67,7 @@ class CustomSearchDelegate extends SearchDelegate {
               ),
               title: Text(userName),
               onTap: () {
-                _navigateToChatPage(context, userName, uid, photoUrl);
+                _navigateToChatPage(context, userName, uid, userProvider.getUser.uid, photoUrl);
               },
             );
           },
@@ -74,15 +77,16 @@ class CustomSearchDelegate extends SearchDelegate {
   }
 
   void _navigateToChatPage(
-      BuildContext context, String userName, String uid, String photoUrl) {
+      BuildContext context, String userName, String receiverId, String senderId,  String photoUrl) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChatPage(
           senderName: '',
           receiverName: userName,
-          receiverID: uid,
+          receiverID: receiverId,
           receiverPhotoUrl: photoUrl,
+          senderID: senderId,
         ),
       ),
     );

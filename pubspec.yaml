@@ -63,6 +63,7 @@ dependencies:
   flutter_carousel_widget: ^2.2.0
   badges: ^3.1.2
   google_maps_flutter: ^2.6.0
+  encrypt: ^5.0.3
 
 
 dev_dependencies:
