@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:badges/badges.dart' as badges;
 
+import 'areaNameSwitch.dart';
+
 class TopBar extends StatelessWidget {
   const TopBar({Key? key}) : super(key: key);
 
@@ -61,51 +63,7 @@ class TopBar extends StatelessWidget {
   Widget _topBar() {
     return Row(
       children: [
-        Animate(
-          effects: [
-            ShimmerEffect(
-              duration: 1500.ms,
-              delay: 1000.ms,
-              color: Colors.cyan,
-            ),
-          ],
-          child: Expanded(
-            child: const Text(
-              'BIL MANT2A',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ).animate().fadeOut(delay: 3000.ms).swap(
-                  //animates text in top bar
-                  duration: 1500.ms,
-                  builder: (_, __) => const Text(
-                    "Welcome!",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(duration: 500.ms, delay: 500.ms)
-                      .fadeOut(delay: 3000.ms)
-                      .swap(
-                        duration: 1000.ms,
-                        builder: (_, __) => const Text(
-                          'BIL MANT2A',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ).animate().fadeIn(duration: 1500.ms, delay: 500.ms),
-                      ),
-                ),
-          ),
-        ),
-
+        LocationScreen(),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: WeatherPage(),
