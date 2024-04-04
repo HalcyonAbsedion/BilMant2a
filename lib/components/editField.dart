@@ -43,8 +43,14 @@ class _editFieldState extends State<editField> {
                 autofocus: true,
                 controller: _birthDateController,
                 decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_today_rounded),
-                  labelText: "Birthdate",
+                  icon: Icon(
+                    Icons.calendar_today_rounded,
+                    color: Colors.white,
+                  ),
+                  labelText: "Press to insert date of birth",
+                  labelStyle: TextStyle(
+                    color: Colors.white,
+                  ),
                   border: InputBorder.none,
                 ),
                 onTap: () async {
@@ -56,11 +62,13 @@ class _editFieldState extends State<editField> {
                   );
 
                   if (pickedate != null) {
-                    setState(() {
-                      _birthDateController.text =
-                          DateFormat("dd-MM-yyyy").format(pickedate);
-                      newValue = _birthDateController.text;
-                    });
+                    setState(
+                      () {
+                        _birthDateController.text =
+                            DateFormat("dd-MM-yyyy").format(pickedate);
+                        newValue = _birthDateController.text;
+                      },
+                    );
                   }
                 },
                 readOnly: true,
@@ -73,10 +81,22 @@ class _editFieldState extends State<editField> {
               ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: Text("Cancel")),
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              )),
           TextButton(
-              onPressed: () => Navigator.of(context).pop(newValue),
-              child: Text("Save")),
+            onPressed: () => Navigator.of(context).pop(newValue),
+            child: Text(
+              "Save",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -112,27 +132,26 @@ class _editFieldState extends State<editField> {
       child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text("${widget.label}:"),
-              Container(
-                child: IconButton(
-                  onPressed: () => edit(widget.field),
-                  icon: Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.blue,
-                    ),
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
+              IconButton(
+                onPressed: () => edit(widget.field),
+                icon: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.blue,
+                  ),
+                  child: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
                   ),
                 ),
               ),
               Container(
-                width: 100,
+                width: 200,
                 height: 50,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
@@ -140,7 +159,12 @@ class _editFieldState extends State<editField> {
                   border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Text(widget.userValue),
+                child: Text(
+                  widget.userValue,
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
               ),
             ],
           ),
