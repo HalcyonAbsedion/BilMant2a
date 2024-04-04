@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:provider/provider.dart';
 import 'package:bilmant2a/services/auth_service.dart';
@@ -64,79 +65,112 @@ class _ProfileState extends State<Profile> {
           ),
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(34, 0, 187, 212),
       body: Column(
         children: [
+          Animate(
+            effects: [
+              ShimmerEffect(color: Colors.cyan, duration: 1000.ms),
+            ],
+            child: Text(
+              "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 23,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  right: 10,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.green, width: 2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: userProvider.getUser.photoUrl != ""
+                        ? NetworkImage(userProvider.getUser.photoUrl)
+                        : null,
+                  ),
+                ),
+              ).animate().fadeIn().slideX(
+                    delay: 1000.ms,
+                    begin: 1.5,
+                    duration: 1500.ms,
+                    curve: Curves.easeInOutBack,
+                  ),
+              const SizedBox(
+                width: 15,
+              ),
+              _buildInfoColumn(
+                "16",
+                "Friends",
+              ).animate().fadeIn(delay: 2000.ms),
+              const SizedBox(
+                width: 15,
+              ),
+              _buildInfoColumn(
+                "16",
+                "Connections",
+              ).animate().fadeIn(delay: 2000.ms),
+              const SizedBox(
+                width: 15,
+              ),
+              _buildInfoColumn(
+                "16",
+                "Posts",
+              ).animate().fadeIn(delay: 2000.ms),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: userProvider.getUser.photoUrl != ""
-                          ? NetworkImage(userProvider.getUser.photoUrl)
-                          : null,
-                    ),
-                  ),
-                ),
-                Text(
-                  "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   "${userProvider.getUser.bio} ",
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                       color: Colors.black),
                 ),
-                SizedBox(height: 10),
-                Row(
+                const SizedBox(height: 10),
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildInfoColumn(
-                      "16",
-                      "Friends",
-                    ),
-                    _buildInfoColumn("16", "Connections"),
-                    _buildInfoColumn("16", "Posts"),
-                  ],
+                  children: [],
                 ),
                 const SizedBox(height: 10),
-                ElevatedButton(
-                  child: const Text(
-                    "Edit Profile",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfilePageEdit(),
+                Center(
+                  child: ElevatedButton(
+                    child: Text(
+                      "Edit Profile",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePageEdit(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(0),
+                      fixedSize: const Size(300, 50),
+                      backgroundColor: Colors.grey[300],
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(0),
-                    fixedSize: const Size(300, 50),
-                    backgroundColor: Colors.grey[300],
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -177,7 +211,7 @@ class _ProfileState extends State<Profile> {
         Text(
           value,
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.w600,
             fontSize: 18,
           ),
@@ -186,7 +220,7 @@ class _ProfileState extends State<Profile> {
         Text(
           label,
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.w600,
             fontSize: 18,
           ),
