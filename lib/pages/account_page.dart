@@ -140,7 +140,7 @@ class _ProfileState extends State<Profile> {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: Colors.black),
+                      color: Colors.white),
                 ),
                 const SizedBox(height: 10),
                 const Row(

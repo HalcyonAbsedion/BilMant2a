@@ -1,17 +1,52 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:bilmant2a/models/message.dart';
-import 'package:bilmant2a/storage/message_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final String senderId;
+  final String receiverId;
+  String key = "";
+  String chatRoomId = "";
+  bool isGroupChat = true;
 
+  ChatService({this.senderId = "", this.receiverId = ""}) {
+    chatRoomId = receiverId;
+    if (receiverId.length > 12) {
+      List<String> ids = [senderId, receiverId];
+      ids.sort();
+      chatRoomId = ids.join('_');
+      isGroupChat = false;
+    }
+  }
   User? getCurrentUser() {
     return _auth.currentUser;
   }
+
+  Future<void> getChatRoomKey() async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _firestore.collection("chat_rooms").doc(chatRoomId).get();
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic>? data =
+            documentSnapshot.data() as Map<String, dynamic>?;
+        if (data != null) {
+          key = (data['key'] as String?)!;
+        }
+      }
+      return; // Chat room not found or data is null
+    } catch (e) {
+      print("Error getting chat room key: $e");
+      return; // Error occurred
+    }
+  }
+
   Stream<List<Map<String, dynamic>>> getUsersStream() {
     return _firestore.collection("Users").snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -20,133 +55,90 @@ class ChatService {
       }).toList();
     });
   }
-  Future<void> sendMessage(Message newMessage, String chatRoomID) async {
-    await _firestore
-        .collection("chat_rooms")
-        .doc(chatRoomID)
-        .collection("messages")
-        .add(newMessage.toMap());
-    MessageStorage messageStorage = MessageStorage(chatId: chatRoomID);
-    messageStorage.addMessage(newMessage);
+
+  String generateRandomKey(int length) {
+    var random = Random.secure();
+    var values = List<int>.generate(length, (i) => random.nextInt(256));
+    return base64Url.encode(values);
   }
 
-  Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
-    String chatRoomID = userID;
-    if (userID.length > 10) {
-      List<String> ids = [userID, otherUserID];
-      ids.sort();
-      chatRoomID = ids.join('_');
-    }
+  String encryptMessage(String message) {
+    
+    final keyBytes = encrypt.Key.fromUtf8(key);
+    final iv = encrypt.IV.fromLength(16); // For AES, this is always 16
+    final encrypter = encrypt.Encrypter(encrypt.AES(keyBytes));
+    final encrypted = encrypter.encrypt(message, iv: iv);
+    return encrypted.base64;
+  }
 
-    return _firestore
+  Future<String> decryptMessage(String encryptedMessage) async {
+    print("trying to decrypt: " + encryptedMessage);
+    if (key.isEmpty) {
+      await getChatRoomKey();
+    }
+    try {
+      final keyBytes = encrypt.Key.fromUtf8(key);
+      final iv = encrypt.IV.fromLength(16); // For AES, this is always 16
+      final encrypter = encrypt.Encrypter(encrypt.AES(keyBytes));
+      final encrypted = encrypt.Encrypted.fromBase64(encryptedMessage);
+      final decrypted = encrypter.decrypt(encrypted, iv: iv);
+      return decrypted;
+    } catch (e) {
+      print("Error decrypting message: $e");
+      return ''; // Return empty string on error
+    }
+  }
+
+  // SEND MESSAGE
+  Future<void> sendMessage(String message, String senderName) async {
+    final chatRoomExists = await doesChatRoomExist(chatRoomId);
+    String encryptedMessage = message;
+    if (!chatRoomExists) {
+      final randomKey = generateRandomKey(16);
+      await FirebaseFirestore.instance
+          .collection("chat_rooms")
+          .doc(chatRoomId)
+          .set({"key": randomKey});
+    }
+    if (!isGroupChat) {
+      encryptedMessage = encryptMessage(message);
+    }
+    final Timestamp timeStamp = Timestamp.now();
+
+    Message newMessage = Message(
+      senderName: senderName,
+      senderID: senderId,
+      message: encryptedMessage,
+      chatRoomID: chatRoomId,
+      timeStamp: timeStamp,
+      received: false,
+    );
+
+    await _firestore
+        .collection("chat_rooms")
+        .doc(chatRoomId)
+        .collection("messages")
+        .add(newMessage.toMap());
+  }
+
+  Future<bool> doesChatRoomExist(String chatRoomID) async {
+    final chatRoomSnapshot = await FirebaseFirestore.instance
         .collection("chat_rooms")
         .doc(chatRoomID)
+        .get();
+    bool exists = chatRoomSnapshot.exists;
+    if (exists) {
+      getChatRoomKey();
+    }
+    return exists;
+  }
+
+  Stream<QuerySnapshot> getMessages() {
+    return _firestore
+        .collection("chat_rooms")
+        .doc(chatRoomId)
         .collection("messages")
         .orderBy("timeStamp", descending: false)
         .snapshots();
-  }
-
-  void storeNewMessages(String userID, String otherUserID) {
-    String chatRoomID = userID;
-    bool isGroupChat = userID.length < 10;
-    if (!isGroupChat) {
-      List<String> ids = [userID, otherUserID];
-      ids.sort();
-      chatRoomID = ids.join('_');
-    }
-    var messages = _firestore
-        .collection("chat_rooms")
-        .doc(chatRoomID)
-        .collection("messages")
-        .orderBy("timeStamp", descending: false);
-    MessageStorage messageStorage = MessageStorage(chatId: chatRoomID);
-
-    messages.snapshots().listen((QuerySnapshot snapshot) async {
-      for (DocumentSnapshot doc in snapshot.docs) {
-        DocumentReference docRef = doc.reference;
-        try {
-          Message message = Message.fromSnap(doc);
-          if (otherUserID != getSenderIdFromMessage(doc)) {
-            await docRef.update({'received': true});
-            print("document marked as received");
-            messageStorage.addMessage(message);
-            print("document added to text file successfuly");
-            await docRef.delete();
-            print('Document deleted successfuly');
-          } else {
-            if (message.received) {
-              docRef.delete();
-            }
-          }
-        } catch (e) {
-          print('Error marking document as received: $e');
-        }
-      }
-    });
-  }
-
-  Future<List<Message>> markMessagesAsReceived(
-      Query<Map<String, dynamic>> messages,
-      String currentUserId,
-      String chatId) {
-    MessageStorage messageStorage = MessageStorage(chatId: chatId);
-
-    messages.snapshots().listen((QuerySnapshot snapshot) async {
-      for (DocumentSnapshot doc in snapshot.docs) {
-        DocumentReference docRef = doc.reference;
-        if (currentUserId != getSenderIdFromMessage(doc)) {
-          try {
-            Future<List<Message>> messagesM = fetchMessages(messages, chatId);
-            await docRef.update({'received': true});
-            await docRef.delete();
-            messageStorage.addMessages(messagesM);
-            print('Document deleted successfuly');
-          } catch (e) {
-            print('Error marking document as received: $e');
-          }
-        }
-      }
-    });
-
-    return messageStorage.getStoredMessages();
-  }
-
-  String getSenderIdFromMessage(DocumentSnapshot message) {
-    Map<String, dynamic> data = message.data() as Map<String, dynamic>;
-    String senderId = data['senderID'];
-    return senderId;
-  }
-
-  Future<List<Message>> fetchMessages(
-      Query<Map<String, dynamic>> messages, String chatRoomId) async {
-    List<Message> fetchedMessages = [];
-    try {
-      final QuerySnapshot querySnapshot = await messages.get();
-
-      fetchedMessages =
-          querySnapshot.docs.map((doc) => Message.fromSnap(doc)).toList();
-    } catch (e) {
-      print('Error fetching messages: $e');
-    }
-    int l = fetchedMessages.length;
-    print("$l---------------------------------------------------");
-    return fetchedMessages;
-  }
-
-  Stream<List<Message>> listenForMessages(String receiverID, String senderId) {
-    String chatRoomID = receiverID;
-    if (chatRoomID.length > 10) {
-      List<String> ids = [receiverID, senderId];
-      ids.sort();
-      chatRoomID = ids.join('_');
-    }
-
-    return _firestore
-        .collection("chat_rooms")
-        .doc(chatRoomID)
-        .collection("messages")
-        .orderBy("timeStamp", descending: false)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => Message.fromSnap(doc)).toList());
   }
 }

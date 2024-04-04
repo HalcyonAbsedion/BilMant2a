@@ -84,6 +84,7 @@ class DirectMessages extends StatelessWidget {
                       receiverName: currentlocation,
                       receiverID: currentlocation.toString().toLowerCase(),
                       receiverPhotoUrl: "",
+                      senderID: userProvider.getUser.uid,
                     ),
                   ));
             },
@@ -133,6 +134,7 @@ class DirectMessages extends StatelessWidget {
                   receiverName: receiverName,
                   receiverID: uid,
                   receiverPhotoUrl: photoUrl,
+                  senderID: _chatService.getCurrentUser()!.uid,
                 ),
               ));
         },
