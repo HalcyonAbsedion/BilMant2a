@@ -92,8 +92,9 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
     model.User user = Provider.of<UserProvider>(context).getUser;
     String _selectedGender = "Male";
     return Scaffold(
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
         ),
         //background
@@ -127,17 +128,28 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                       icon: Icon(
                         Icons.edit,
                         size: 43,
-                        color: Colors.black,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                currentUser.email!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
             Text(
-              currentUser.email!,
+              'Feel free to edit your information by pressing the edit icons below...',
+              style: TextStyle(),
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 50,
@@ -159,7 +171,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
 
             //age
             editField(
-              label: "BrithDate",
+              label: "D.O.B",
               userValue: user.birthDate,
               field: "birthDate",
               isDate: true,
@@ -196,7 +208,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
 
             //phone number
             editField(
-              label: "Phone Number:",
+              label: "Phone Number",
               userValue: user.phoneNumber,
               field: "phoneNumber",
             ),
