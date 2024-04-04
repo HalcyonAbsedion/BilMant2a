@@ -14,7 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:bilmant2a/services/auth_service.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  final String userId;
+  const Profile({super.key, required this.userId});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -26,6 +27,11 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
+    final postProvider = Provider.of<PostProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    postProvider.clearOtherUserPosts();
+    postProvider.fetchCurrentUserFilteredPosts(userProvider.getUser.postIds);
   }
 
   final currentUser = FirebaseAuth.instance.currentUser!;
@@ -33,23 +39,22 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 43, 48, 58),
         elevation: 0,
         actions: [
-          IconButton(
-            onPressed: () {
-              _authMethods.signOut();
-              FirebaseAuth.instance.signOut();
-            },
-            icon: const Icon(
-              Icons.logout,
-              size: 30,
-              color: Colors.white,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     _authMethods.signOut();
+          //     FirebaseAuth.instance.signOut();
+          //   },
+          //   icon: const Icon(
+          //     Icons.logout,
+          //     size: 30,
+          //     color: Colors.white,
+          //   ),
+          // ),
           const SizedBox(
             width: 300,
           ),
@@ -184,22 +189,7 @@ class _ProfileState extends State<Profile> {
               ],
             ),
           ),
-          Expanded(
-            child: Consumer<UserProvider>(
-              builder: (context, userProvider, _) {
-                return ListView.builder(
-                  itemCount: userProvider.getUser.postIds.length,
-                  itemBuilder: (context, index) {
-                    final postID = userProvider.getUser.postIds[index];
-                    final postProvider = Provider.of<PostProvider>(context);
-                    return PostWidget(
-                      post: postProvider.getPostByPostID(postID),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+          Expanded(child: DisplayPosts(postUserId: widget.userId)),
         ],
       ),
     );

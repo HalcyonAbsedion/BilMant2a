@@ -29,6 +29,12 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
+  void clearOtherUserPosts() {
+    currentUserPosts.clear();
+    otherUserPosts.clear();
+    notifyListeners();
+  }
+
   Future<void> fetchCurrentUserFilteredPosts(List<dynamic> postIds) async {
     _currentUserPosts = [];
     try {
@@ -49,7 +55,8 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchOtherUserFilteredPosts(List<dynamic> otherPostIds) async {
+  Future<void> fetchOtherUserFilteredPosts(String uid) async {
+    List<dynamic> otherPostIds = await getPostIdsForUser(uid);
     try {
       _otherUserPosts.clear();
       for (String postId in otherPostIds) {
@@ -72,5 +79,27 @@ class PostProvider extends ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<List<dynamic>> getPostIdsForUser(String uid) async {
+    try {
+      DocumentSnapshot userSnapshot =
+          await FirebaseFirestore.instance.collection("Users").doc(uid).get();
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        if (userData.containsKey("postIds") && userData["postIds"] is List) {
+          return userData["postIds"];
+        } else {
+          print("postIds field either does not exist or is not a list.");
+        }
+      } else {
+        print("User document with UID $uid does not exist.");
+      }
+    } catch (error) {
+      print("Error occurred while getting postIds for user $uid: $error");
+    }
+
+    return [];
   }
 }

@@ -5,7 +5,10 @@ import 'package:bilmant2a/pages/directMessages_page.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../pages/postCreationPage.dart';
+import '../providers/post_provider.dart';
+import '../providers/user_provider.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -43,6 +46,9 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final postProvider = Provider.of<PostProvider>(context);
+
     return Scaffold(
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
@@ -62,9 +68,11 @@ class _NavBarState extends State<NavBar> {
             builder: (context) => DirectMessages(),
           ),
           // Wrap Profile with Builder
-          Builder(
-            builder: (context) => Profile(),
-          )
+          Builder(builder: (context) {
+            return Profile(
+              userId: userProvider.getUser.uid,
+            );
+          })
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(

@@ -12,6 +12,8 @@ import '../models/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
+import '../pages/account_page.dart';
+
 class PostWidget extends StatefulWidget {
   final Post post;
   const PostWidget({Key? key, required this.post}) : super(key: key);
@@ -85,7 +87,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    postProvider = PostProvider();
+    final postProvider = Provider.of<PostProvider>(context);
     final size = MediaQuery.of(context).size;
 
     return Container(
@@ -103,29 +105,41 @@ class _PostWidgetState extends State<PostWidget> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.green, width: 2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: CircleAvatar(
-                        backgroundImage: widget.post.profImage != ""
-                            ? NetworkImage(widget.post.profImage)
-                            : null,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        widget.post.username,
-                        style: const TextStyle(
-                          color: Colors.white,
+                child: GestureDetector(
+                  onTap: () {
+                    // Navigate to another page
+                    postProvider.fetchOtherUserFilteredPosts(widget.post.uid);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Profile(userId: widget.post.uid)),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.green, width: 2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: CircleAvatar(
+                          backgroundImage: widget.post.profImage != ""
+                              ? NetworkImage(widget.post.profImage)
+                              : null,
                         ),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          widget.post.username,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Row(

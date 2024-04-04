@@ -24,24 +24,26 @@ class _DiplayPostsState extends State<DisplayPosts> {
   var uid;
   bool isUserPage = false;
   bool isOtherUserPage = false;
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  //   isUserPage = widget.postUserId.isNotEmpty;
-  //   if (isUserPage) {
-  //     isOtherUserPage = widget.postUserId != uid;
-  //   }
-  // }
+    isUserPage = widget.postUserId.isNotEmpty;
+    if (isUserPage) {
+      print("user");
+      isOtherUserPage = widget.postUserId != uid;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
     uid = FirebaseAuth.instance.currentUser?.uid;
     if (isUserPage) {
       if (widget.postUserId == uid) {
         posts = postProvider.currentUserPosts;
+      } else {
+        posts = postProvider.otherUserPosts;
       }
     } else {
       posts = postProvider.posts;
@@ -63,7 +65,6 @@ class _DiplayPostsState extends State<DisplayPosts> {
               ),
               itemCount: posts.length,
               itemBuilder: (context, index) {
-                print(posts.length);
                 final post = posts[index];
                 return PostWidget(
                   post: post,

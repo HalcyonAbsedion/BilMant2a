@@ -25,7 +25,7 @@ class _AuthPageState extends State<AuthPage> {
     PostProvider postProvider =
         Provider.of<PostProvider>(context, listen: false);
     await postProvider.fetchPosts();
-    await postProvider.fetchCurrentUserFilteredPosts(userProvider.getUser.postIds);
+    
   }
 
   @override
