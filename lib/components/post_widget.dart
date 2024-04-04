@@ -1,7 +1,9 @@
 import 'package:bilmant2a/components/like_button.dart';
 import 'package:bilmant2a/components/videoComponent.dart';
+import 'package:bilmant2a/pages/comment_screen.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/postUpload_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   bool isLiked = false;
+  int commentLen = 0;
   late TextEditingController _textController;
   late PostProvider postProvider;
   late String currentUserUid;
@@ -30,6 +33,29 @@ class _PostWidgetState extends State<PostWidget> {
     _textController = TextEditingController();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     isLiked = widget.post.likes.contains(currentUserUid);
+    fetchCommentLen();
+  }
+
+  fetchCommentLen() async {
+    try {
+      QuerySnapshot snap = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(widget.post.postId)
+          .collection('comments')
+          .get();
+      int newCommentLen = snap.docs.length;
+
+      if (mounted) {
+        setState(() {
+          commentLen = newCommentLen;
+        });
+      }
+    } catch (err) {
+      showSnackBar(
+        context,
+        err.toString(),
+      );
+    }
   }
 
   @override
@@ -67,7 +93,7 @@ class _PostWidgetState extends State<PostWidget> {
         color: const Color.fromARGB(255, 43, 48, 58),
         borderRadius: BorderRadius.circular(12),
       ),
-      margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
+      margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
       padding: const EdgeInsets.all(25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +215,7 @@ class _PostWidgetState extends State<PostWidget> {
                 child: likeComponent(),
               ),
               shareComponent(),
-              commentComponent(),
+              commentComponent(context),
             ],
           ),
           Padding(
@@ -221,11 +247,41 @@ class _PostWidgetState extends State<PostWidget> {
                   borderSide: const BorderSide(color: Colors.grey, width: 2.0),
                 ),
                 suffixIcon: IconButton(
-                  onPressed: () {
-                    _textController.clear();
+                  onPressed: () async {
+                    final UserProvider userProvider =
+                        Provider.of<UserProvider>(context, listen: false);
+
+                    try {
+                      String res = await PostsMethods().postComment(
+                        widget.post.postId,
+                        _textController.text,
+                        userProvider.getUser.uid,
+                        "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}",
+                        userProvider.getUser.photoUrl,
+                      );
+                      setState(() {
+                        commentLen += 1;
+                      });
+
+                      if (res != 'success') {
+                        setState(() {
+                          commentLen -= 1;
+                        });
+                        showSnackBar(context, res);
+                      }
+                      _textController.clear();
+                    } catch (err) {
+                      setState(() {
+                        commentLen -= 1;
+                      });
+                      showSnackBar(
+                        context,
+                        err.toString(),
+                      );
+                    }
                   },
                   icon: const Icon(
-                    Icons.clear,
+                    Icons.check,
                     color: Colors.red,
                   ),
                 ),
@@ -258,18 +314,34 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
-  Widget commentComponent() {
-    return const Row(
+  showSnackBar(BuildContext context, String text) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+      ),
+    );
+  }
+
+  Widget commentComponent(BuildContext context) {
+    return Row(
       children: [
         IconButton(
-          onPressed: null,
-          icon: Icon(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => CommentsScreen(
+                  postId: widget.post.postId,
+                ),
+              ),
+            );
+          },
+          icon: const Icon(
             Icons.comment,
             color: Colors.white,
           ),
         ),
         Text(
-          "999",
+          "$commentLen",
           style: TextStyle(color: Colors.white),
         ),
       ],
