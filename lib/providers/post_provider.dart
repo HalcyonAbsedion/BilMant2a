@@ -32,7 +32,6 @@ class PostProvider extends ChangeNotifier {
   void clearOtherUserPosts() {
     currentUserPosts.clear();
     otherUserPosts.clear();
-    notifyListeners();
   }
 
   Future<void> fetchCurrentUserFilteredPosts(List<dynamic> postIds) async {
