@@ -92,17 +92,17 @@ class _ProfileState extends State<Profile> {
               backgroundColor: Color.fromARGB(255, 43, 48, 58),
               elevation: 0,
               actions: [
-                // IconButton(
-                //   onPressed: () {
-                //     _authMethods.signOut();
-                //     FirebaseAuth.instance.signOut();
-                //   },
-                //   icon: const Icon(
-                //     Icons.logout,
-                //     size: 30,
-                //     color: Colors.white,
-                //   ),
-                // ),
+                IconButton(
+                  onPressed: () {
+                    _authMethods.signOut();
+                    FirebaseAuth.instance.signOut();
+                  },
+                  icon: const Icon(
+                    Icons.logout,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                ),
                 const SizedBox(
                   width: 300,
                 ),
