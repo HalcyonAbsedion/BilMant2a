@@ -114,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         // elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
           onPressed: widget.onTap
           // Ensure that you have the correct context for Navigator.pop
@@ -141,9 +141,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   Text(
                     "Sign up",
                     style: TextStyle(
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontSize: 60,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                   SizedBox(
                     height: 20,
@@ -178,7 +178,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(
+                          value,
+                          style: TextStyle(color: Colors.black),
+                        ),
                       );
                     }).toList(),
                   ),
@@ -186,8 +189,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextField(
                     controller: _birthDateController,
                     decoration: const InputDecoration(
-                      icon: Icon(Icons.calendar_today_rounded),
-                      labelText: "Birthdate",
+                      icon: Icon(
+                        Icons.calendar_today_rounded,
+                        color: Colors.black,
+                      ),
+                      labelText: "D.O.B",
                       border: InputBorder.none,
                     ),
                     onTap: () async {
@@ -241,7 +247,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: const Text(
-                    "Sign up",
+                    "Sign up!",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
@@ -297,7 +303,7 @@ Widget inputFile({
             borderSide: BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(255, 255, 0, 0)),
+            borderSide: BorderSide(color: Colors.blue),
           ),
         ),
       ),
