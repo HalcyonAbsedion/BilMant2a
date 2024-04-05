@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -160,25 +161,34 @@ class SettingsPage extends StatelessWidget {
                   height: 20,
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Log Out',
-                      style: TextStyle(
-                        color: Colors.yellow,
-                        fontSize: 20,
+              GestureDetector(
+                onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Log Out',
+                        style: TextStyle(
+                          color: Colors.yellow,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.logout,
-                      color: Colors.yellow,
+                    IconButton(
+                      onPressed: () {
+                        FirebaseAuth.instance.signOut();
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.logout,
+                        color: Colors.yellow,
+                      ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
               SizedBox(
                 height: 20,

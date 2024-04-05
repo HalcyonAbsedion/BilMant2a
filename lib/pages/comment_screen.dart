@@ -1,5 +1,6 @@
 import 'package:bilmant2a/components/comment_card.dart';
 import 'package:bilmant2a/models/user.dart';
+import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/postUpload_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -63,7 +64,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('posts')
+            .collection('Posts')
             .doc(widget.postId)
             .collection('comments')
             .snapshots(),
@@ -109,11 +110,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 ),
               ),
               InkWell(
-                onTap: () => postComment(
-                  user.uid,
-                  username,
-                  user.photoUrl,
-                ),
+                onTap: () {
+                  postComment(user.uid, username, user.photoUrl);
+                  Provider.of<PostProvider>(context, listen: false)
+                      .refreshPost(widget.postId);
+                },
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),

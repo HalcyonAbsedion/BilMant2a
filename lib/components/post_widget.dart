@@ -41,7 +41,7 @@ class _PostWidgetState extends State<PostWidget> {
   fetchCommentLen() async {
     try {
       QuerySnapshot snap = await FirebaseFirestore.instance
-          .collection('posts')
+          .collection('Posts')
           .doc(widget.post.postId)
           .collection('comments')
           .get();

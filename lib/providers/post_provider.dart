@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bilmant2a/models/post.dart';
@@ -5,13 +7,24 @@ import 'package:bilmant2a/models/post.dart';
 class PostProvider extends ChangeNotifier {
   List<Post> _posts = [];
   List<Post> _currentUserPosts = [];
+  int commentCount = 0;
   final List<Post> _otherUserPosts = [];
 
   List<Post> get posts => _posts;
   List<Post> get currentUserPosts => _currentUserPosts;
   List<Post> get otherUserPosts => _otherUserPosts;
+  // late StreamSubscription<QuerySnapshot> _subscription;
+  // PostProvider() {
+  //   // Initialize the stream subscription in the constructor
+  //   _subscription = FirebaseFirestore.instance
+  //       .collection('Posts')
+  //       .snapshots()
+  //       .listen((querySnapshot) {
+  //     _posts = querySnapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
+  //     notifyListeners();
+  //   });
+  // }
 
-  PostProvider();
   Post getPostByPostID(String postID) {
     return _posts.firstWhere((post) => post.postId == postID,
         orElse: () => Post.empty());
@@ -100,5 +113,26 @@ class PostProvider extends ChangeNotifier {
     }
 
     return [];
+  }
+
+  Future<void> refreshPost(String postId) async {
+    try {
+      final DocumentSnapshot postSnapshot = await FirebaseFirestore.instance
+          .collection('Posts')
+          .doc(postId)
+          .get();
+
+      if (postSnapshot.exists) {
+        // Find the index of the post in the _posts list
+        int index = _posts.indexWhere((post) => post.postId == postId);
+        if (index != -1) {
+          // Update the post data in the _posts list
+          _posts[index] = Post.fromSnap(postSnapshot);
+          notifyListeners();
+        }
+      }
+    } catch (e) {
+      print('Error refreshing post: $e');
+    }
   }
 }

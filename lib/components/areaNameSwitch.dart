@@ -26,11 +26,14 @@ class _LocationScreenState extends State<LocationScreen> {
     });
 
     String locationName = await getLocationName();
-    setState(() {
-      fetchedBilMant2a =
-          locationName.isNotEmpty ? 'Bil $locationName' : 'No locations found';
-      loading = false; // Hide loading indicator after fetching is done
-    });
+    if (mounted) {
+      setState(() {
+        fetchedBilMant2a = locationName.isNotEmpty
+            ? 'Bil $locationName'
+            : 'No locations found';
+        loading = false; // Hide loading indicator after fetching is done
+      });
+    }
   }
 
   Future<String> getLocationName() async {

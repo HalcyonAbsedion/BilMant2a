@@ -58,7 +58,7 @@ class _ProfileState extends State<Profile> {
           .get();
       followers = userSnap.data()!['followers'].length;
       following = userSnap.data()!['following'].length;
-      postLen = (userData?['postIds'] as List<dynamic>?)?.length ?? 0;
+      postLen = userSnap.data()!['postIds'].length;
       isFollowing = userSnap
           .data()!['followers']
           .contains(FirebaseAuth.instance.currentUser!.uid);
@@ -200,7 +200,9 @@ class _ProfileState extends State<Profile> {
                     children: [
                       const SizedBox(height: 10),
                       Text(
-                        "${userProvider.getUser.bio} ",
+                        isCurrentUser
+                            ? "${userProvider.getUser.bio} "
+                            : "${userData['bio'] ?? ""} ",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -258,6 +260,7 @@ class _ProfileState extends State<Profile> {
                                           isFollowing = true;
                                           followers++;
                                         }
+                                        userProvider.refreshUser();
                                       });
                                     } catch (error) {
                                       print(
