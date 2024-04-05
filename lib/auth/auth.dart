@@ -1,9 +1,9 @@
 import 'package:bilmant2a/components/navbar.dart';
+import 'package:bilmant2a/pages/login_page.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../auth/login_or_register.dart';
 import '../providers/post_provider.dart';
 
 class AuthPage extends StatefulWidget {
@@ -18,6 +18,7 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
   }
+
   addData() async {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
@@ -25,7 +26,6 @@ class _AuthPageState extends State<AuthPage> {
     PostProvider postProvider =
         Provider.of<PostProvider>(context, listen: false);
     await postProvider.fetchPosts();
-    
   }
 
   @override
@@ -40,7 +40,7 @@ class _AuthPageState extends State<AuthPage> {
                   builder: (context) => NavBar(),
                 );
               } else {
-                return const LoginOrRegister();
+                return const LoginPage();
               }
             }));
   }

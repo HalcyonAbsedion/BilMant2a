@@ -1,11 +1,11 @@
+import 'package:bilmant2a/pages/login_page.dart';
 import 'package:bilmant2a/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class RegisterPage extends StatefulWidget {
-  final Function()? onTap;
-  const RegisterPage({super.key, required this.onTap});
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -116,10 +116,10 @@ class _RegisterPageState extends State<RegisterPage> {
         // elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          onPressed: widget.onTap
-          // Ensure that you have the correct context for Navigator.pop
-          // Navigator.pop(context);
-          ,
+          onPressed: () =>
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const LoginPage();
+          })),
           icon: const Icon(
             Icons.arrow_back_ios,
             size: 20,
@@ -257,7 +257,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               GestureDetector(
-                onTap: widget.onTap,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                  return const LoginPage();
+                })),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
