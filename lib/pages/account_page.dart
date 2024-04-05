@@ -109,7 +109,12 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SettingsPage()),
+                      );
+                    },
                     icon: const Icon(
                       Icons.settings,
                       color: Colors.white,
