@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
           icon: const Icon(
             Icons.arrow_back_ios,
             size: 20,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -146,28 +146,45 @@ class _RegisterPageState extends State<RegisterPage> {
                         color: Colors.black),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Text(
-                    "Create an account, It's free ",
+                    "Create an account; It's free! ",
                     style: TextStyle(
                         fontFamily: 'Product Sans',
-                        fontSize: 14,
+                        fontSize: 20,
                         color: Color.fromARGB(255, 0, 0, 0)),
-                  )
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
               Column(
                 children: <Widget>[
+                  //first name
                   inputFile(
-                      label: "First Name", controller: _firstNameController),
+                    label: "First Name",
+                    controller: _firstNameController,
+                  ),
+                  //last name
                   inputFile(
-                      label: "Last Name", controller: _lastNameController),
-                  inputFile(label: "Email", controller: _emailController),
+                    label: "Last Name",
+                    controller: _lastNameController,
+                  ),
+                  //email
+                  inputFile(
+                    label: "Email",
+                    controller: _emailController,
+                  ),
+
+                  //gender
                   inputFile(
                       label: "Location / Area",
                       controller: _locationController),
                   DropdownButton<String>(
+                    style: const TextStyle(color: Colors.white),
+                    dropdownColor: Colors.white,
                     value: _selectedGender,
                     onChanged: (String? newValue) {
                       setState(() {
@@ -185,73 +202,77 @@ class _RegisterPageState extends State<RegisterPage> {
                       );
                     }).toList(),
                   ),
-                  // inputFile(label: "Gender", controller: _genderController),
-                  TextField(
-                    controller: _birthDateController,
-                    decoration: const InputDecoration(
-                      icon: Icon(
-                        Icons.calendar_today_rounded,
-                        color: Colors.black,
+                  // date of birth
+                  Center(
+                    child: TextField(
+                      controller: _birthDateController,
+                      decoration: const InputDecoration(
+                        icon: Icon(
+                          Icons.calendar_today_rounded,
+                          color: Colors.black,
+                        ),
+                        labelText: "Please Enter Date of Birth",
+                        labelStyle: TextStyle(color: Colors.black),
                       ),
-                      labelText: "D.O.B",
-                      border: InputBorder.none,
-                    ),
-                    onTap: () async {
-                      DateTime? pickedate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1905),
-                        lastDate: DateTime.now(),
-                      );
+                      onTap: () async {
+                        DateTime? pickedate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1905),
+                          lastDate: DateTime.now(),
+                        );
 
-                      if (pickedate != null) {
-                        setState(() {
-                          _birthDateController.text =
-                              DateFormat("dd-MM-yyyy").format(pickedate);
-                        });
-                      }
-                    },
-                    readOnly: true,
+                        if (pickedate != null) {
+                          setState(() {
+                            _birthDateController.text =
+                                DateFormat("dd-MM-yyyy").format(pickedate);
+                          });
+                        }
+                      },
+                      readOnly: true,
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
+                  //password
                   inputFile(
                       label: "Password",
                       controller: _passwordController,
                       obscureText: true),
+                  //confirm password
                   inputFile(
                       label: "Confirm Password",
                       controller: _confirmpasswordController,
                       obscureText: true),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.only(top: 0, left: 0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  border: const Border(
-                    bottom: BorderSide(color: Colors.black),
-                    top: BorderSide(color: Colors.black),
-                    left: BorderSide(color: Colors.black),
-                    right: BorderSide(color: Colors.black),
-                  ),
-                ),
-                child: MaterialButton(
-                  minWidth: double.infinity,
-                  height: 60,
-                  onPressed: signUp,
-                  color: Color.fromARGB(255, 242, 0, 0),
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
+
+              //sign up button
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 0, left: 0),
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
+                    border: Border.all(color: Colors.black),
                   ),
-                  child: const Text(
-                    "Sign up!",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                      color: Colors.white,
+                  child: MaterialButton(
+                    minWidth: double.infinity,
+                    height: 60,
+                    onPressed: signUp,
+                    color: Theme.of(context).colorScheme.primary,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: const Text(
+                      "Sign up!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -264,11 +285,19 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already have an account?"),
+                    //go back to login
                     Text(
-                      " Login",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                      "Already have an account?  ",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      "Login!",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.cyan),
                     )
                   ],
                 ),
@@ -281,14 +310,16 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
+//input field widget
 Widget inputFile({
   required String label,
   bool obscureText = false,
   required TextEditingController controller,
 }) {
   return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
+      //label
       Text(
         label,
         style: const TextStyle(
@@ -297,22 +328,31 @@ Widget inputFile({
       const SizedBox(
         height: 5,
       ),
+      //input field
       TextField(
+        cursorHeight: 30,
+        style: const TextStyle(color: Colors.black),
         obscureText: obscureText,
         controller: controller,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-        ),
+        decoration: InputDecoration(
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 4,
+                ),
+                borderRadius: BorderRadius.circular(15)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.cyan,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(15))),
       ),
       const SizedBox(
         height: 10,
-      )
+      ),
     ],
   );
 }
