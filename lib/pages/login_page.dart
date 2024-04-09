@@ -66,7 +66,6 @@ class _LoginPageState extends State<LoginPage> {
           child: Center(
             child: SingleChildScrollView(
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -111,124 +110,125 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 30),
 
                   //email textfield
-                  Animate(
-                    effects: [FadeEffect(duration: 1000.ms, delay: 1500.ms)],
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(
-                              Icons.email,
-                              size: 30,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: TextField(
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
-                                  controller: emailTextController,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.grey[200],
-                                    hintText: 'Email',
-                                    hintStyle: const TextStyle(
-                                      color: Colors.grey,
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white),
-                                    ),
-                                  ),
-                                  obscureText: false,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(
+                            Icons.email,
+                            size: 30,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: TextField(
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
+                                controller: emailTextController,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.grey[200],
+                                  hintText: 'Email',
+                                  hintStyle: const TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                ),
+                                obscureText: false,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                  ).animate().slideX(
+                        duration: 500.ms,
+                        delay: 1600.ms,
+                        begin: -1.0,
+                        curve: Curves.easeInOut,
+                      ),
 
                   const SizedBox(height: 20),
 
                   //password textfield
-                  Animate(
-                    effects: [FadeEffect(duration: 1000.ms, delay: 1800.ms)],
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            const Icon(
-                              Icons.lock,
-                              size: 30,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: TextField(
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary),
-                                  controller: passwordTextController,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.grey[200],
-                                    hintText: 'Password',
-                                    hintStyle: const TextStyle(
-                                      color: Colors.grey,
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white),
-                                    ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(
+                            Icons.lock,
+                            size: 30,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: TextField(
+                                style: TextStyle(
+                                    fontSize: 13,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                                controller: passwordTextController,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.grey[200],
+                                  hintText: 'Password',
+                                  hintStyle: const TextStyle(
+                                    color: Colors.grey,
                                   ),
-                                  obscureText: true,
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
                                 ),
+                                obscureText: true,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                  ).animate().slideX(
+                        duration: 500.ms,
+                        delay: 1600.ms,
+                        begin: 1.0,
+                        curve: Curves.easeInOut,
+                      ),
                   const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Text('Forgot your password? No problem! '),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context,
@@ -237,16 +237,23 @@ class _LoginPageState extends State<LoginPage> {
                             }));
                           },
                           child: const Text(
-                            'Forgot Password?',
+                            'Click Here!',
                             style: TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold),
-                          ),
+                          ).animate().shake(
+                                duration: 500.ms,
+                                delay: 2000.ms,
+                                curve: Curves.easeInOut,
+                              ),
                         ),
                       ],
-                    ),
+                    ).animate().fadeIn(
+                          duration: 500.ms,
+                          delay: 1600.ms,
+                        ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 100),
 
                   //login button
                   Padding(
@@ -260,47 +267,68 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Center(
-                          child: Text('Log In',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              )),
+                          child: Text(
+                            'Log In',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  )
+                      .animate(
+                        onPlay: (controller) => controller.repeat(
+                          reverse: true,
+                        ), // Play the animation in a loop
+                      )
+                      .scaleXY(
+                        end: 1.1,
+                        duration: 1500.ms,
+                        delay: 400.ms,
+                        curve: Curves.easeInOut,
+                      )
+                      .shimmer(color: Colors.cyan),
+
                   const SizedBox(height: 10),
 
-                  //'Not a member' text
-                  const Text(
-                    'Did not join the community yet?',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  //sign in button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                    child: GestureDetector(
-                      onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return RegisterPage();
-                      })),
-                      child: const Center(
-                        child: Text(
-                          'Sign up!',
-                          style: TextStyle(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //'Not a member' text
+                      const Text(
+                        'Did not join the community yet?  ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      //sign in button
+                      GestureDetector(
+                        onTap: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return RegisterPage();
+                        })),
+                        child: const Center(
+                          child: Text(
+                            'Sign up!',
+                            style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    ],
+                  ).animate().fadeIn(
+                        duration: 500.ms,
+                        delay: 2000.ms,
+                      ),
+
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
