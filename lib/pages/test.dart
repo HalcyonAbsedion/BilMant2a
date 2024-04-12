@@ -1,102 +1,57 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
+
+void main() {
+  runApp(TestPage());
+}
 
 class TestPage extends StatefulWidget {
-  const TestPage({Key? key}) : super(key: key);
-
   @override
-  State<TestPage> createState() => _TestPageState();
+  _TestPageState createState() => _TestPageState();
 }
 
 class _TestPageState extends State<TestPage> {
-  Completer<GoogleMapController> _googleMapController = Completer();
-  CameraPosition? _cameraPosition;
-  Location? _location;
-  LocationData? _currentLocation;
-
   @override
   void initState() {
-    _init();
     super.initState();
   }
 
-  _init() async {
-    _location = Location();
-    _cameraPosition = CameraPosition(
-        target: LatLng(
-            0, 0), // this is just the example lat and lng for initializing
-        zoom: 15);
-    _initLocation();
-  }
-
-  //function to listen when we move position
-  _initLocation() {
-    //use this to go to current location instead
-    _location?.getLocation().then((location) {
-      _currentLocation = location;
-    });
-    _location?.onLocationChanged.listen((newLocation) {
-      _currentLocation = newLocation;
-      moveToPosition(LatLng(
-          _currentLocation?.latitude ?? 0, _currentLocation?.longitude ?? 0));
-    });
-  }
-
-  moveToPosition(LatLng latLng) async {
-    GoogleMapController mapController = await _googleMapController.future;
-    mapController.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: latLng, zoom: 15)));
-  }
+  Color containerColor = Colors.red;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    return _getMap();
-  }
-
-  Widget _getMarker() {
-    return Container(
-      width: 40,
-      height: 40,
-      padding: EdgeInsets.all(2),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(100),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey,
-                offset: Offset(0, 3),
-                spreadRadius: 4,
-                blurRadius: 6)
-          ]),
-      child: ClipOval(child: Image.asset("assets/rainy.png")),
-    );
-  }
-
-  Widget _getMap() {
-    return Stack(
-      children: [
-        GoogleMap(
-          initialCameraPosition: _cameraPosition!,
-          mapType: MapType.normal,
-          onMapCreated: (GoogleMapController controller) {
-            // now we need a variable to get the controller of google map
-            if (!_googleMapController.isCompleted) {
-              _googleMapController.complete(controller);
-            }
-          },
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
         ),
-        Positioned.fill(
-            child: Align(alignment: Alignment.center, child: _getMarker()))
-      ],
+        body: Center(
+          child: Container(
+            height: 50,
+            width: 150,
+            child: ElevatedButton(
+                onPressed: () async {
+                  await LaunchApp.openApp(
+                      androidPackageName: 'com.example.augmentedrealitydemo',
+                      // iosUrlScheme: 'pulsesecure://',
+                      // appStoreLink:
+                      //     'itms-apps://itunes.apple.com/us/app/pulse-secure/id945832041',
+                      openStore: true);
+
+                  // Enter the package name of the App you want to open and for iOS add the URLscheme to the Info.plist file.
+                  // The `openStore` argument decides whether the app redirects to PlayStore or AppStore.
+                  // For testing purpose you can enter com.instagram.android
+                },
+                child: Container(
+                    child: Center(
+                  child: Text(
+                    "Open",
+                    textAlign: TextAlign.center,
+                  ),
+                ))),
+          ),
+        ),
+      ),
     );
   }
 }

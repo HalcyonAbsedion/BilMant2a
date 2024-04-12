@@ -2,6 +2,7 @@ import 'package:bilmant2a/pages/GoogleMaps.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 
 class LiteModePage extends GoogleMapExampleAppPage {
   const LiteModePage({Key? key})
@@ -50,22 +51,33 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: SizedBox(
-        width: MediaQuery.of(context)
-            .size
-            .width, // Set width to match screen width
-        height: MediaQuery.of(context).size.height *
-            0.75, // Set height to 75% of screen height
-        child: GoogleMap(
-          initialCameraPosition: widget.initialPosition,
-          onMapCreated: (controller) {
-            _controller = controller;
-            _addMarker(); // Add marker when the map is created
-          },
-          markers: _markers,
+    return Column(
+      children: [
+        Expanded(
+          child: Card(
+            child: GoogleMap(
+              initialCameraPosition: widget.initialPosition,
+              onMapCreated: (controller) {
+                _controller = controller;
+                _addMarker(); // Add marker when the map is created
+              },
+              markers: _markers,
+            ),
+          ),
         ),
-      ),
+        ElevatedButton(
+          onPressed: () async {
+            await LaunchApp.openApp(
+              androidPackageName: 'com.example.augmentedrealitydemo',
+              // openStore: true,
+            );
+          },
+          child: Text(
+            "Open AR Application",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 
