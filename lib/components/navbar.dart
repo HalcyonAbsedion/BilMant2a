@@ -2,6 +2,7 @@ import 'package:bilmant2a/components/top_bar.dart';
 import 'package:bilmant2a/pages/DiscoverPage.dart';
 import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/directMessages_page.dart';
+import 'package:bilmant2a/pages/test.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,9 +59,7 @@ class _NavBarState extends State<NavBar> {
           Builder(
             builder: (context) => TopBar(),
           ),
-          Builder(
-            builder: (context) => AnimateCameraPage(),
-          ),
+          Builder(builder: (context) => LiteModePage()),
           Builder(
             builder: (context) => postCreationPage(),
           ),
