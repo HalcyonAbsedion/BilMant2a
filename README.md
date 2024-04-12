@@ -1,6 +1,6 @@
 # bilmant2a
 
-A new Flutter project.
+A fresh app tailored specially for your community!
 
 ## Getting Started
 
