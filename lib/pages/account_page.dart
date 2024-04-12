@@ -123,21 +123,24 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             ),
-            backgroundColor: Color.fromARGB(34, 0, 187, 212),
+            backgroundColor: Color.fromARGB(255, 61, 78, 87),
             body: Column(
               children: [
                 Animate(
                   effects: [
                     ShimmerEffect(color: Colors.cyan, duration: 1000.ms),
                   ],
-                  child: Text(
-                    isCurrentUser
-                        ? "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}"
-                        : "${userData['firstName']} ${userData?['lastName'] ?? ""}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 23,
-                      color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      isCurrentUser
+                          ? "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}"
+                          : "${userData['firstName']} ${userData?['lastName'] ?? ""}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 23,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

@@ -15,7 +15,7 @@ class TopBar extends StatelessWidget {
       length: 3, // Adjusted length to match the number of tabs
       child: Scaffold(
         appBar: _appBar(),
-        backgroundColor: Color.fromARGB(34, 0, 187, 212),
+        backgroundColor: Color.fromARGB(255, 61, 78, 87),
         body: const TabBarView(
           children: [
             DisplayPosts(postType: 'explore'),
@@ -71,6 +71,11 @@ class TopBar extends StatelessWidget {
 // The preferred solution is to cancel the timer or stop listening to the animation in the dispose() callback. Another solution is to check the "mounted" property of this object before calling setState() to ensure the object is still in the tree.
 // This error might indicate a memory leak if setState() is being called because another object is retaining a reference to this State object after it has been removed from the tree. To avoid memory leaks, consider breaking the reference to this object during dispose().)
         LocationScreen(),
+        const Expanded(
+          child: SizedBox(
+            width: 10,
+          ),
+        ),
         const Padding(
           padding: EdgeInsets.only(left: 8.0),
           child: WeatherPage(),
