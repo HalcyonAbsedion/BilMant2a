@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class AboutUs extends StatelessWidget {
   const AboutUs({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Who Are We',
                     style: TextStyle(
                       color: Colors.cyan,
@@ -25,40 +26,57 @@ class AboutUs extends StatelessWidget {
                       fontSize: 30,
                     ),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.question_mark,
                     color: Colors.white,
-                  )
+                    size: 30,
+                  ).animate().shake(
+                        duration: 3000.ms,
+                      ),
                 ],
-              ),
-              SizedBox(
+              ).animate().fadeIn(
+                    duration: 500.ms,
+                  ),
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.person,
                     color: Colors.white,
-                  ),
-                  Icon(
+                  ).animate().fadeIn(
+                        duration: 500.ms,
+                        delay: 1000.ms,
+                      ),
+                  const Icon(
                     Icons.person,
                     color: Colors.white,
-                  ),
-                  Icon(
+                  ).animate().fadeIn(
+                        duration: 500.ms,
+                        delay: 1900.ms,
+                      ),
+                  const Icon(
                     Icons.person,
                     color: Colors.white,
-                  ),
-                  Icon(
+                  ).animate().fadeIn(
+                        duration: 500.ms,
+                        delay: 1600.ms,
+                      ),
+                  const Icon(
                     Icons.person,
                     color: Colors.white,
-                  ),
+                  ).animate().fadeIn(
+                        duration: 500.ms,
+                        delay: 1300.ms,
+                      ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
-              Text(
+              const Text(
                 'We are a group of four ambitious computer science student with the thirst for knowledge.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -66,11 +84,14 @@ class AboutUs extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
-              ),
-              SizedBox(
+              ).animate().fadeIn(
+                    duration: 500.ms,
+                    delay: 2000.ms,
+                  ),
+              const SizedBox(
                 height: 60,
               ),
-              Text(
+              const Text(
                 'We developed this app with the intention of reigniting the spark of companionship, friendship and union between individuals as it once was before the emergance of way to many online services. ',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -78,7 +99,10 @@ class AboutUs extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
-              ),
+              ).animate().fadeIn(
+                    duration: 500.ms,
+                    delay: 2500.ms,
+                  ),
             ],
           ),
         ),
