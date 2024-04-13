@@ -1,3 +1,4 @@
+import 'package:bilmant2a/pages/about_us.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -140,7 +141,7 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Contact Us',
+                      'About Us',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -148,9 +149,16 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AboutUs(),
+                        ),
+                      );
+                    },
                     icon: Icon(
-                      Icons.send,
+                      Icons.info,
                       color: Colors.white,
                     ),
                   )
