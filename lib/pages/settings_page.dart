@@ -8,7 +8,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 21, 21, 22),
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 43, 48, 58),
           elevation: 0,

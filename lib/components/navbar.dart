@@ -2,6 +2,7 @@ import 'package:bilmant2a/components/top_bar.dart';
 import 'package:bilmant2a/pages/DiscoverPage.dart';
 import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/pages/directMessages_page.dart';
+import 'package:bilmant2a/pages/prePostCreation.dart';
 import 'package:bilmant2a/pages/test.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,16 +53,16 @@ class _NavBarState extends State<NavBar> {
 
     return Scaffold(
       body: PageView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChanged,
         children: [
           Builder(
-            builder: (context) => TopBar(),
+            builder: (context) => const TopBar(),
           ),
-          Builder(builder: (context) => LiteModePage()),
+          Builder(builder: (context) => const LiteModePage()),
           Builder(
-            builder: (context) => postCreationPage(),
+            builder: (context) => const PrePostCreation(),
           ),
           Builder(
             builder: (context) => DirectMessages(),
@@ -76,9 +77,9 @@ class _NavBarState extends State<NavBar> {
       ),
       bottomNavigationBar: CupertinoTabBar(
         border: Border.all(
-          color: Color.fromARGB(255, 66, 74, 90),
+          color: const Color.fromARGB(255, 66, 74, 90),
         ),
-        backgroundColor: Color.fromARGB(255, 43, 48, 58),
+        backgroundColor: const Color.fromARGB(255, 43, 48, 58),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Padding(
@@ -105,7 +106,7 @@ class _NavBarState extends State<NavBar> {
               icon: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
-                  Icons.add_circle,
+                  Icons.arrow_upward_sharp,
                   color: (_page == 2) ? Colors.deepPurple : Colors.white,
                 ),
               ),

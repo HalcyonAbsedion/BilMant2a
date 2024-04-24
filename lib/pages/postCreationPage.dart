@@ -156,7 +156,7 @@ class _postCreationPageState extends State<postCreationPage> {
           )
         ],
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Color.fromARGB(255, 21, 21, 22),
       body: Column(
         children: [
           SizedBox(
