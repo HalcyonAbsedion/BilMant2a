@@ -15,7 +15,7 @@ class TopBar extends StatelessWidget {
       length: 3, // Adjusted length to match the number of tabs
       child: Scaffold(
         appBar: _appBar(),
-        backgroundColor: Color.fromARGB(255, 61, 78, 87),
+        backgroundColor: Color.fromARGB(255, 21, 21, 22),
         body: const TabBarView(
           children: [
             DisplayPosts(postType: 'explore'),

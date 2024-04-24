@@ -52,10 +52,6 @@ class DirectMessages extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton.filled(
-              onPressed: () {},
-              icon: Icon(Icons.location_pin),
-            ).animate().fadeIn(delay: 500.ms),
           ],
         ),
         actions: [

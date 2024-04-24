@@ -92,17 +92,6 @@ class _ProfileState extends State<Profile> {
               backgroundColor: Color.fromARGB(255, 43, 48, 58),
               elevation: 0,
               actions: [
-                IconButton(
-                  onPressed: () {
-                    _authMethods.signOut();
-                    FirebaseAuth.instance.signOut();
-                  },
-                  icon: const Icon(
-                    Icons.logout,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                ),
                 const SizedBox(
                   width: 300,
                 ),
@@ -112,7 +101,8 @@ class _ProfileState extends State<Profile> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SettingsPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const SettingsPage()),
                       );
                     },
                     icon: const Icon(
@@ -123,7 +113,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             ),
-            backgroundColor: Color.fromARGB(255, 61, 78, 87),
+            backgroundColor: const Color.fromARGB(255, 21, 21, 22),
             body: Column(
               children: [
                 Animate(
@@ -153,18 +143,31 @@ class _ProfileState extends State<Profile> {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green, width: 2),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 3,
+                          ),
                           shape: BoxShape.circle,
                         ),
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: isCurrentUser
-                              ? (userProvider.getUser.photoUrl != ""
-                                  ? NetworkImage(userProvider.getUser.photoUrl)
-                                  : null)
-                              : (userData?['photoUrl'] != null
-                                  ? NetworkImage(userData?['photoUrl'])
-                                  : null),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.transparent,
+                              width: 3,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundImage: isCurrentUser
+                                ? (userProvider.getUser.photoUrl != ""
+                                    ? NetworkImage(
+                                        userProvider.getUser.photoUrl)
+                                    : null)
+                                : (userData?['photoUrl'] != null
+                                    ? NetworkImage(userData?['photoUrl'])
+                                    : null),
+                          ),
                         ),
                       ),
                     ).animate().fadeIn().slideX(
@@ -208,9 +211,11 @@ class _ProfileState extends State<Profile> {
                             : "${userData['bio'] ?? ""} ",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 10,
                             color: Colors.white),
-                      ),
+                      ).animate().fadeIn(
+                            delay: 2000.ms,
+                          ),
                       const SizedBox(height: 10),
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -234,7 +239,7 @@ class _ProfileState extends State<Profile> {
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
-                                    fixedSize: const Size(300, 50),
+                                    fixedSize: const Size(225, 50),
                                     backgroundColor: Colors.grey[300],
                                     textStyle: const TextStyle(
                                       color: Colors.white,
@@ -271,6 +276,7 @@ class _ProfileState extends State<Profile> {
                                       // Handle error if necessary
                                     }
                                   },
+                                  //edit button
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.all(0),
                                     fixedSize: const Size(300, 50),
@@ -284,15 +290,16 @@ class _ProfileState extends State<Profile> {
                                 )),
                       const SizedBox(height: 10),
                       Container(
-                        color: Colors.grey,
-                        width: double.infinity,
                         height: 1,
+                        color: Colors.grey,
                       ),
                       const SizedBox(height: 16),
                     ],
                   ),
                 ),
-                Expanded(child: DisplayPosts(postUserId: widget.userId)),
+                Expanded(
+                  child: DisplayPosts(postUserId: widget.userId),
+                ),
               ],
             ),
           );

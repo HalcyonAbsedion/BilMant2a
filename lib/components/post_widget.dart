@@ -151,7 +151,7 @@ class _PostWidgetState extends State<PostWidget> {
                         color: Colors.cyan,
                         width: 1,
                       ),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

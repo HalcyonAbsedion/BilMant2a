@@ -41,7 +41,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           context: context,
           builder: (context) {
             return const AlertDialog(
-              content: Text('Check your email for reset link!'),
+              content: Text(
+                'Check your email for reset link!',
+                style: TextStyle(color: Colors.black),
+              ),
             );
           });
     }
@@ -50,9 +53,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-      ),
+      appBar: AppBar(backgroundColor: Theme.of(context).primaryColor),
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -60,18 +61,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           const Text('Forgot your Password?',
               style: TextStyle(
                 fontSize: 27,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               )),
           const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-            child: const Text(
-                'Enter your email address below to reset your password. You will receive an email with a link to create a new password.',
-                style: TextStyle(
-                  fontSize: 20,
-                )),
+          const Padding(
+            padding: EdgeInsets.only(left: 40.0, right: 40.0),
+            child: Text(
+              'Enter your email address below to reset your password. You will receive an email with a link to create a new password.',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.black,
+              ),
+            ),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(
+            height: 130,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50.0),
             child: Container(
@@ -92,10 +98,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 5.0),
-                        child: MyTextField(
+                        child: TextField(
                           controller: emailTextController,
-                          hintText: 'Email',
-                          obscureText: false,
+                          style: const TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            fillColor: Colors.grey.shade200,
+                            filled: true,
+                            hintText: 'Enter your email here...',
+                            hintStyle: TextStyle(color: Colors.grey[500]),
+                          ),
                         )),
                   ),
                 ],

@@ -179,7 +179,7 @@ class _postCreationPageState extends State<postCreationPage> {
                   child: TextField(
                     controller: textController,
                     decoration: const InputDecoration(
-                      hintText: "Write here...",
+                      hintText: "Share with your neighbors...",
                       hintStyle: TextStyle(color: Colors.grey),
                       border: InputBorder.none,
                     ),

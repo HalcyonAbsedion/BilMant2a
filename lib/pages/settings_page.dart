@@ -10,9 +10,9 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 43, 48, 58),
+          backgroundColor: const Color.fromARGB(255, 43, 48, 58),
           elevation: 0,
-          title: Text(
+          title: const Text(
             "Settings",
             style: TextStyle(
               color: Colors.white,
@@ -20,7 +20,7 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         body: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -28,12 +28,12 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.person,
                       color: Colors.white,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Account Settings',
                     style: TextStyle(
                       color: Colors.white,
@@ -43,12 +43,12 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       'Notifications',
                       style: TextStyle(
@@ -59,19 +59,19 @@ class SettingsPage extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.notifications,
                       color: Colors.white,
                     ),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       'Edit Account',
                       style: TextStyle(
@@ -82,14 +82,14 @@ class SettingsPage extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.edit,
                       color: Colors.white,
                     ),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
@@ -111,12 +111,12 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       'Help Center',
                       style: TextStyle(
@@ -127,19 +127,19 @@ class SettingsPage extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.help,
                       color: Colors.white,
                     ),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       'About Us',
                       style: TextStyle(
@@ -157,14 +157,14 @@ class SettingsPage extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.info,
                       color: Colors.white,
                     ),
                   )
                 ],
               ),
-              Expanded(
+              const Expanded(
                 child: SizedBox(
                   height: 20,
                 ),
@@ -176,7 +176,7 @@ class SettingsPage extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         'Log Out',
                         style: TextStyle(
@@ -190,7 +190,7 @@ class SettingsPage extends StatelessWidget {
                         FirebaseAuth.instance.signOut();
                         Navigator.pop(context);
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.logout,
                         color: Colors.yellow,
                       ),
@@ -198,12 +198,12 @@ class SettingsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       'Delete Account',
                       style: TextStyle(
@@ -214,7 +214,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {},
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete,
                       color: Colors.red,
                     ),
