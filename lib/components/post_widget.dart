@@ -241,67 +241,6 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
           ),
-          SizedBox(
-            height: 40,
-            child: TextField(
-              controller: _textController,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(10),
-                hintText: 'Comment Here..',
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(color: Colors.cyan, width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(color: Colors.grey, width: 2.0),
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    final UserProvider userProvider =
-                        Provider.of<UserProvider>(context, listen: false);
-
-                    try {
-                      String res = await PostsMethods().postComment(
-                        widget.post.postId,
-                        _textController.text,
-                        userProvider.getUser.uid,
-                        "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}",
-                        userProvider.getUser.photoUrl,
-                      );
-                      setState(() {
-                        commentLen += 1;
-                      });
-
-                      if (res != 'success') {
-                        setState(() {
-                          commentLen -= 1;
-                        });
-                        showSnackBar(context, res);
-                      }
-                      _textController.clear();
-                    } catch (err) {
-                      setState(() {
-                        commentLen -= 1;
-                      });
-                      showSnackBar(
-                        context,
-                        err.toString(),
-                      );
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.check,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

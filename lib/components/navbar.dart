@@ -42,8 +42,16 @@ class _NavBarState extends State<NavBar> {
   }
 
   void navigationTapped(int page) {
-    //Animating Page
-    pageController.jumpToPage(page);
+    if (page == 2) {
+      // If the middle button is tapped, navigate to the post creation page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => postCreationPage()),
+      );
+    } else {
+      //Animating to Page
+      pageController.jumpToPage(page);
+    }
   }
 
   @override

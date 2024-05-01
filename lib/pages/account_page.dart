@@ -82,6 +82,7 @@ class _ProfileState extends State<Profile> {
       followers = userProvider.getUser.followers.length;
       following = userProvider.getUser.following.length;
       postLen = userProvider.getUser.postIds.length;
+      isLoading = false;
     } else {}
     return isLoading
         ? const Center(

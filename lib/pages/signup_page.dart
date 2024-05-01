@@ -115,17 +115,17 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         // elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        leading: IconButton(
-          onPressed: () =>
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return const LoginPage();
-          })),
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 20,
-            color: Colors.white,
-          ),
-        ),
+        // leading: IconButton(
+        //   onPressed: () =>
+        //       Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //     return const LoginPage();
+        //   })),
+        //   icon: const Icon(
+        //     Icons.arrow_back_ios,
+        //     size: 20,
+        //     color: Colors.white,
+        //   ),
+        // ),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: Container(
@@ -278,10 +278,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                  return const LoginPage();
-                })),
+                onTap: () => Navigator.pop(context),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
