@@ -1,8 +1,11 @@
+import 'package:bilmant2a/components/calendar.dart';
 import 'package:bilmant2a/pages/GoogleMaps.dart';
+import 'package:bilmant2a/providers/locationProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:provider/provider.dart';
 
 class LiteModePage extends GoogleMapExampleAppPage {
   const LiteModePage({Key? key})
@@ -10,21 +13,14 @@ class LiteModePage extends GoogleMapExampleAppPage {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getCurrentLocation(),
-      builder: (context, AsyncSnapshot<Position> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Show loading indicator while getting the location
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          final currentLocation = snapshot.data!;
-          final CameraPosition _kInitialPosition = CameraPosition(
-            target: LatLng(currentLocation.latitude, currentLocation.longitude),
-            zoom: 15.0, // Adjust the zoom level as per your requirement
-          );
-          return _LiteModeBody(initialPosition: _kInitialPosition);
-        }
+    return Consumer<LocationProvider>(
+      builder: (context, locationProvider, _) {
+        return _LiteModeBody(
+            initialPosition: CameraPosition(
+          target: LatLng(locationProvider.currentLocation.latitude,
+              locationProvider.currentLocation.longitude),
+          zoom: 15.0,
+        ));
       },
     );
   }
@@ -50,6 +46,21 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
   Set<Marker> _markers = {}; // Set to hold the markers
 
   @override
+  void initState() {
+    super.initState();
+
+    if (mounted)
+      _markers.add(
+        Marker(
+          markerId: MarkerId('currentLocation'),
+          position: LatLng(widget.initialPosition.target.latitude,
+              widget.initialPosition.target.longitude),
+          infoWindow: InfoWindow(title: 'Your Location'),
+        ),
+      );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -59,7 +70,6 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
               initialCameraPosition: widget.initialPosition,
               onMapCreated: (controller) {
                 _controller = controller;
-                _addMarker(); // Add marker when the map is created
               },
               markers: _markers,
             ),
@@ -77,11 +87,24 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
             style: TextStyle(color: Colors.white),
           ),
         ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return CalendarPage();
+            }));
+          },
+          child: Text(
+            "Events Calendar",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ],
     );
   }
 
   void _addMarker() {
+    if (!mounted) return;
+
     setState(() {
       _markers.add(
         Marker(

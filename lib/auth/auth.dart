@@ -1,5 +1,6 @@
 import 'package:bilmant2a/components/navbar.dart';
 import 'package:bilmant2a/pages/login_page.dart';
+import 'package:bilmant2a/providers/locationProvider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,9 @@ class _AuthPageState extends State<AuthPage> {
     PostProvider postProvider =
         Provider.of<PostProvider>(context, listen: false);
     await postProvider.fetchPosts();
+    LocationProvider locationProvider =
+        Provider.of<LocationProvider>(context, listen: false);
+    await locationProvider.getCurrentLocation();
   }
 
   @override

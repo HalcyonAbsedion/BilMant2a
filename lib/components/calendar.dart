@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
 
   @override
-  // ignore: no_logic_in_create_state
-  State<StatefulWidget> createState() {
-    throw UnimplementedError();
-  }
+  _CalendarPageState createState() => _CalendarPageState();
 }
 
-class _MyAppState extends State<MyApp> {
-  DateTime today = DateTime.now();
-  void _onDaySelected(DateTime day, DateTime focusedDay) {
-    setState(() {
-      today = day;
-    });
-  }
-
+class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +16,10 @@ class _MyAppState extends State<MyApp> {
       body: content(),
     );
   }
-
-  content() {}
 }
 
 Widget content() {
-  // ignore: prefer_typing_uninitialized_variables
-  var today;
+  DateTime today = DateTime.now();
   var onDaySelected;
   return Padding(
     padding: const EdgeInsets.all(20.0),
