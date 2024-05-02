@@ -75,12 +75,16 @@ class _NavBarState extends State<NavBar> {
           Builder(
             builder: (context) => DirectMessages(),
           ),
-          // Wrap Profile with Builder
           Builder(builder: (context) {
             return Profile(
               userId: userProvider.getUser.uid,
             );
-          })
+          }),
+          Builder(
+            builder: (context) => MyHomePage(
+              title: "TEst",
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
@@ -142,6 +146,16 @@ class _NavBarState extends State<NavBar> {
             label: '',
             backgroundColor: Colors.blue,
           ),
+          BottomNavigationBarItem(
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.bug_report,
+                  color: (_page == 5) ? Colors.deepPurple : Colors.white,
+                ),
+              ),
+              label: '',
+              backgroundColor: Colors.blue),
         ],
         onTap: navigationTapped,
         currentIndex: _page,

@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:bilmant2a/pages/signup_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../pages/forgot_pw_page.dart';
@@ -29,6 +33,17 @@ class _LoginPageState extends State<LoginPage> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailTextController.text.trim(),
         password: passwordTextController.text.trim(),
+      );
+      await FirebaseMessaging.instance.getToken().then(
+        (value) async {
+          log(value!);
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .update(
+            {'token': value},
+          );
+        },
       );
       if (dialogContext != null && dialogContext!.mounted) {
         Navigator.pop(

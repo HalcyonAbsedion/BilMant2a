@@ -5,6 +5,7 @@ import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:bilmant2a/pages/settings_page.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/notificationService.dart';
 import 'package:bilmant2a/services/storage_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -59,6 +60,7 @@ class _ProfileState extends State<Profile> {
       followers = userSnap.data()!['followers'].length;
       following = userSnap.data()!['following'].length;
       postLen = userSnap.data()!['postIds'].length;
+
       isFollowing = userSnap
           .data()!['followers']
           .contains(FirebaseAuth.instance.currentUser!.uid);
@@ -268,6 +270,11 @@ class _ProfileState extends State<Profile> {
                                         } else {
                                           isFollowing = true;
                                           followers++;
+                                          NotificationService().sendNotification(
+                                              'BilMant2a',
+                                              '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed',
+                                              '${userData['token']}',
+                                              'https://images.unsplash.com/photo-1688607932382-f01b0987c897?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80');
                                         }
                                         userProvider.refreshUser();
                                       });

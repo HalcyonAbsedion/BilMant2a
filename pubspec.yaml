@@ -68,6 +68,8 @@ dependencies:
   external_app_launcher: ^4.0.0
   smooth_scroll_multiplatform: ^1.0.8
   flick_video_player: ^0.7.0
+  firebase_messaging: ^14.9.1
+  flutter_local_notifications: ^17.1.1
 
 dev_dependencies:
   flutter_test:

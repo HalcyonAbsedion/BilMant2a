@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bilmant2a/auth/auth.dart';
 import 'package:bilmant2a/firebase_options.dart';
 import 'package:bilmant2a/providers/locationProvider.dart';
@@ -8,10 +10,28 @@ import 'package:bilmant2a/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+Future<void> _firebaseMessagingBackgoundHandler(RemoteMessage message) async {
+  log('Handling a background message ${message.messageId}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseMessaging.instance.getInitialMessage();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  log(
+    (await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()!
+            .requestNotificationsPermission())
+        .toString(),
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgoundHandler);
   runApp(const MyApp());
 }
 
