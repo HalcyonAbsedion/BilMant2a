@@ -1,4 +1,5 @@
 import 'package:bilmant2a/pages/about_us.dart';
+import 'package:bilmant2a/pages/contact_us.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
@@ -86,7 +87,7 @@ class SettingsPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ProfilePageEdit(),
+                          builder: (context) => const ProfilePageEdit(),
                         ),
                       );
                     },
@@ -134,7 +135,14 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ContactUs(),
+                        ),
+                      );
+                    },
                     icon: const Icon(
                       Icons.help,
                       color: Colors.white,

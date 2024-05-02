@@ -7,6 +7,16 @@ class AboutUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 43, 48, 58),
+        elevation: 0,
+        title: const Text(
+          "About Us",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: SafeArea(
