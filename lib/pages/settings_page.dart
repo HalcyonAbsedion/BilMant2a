@@ -1,6 +1,7 @@
 import 'package:bilmant2a/pages/about_us.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:bilmant2a/pages/profile_edit.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -8,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 21, 21, 22),
+        backgroundColor: const Color.fromARGB(255, 21, 21, 22),
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 43, 48, 58),
           elevation: 0,
@@ -81,7 +82,14 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePageEdit(),
+                        ),
+                      );
+                    },
                     icon: const Icon(
                       Icons.edit,
                       color: Colors.white,
@@ -118,7 +126,7 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   const Expanded(
                     child: Text(
-                      'Help Center',
+                      'Contact Us!',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
