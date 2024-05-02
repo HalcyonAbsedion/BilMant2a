@@ -5,6 +5,7 @@ import 'package:bilmant2a/pages/directMessages_page.dart';
 import 'package:bilmant2a/pages/prePostCreation.dart';
 import 'package:bilmant2a/pages/test.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
+import 'package:bilmant2a/services/notificationService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,8 @@ class _NavBarState extends State<NavBar> {
   @override
   void initState() {
     super.initState();
+    NotificationService().requestPermission();
+    NotificationService().init(context);
     pageController = PageController();
   }
 
@@ -80,11 +83,11 @@ class _NavBarState extends State<NavBar> {
               userId: userProvider.getUser.uid,
             );
           }),
-          Builder(
-            builder: (context) => MyHomePage(
-              title: "TEst",
-            ),
-          ),
+          // Builder(
+          //   builder: (context) => MyHomePage(
+          //     title: "TEst",
+          //   ),
+          // ),
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
@@ -146,16 +149,16 @@ class _NavBarState extends State<NavBar> {
             label: '',
             backgroundColor: Colors.blue,
           ),
-          BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.bug_report,
-                  color: (_page == 5) ? Colors.deepPurple : Colors.white,
-                ),
-              ),
-              label: '',
-              backgroundColor: Colors.blue),
+          // BottomNavigationBarItem(
+          //     icon: Padding(
+          //       padding: const EdgeInsets.all(8.0),
+          //       child: Icon(
+          //         Icons.bug_report,
+          //         color: (_page == 5) ? Colors.deepPurple : Colors.white,
+          //       ),
+          //     ),
+          //     label: '',
+          //     backgroundColor: Colors.blue),
         ],
         onTap: navigationTapped,
         currentIndex: _page,

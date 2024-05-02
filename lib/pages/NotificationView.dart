@@ -1,49 +1,67 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class NotificationView extends StatelessWidget {
+class NotificationView extends StatefulWidget {
   const NotificationView({Key? key}) : super(key: key);
+
+  @override
+  State<NotificationView> createState() => _NotificationViewState();
+}
+
+class _NotificationViewState extends State<NotificationView> {
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
-      body: listView(),
-    );
-  }
-
-  PreferredSizeWidget appBar() {
-    return AppBar(
-      title: Center(child: Text('Notification Screen')),
-      backgroundColor: Colors.blue,
-    );
-  }
-
-  Widget listView() {
-    return ListView.separated(
-        itemBuilder: ((context, index) {
-          return listViewItem(index);
-        }),
-        separatorBuilder: (context, index) {
-          return Divider(height: 0);
+      appBar: AppBar(
+        title: const Center(child: Text('Notification Screen')),
+        backgroundColor: Colors.blue,
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firestore
+            .collection('Users')
+            .doc(_auth.currentUser!.uid)
+            .collection('Notifications')
+            .orderBy('datePublished', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final notifications = snapshot.data!.docs;
+          return ListView.separated(
+            itemCount: notifications.length,
+            separatorBuilder: (context, index) => const Divider(height: 0),
+            itemBuilder: (context, index) {
+              final notification =
+                  notifications[index].data() as Map<String, dynamic>;
+              return listViewItem(notification);
+            },
+          );
         },
-        itemCount: 15);
+      ),
+    );
   }
 
-  Widget listViewItem(int index) {
+  Widget listViewItem(Map<String, dynamic> notification) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          prefixIcon(),
+          prefixIcon(notification['Icon']), // Pass icon URL
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(left: 10),
+              margin: const EdgeInsets.only(left: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  message(index),
-                  timeAndDate(index),
+                  titleText(notification['Title']), // Display title
+                  message(notification['Body']),
+                  timeAndDate(notification['datePublished']),
                 ],
               ),
             ),
@@ -53,54 +71,70 @@ class NotificationView extends StatelessWidget {
     );
   }
 
-  Widget prefixIcon() {
+  Widget prefixIcon(String iconUrl) {
     return Container(
       height: 50,
       width: 50,
-      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.grey.shade300,
+        image: DecorationImage(
+          image: NetworkImage(iconUrl), // Load image from URL
+          fit: BoxFit.cover,
+        ),
       ),
-      child: Icon(Icons.notifications, size: 25, color: Colors.grey.shade700),
     );
   }
 
-  Widget message(int index) {
-    double textSize = 14;
-    return Container(
-        child: RichText(
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
-      text: TextSpan(
-        text: 'Message: ',
-        style: TextStyle(
-            fontSize: textSize,
-            color: Colors.black,
-            fontWeight: FontWeight.bold),
-        children: [
-          TextSpan(
-            text: 'Message Description',
-            style: TextStyle(fontWeight: FontWeight.w400),
-          ),
-        ],
+  Widget titleText(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
       ),
-    ));
+    );
   }
 
-  Widget timeAndDate(int index) {
+  Widget message(String body) {
+    double textSize = 14;
     return Container(
-      margin: EdgeInsets.only(top: 5),
+      child: RichText(
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+        text: TextSpan(
+          text: '',
+          style: TextStyle(
+              fontSize: textSize,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          children: [
+            TextSpan(
+              text: body,
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget timeAndDate(Timestamp datePublished) {
+    // Format the date and time as needed
+    final dateTime = datePublished.toDate();
+    final formattedDate = dateTime.toString().split(' ')[0];
+    final formattedTime = dateTime.toString().split(' ')[1].substring(0, 5);
+    return Container(
+      margin: const EdgeInsets.only(top: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '3-8-2024',
-            style: TextStyle(fontSize: 10),
+            formattedDate,
+            style: const TextStyle(fontSize: 10),
           ),
           Text(
-            '12:00 am',
-            style: TextStyle(fontSize: 10),
+            formattedTime,
+            style: const TextStyle(fontSize: 10),
           ),
         ],
       ),

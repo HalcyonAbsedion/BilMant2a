@@ -1,5 +1,6 @@
 import 'package:bilmant2a/pages/about_us.dart';
 import 'package:bilmant2a/pages/contact_us.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
@@ -202,8 +203,14 @@ class SettingsPage extends StatelessWidget {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         FirebaseAuth.instance.signOut();
+                        await FirebaseFirestore.instance
+                            .collection('Users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update(
+                          {'token': ""},
+                        );
                         Navigator.pop(context);
                       },
                       icon: const Icon(

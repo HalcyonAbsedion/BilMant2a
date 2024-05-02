@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:bilmant2a/pages/NotificationView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -144,9 +145,7 @@ class NotificationService {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const Scaffold(
-                  body: Center(child: Text('Taps')),
-                ),
+                builder: (context) => NotificationView(),
               ),
             );
             break;

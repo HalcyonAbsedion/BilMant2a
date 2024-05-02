@@ -1,4 +1,5 @@
 import 'package:bilmant2a/pages/DisplayPosts.dart';
+import 'package:bilmant2a/pages/NotificationView.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -14,7 +15,7 @@ class TopBar extends StatelessWidget {
     return DefaultTabController(
       length: 3, // Adjusted length to match the number of tabs
       child: Scaffold(
-        appBar: _appBar(),
+        appBar: _appBar(context),
         backgroundColor: Color.fromARGB(255, 21, 21, 22),
         body: const TabBarView(
           children: [
@@ -27,7 +28,7 @@ class TopBar extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _appBar() {
+  PreferredSizeWidget _appBar(BuildContext context) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(130),
       child: Container(
@@ -36,7 +37,7 @@ class TopBar extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              _topBar(),
+              _topBar(context),
               const SizedBox(height: 5),
               _tabBar(),
             ],
@@ -60,7 +61,7 @@ class TopBar extends StatelessWidget {
     );
   }
 
-  Widget _topBar() {
+  Widget _topBar(BuildContext context) {
     return Row(
       children: [
         // Leads to Error so this has been commented
@@ -97,9 +98,12 @@ class TopBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return NotificationView();
+            })),
             icon: const Icon(
-              Icons.more_vert,
+              Icons.notifications,
               color: Colors.white,
             ),
           ),

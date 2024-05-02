@@ -2,6 +2,7 @@ import 'package:bilmant2a/components/navbar.dart';
 import 'package:bilmant2a/pages/login_page.dart';
 import 'package:bilmant2a/providers/locationProvider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/notificationService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,8 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   @override
   void initState() {
+    NotificationService().requestPermission();
+    NotificationService().init(context);
     super.initState();
   }
 

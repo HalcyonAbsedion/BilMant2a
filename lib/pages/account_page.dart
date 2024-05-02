@@ -15,6 +15,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:provider/provider.dart';
 import 'package:bilmant2a/services/auth_service.dart';
+import 'package:uuid/uuid.dart';
 
 class Profile extends StatefulWidget {
   final String userId;
@@ -270,11 +271,31 @@ class _ProfileState extends State<Profile> {
                                         } else {
                                           isFollowing = true;
                                           followers++;
+
                                           NotificationService().sendNotification(
-                                              'BilMant2a',
-                                              '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed',
+                                              'New Follower Notification',
+                                              '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed You',
                                               '${userData['token']}',
-                                              'https://images.unsplash.com/photo-1688607932382-f01b0987c897?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80');
+                                              userProvider.getUser.photoUrl);
+                                          String NotificatoinId =
+                                              const Uuid().v1();
+                                          FirebaseFirestore.instance
+                                              .collection('Users')
+                                              .doc(userData?['uid'])
+                                              .collection('Notifications')
+                                              .doc(NotificatoinId)
+                                              .set({
+                                            'Title':
+                                                'New Follower Notification',
+                                            'Body':
+                                                '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed You',
+                                            'SenderId':
+                                                userProvider.getUser.uid,
+                                            'Icon':
+                                                userProvider.getUser.photoUrl,
+                                            'NotificationId': NotificatoinId,
+                                            'datePublished': DateTime.now(),
+                                          });
                                         }
                                         userProvider.refreshUser();
                                       });
