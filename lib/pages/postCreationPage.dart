@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:bilmant2a/models/post.dart' as model;
@@ -63,7 +64,7 @@ class _postCreationPageState extends State<postCreationPage> {
       context: context,
       barrierDismissible: false, // Prevent user from dismissing dialog
       builder: (BuildContext context) {
-        return AlertDialog(
+        return const AlertDialog(
           content: Row(
             children: [
               CircularProgressIndicator(),
@@ -133,7 +134,7 @@ class _postCreationPageState extends State<postCreationPage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 43, 48, 58),
         title: const Text(
-          "Post To Neighbors",
+          "Post Page",
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -146,24 +147,29 @@ class _postCreationPageState extends State<postCreationPage> {
                   .fetchCurrentUserFilteredPosts(userProvider.getUser.postIds),
             },
             child: const Text(
-              "Post",
+              'Post',
               style: TextStyle(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            )
+                .animate(
+                  onPlay: (controller) => controller.repeat(
+                    reverse: true,
+                  ),
+                )
+                .fadeOut(duration: 2000.ms),
           )
         ],
       ),
-      backgroundColor: Color.fromARGB(255, 21, 21, 22),
+      backgroundColor: const Color.fromARGB(255, 21, 21, 22),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -173,46 +179,36 @@ class _postCreationPageState extends State<postCreationPage> {
                       profileUrl != "" ? NetworkImage(profileUrl) : null,
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: TextField(
-                    autofocus: true,
-                    controller: textController,
-                    decoration: const InputDecoration(
-                      hintText: "Share with your neighbors...",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      border: InputBorder.none,
-                    ),
-                    maxLines: 8,
-                  ),
-                ),
+              const SizedBox(
+                width: 200,
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 43, 48, 58),
+                  color: const Color.fromARGB(255, 43, 48, 58),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: DropdownButton<String>(
-                  value: selectedPostType,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedPostType = newValue!;
-                    });
-                  },
-                  items: <String>['explore', 'donations', 'volunteer']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          value,
-                          style: const TextStyle(color: Colors.grey),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: selectedPostType,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedPostType = newValue!;
+                      });
+                    },
+                    items: <String>['explore', 'donations', 'volunteer']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            value,
+                            style: const TextStyle(color: Colors.cyan),
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
               const Divider()
@@ -232,6 +228,19 @@ class _postCreationPageState extends State<postCreationPage> {
           //           ),
           //   ),
           // ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+            child: TextField(
+              autofocus: true,
+              controller: textController,
+              decoration: const InputDecoration(
+                hintText: "Share with your neighbors...",
+                hintStyle: TextStyle(color: Colors.grey),
+                border: InputBorder.none,
+              ),
+              maxLines: null,
+            ),
+          ),
           Expanded(
             // Add Expanded widget here
             child: ListView.builder(
@@ -256,7 +265,10 @@ class _postCreationPageState extends State<postCreationPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _handleFloatingActionButton,
-        child: const Icon(Icons.image_rounded),
+        child: const Icon(
+          Icons.image_rounded,
+          color: Colors.cyan,
+        ),
       ),
     );
   }
