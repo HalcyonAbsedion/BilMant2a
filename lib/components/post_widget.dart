@@ -5,6 +5,7 @@ import 'package:bilmant2a/components/videoComponent.dart';
 import 'package:bilmant2a/pages/comment_screen.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/notificationService.dart';
 import 'package:bilmant2a/services/postUpload_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,7 +76,7 @@ class _PostWidgetState extends State<PostWidget> {
     super.dispose();
   }
 
-  void toggleLike() {
+  Future<void> toggleLike() async {
     setState(() {
       isLiked = !isLiked;
     });
@@ -86,6 +87,17 @@ class _PostWidgetState extends State<PostWidget> {
       postRef.update({
         'likes': FieldValue.arrayUnion([currentUserUid])
       });
+
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      String token = await NotificationService().getUserToken(widget.post.uid);
+      NotificationService().sendNotification(
+          'Post Notification',
+          '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Liked Your Post',
+          token,
+          userProvider.getUser.photoUrl,
+          widget.post.uid,
+          postId: widget.post.postId);
     } else {
       widget.post.likes.remove(currentUserUid);
       postRef.update({

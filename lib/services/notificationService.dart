@@ -1,17 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:bilmant2a/pages/NotificationView.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   late BuildContext context;
+  var userData = {};
 
   // initialize the service with context
   void init(BuildContext context) {
@@ -43,7 +48,8 @@ class NotificationService {
   }
 
   // send notification via FCM
-  sendNotification(String title, body, to, icon) async {
+  sendNotification(String title, body, to, icon, String userId,
+      {String postId = ""}) async {
     print("test");
     try {
       await http.post(
@@ -74,6 +80,22 @@ class NotificationService {
           },
         ),
       );
+
+      String NotificatoinId = const Uuid().v1();
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Notifications')
+          .doc(NotificatoinId)
+          .set({
+        'Title': title,
+        'Body': body,
+        'SenderId': to,
+        'Icon': icon,
+        'NotificationId': NotificatoinId,
+        'datePublished': DateTime.now(),
+        'postId': postId
+      });
     } on Exception catch (e) {
       print(e);
     }
@@ -108,6 +130,16 @@ class NotificationService {
       ),
     );
   }
+
+  Future<String> getUserToken(userId) async {
+    String token =
+        (await FirebaseFirestore.instance.collection('Users').doc(userId).get())
+                .data()?['token'] ??
+            '';
+
+    return token;
+  }
+
   //  getToken() async {
   //   await FirebaseMessaging.instance.getToken().then(
   //     (value) async {

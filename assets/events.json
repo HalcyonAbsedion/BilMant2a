@@ -2,21 +2,30 @@
     {
       "name": "Event 1",
       "description": "Discuss project progress and next steps.",
-      "date": "2024-05-03 00:00:00.000Z"
+      "date": "2024-05-03 00:00:00.000Z",
+      "latitude": 33.888820961412264,
+      "longitude":35.490306960140636
     },
     {
       "name": "Event 2",
       "description": "Regular checkup.",
-      "date": "2024-05-03 00:00:00.000Z"
+      "date": "2024-05-03 00:00:00.000Z",
+      "latitude": 33.89029386252444,
+      "longitude":35.4913658570400
     },
     {
       "name": "Event 3",
       "description": "NOICE",
-      "date": "2024-05-09 00:00:00.000Z"
+      "date": "2024-05-09 00:00:00.000Z",
+      "latitude": 33.89029386255444,
+      "longitude":35.4943658570900
+      
     },
     {
       "name": "Project Deadline",
       "description": "Project Presentation",
-      "date": "2024-05-17 00:00:00.000Z"
+      "date": "2024-05-17 00:00:00.000Z",
+      "latitude": 33.87305828064106,
+      "longitude":35.49609184280807
     }
   ]

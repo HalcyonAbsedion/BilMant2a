@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:bilmant2a/components/comment_card.dart';
+import 'package:bilmant2a/models/post.dart';
 import 'package:bilmant2a/models/user.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/notificationService.dart';
 import 'package:bilmant2a/services/postUpload_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +41,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
         name,
         profilePic,
       );
+
+      Post post = await Post.getPostById(widget.postId);
+      String token = await NotificationService().getUserToken(post.uid);
+      NotificationService().sendNotification(
+          'Post Notification',
+          '${name}  Just Commentted On Your Post: ${commentEditingController.text}',
+          token,
+          profilePic,
+          post.uid,
+          postId: widget.postId);
 
       if (res != 'success') {
         showSnackBar(context, res);
@@ -115,6 +129,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
               InkWell(
                 onTap: () {
                   postComment(user.uid, username, user.photoUrl);
+
                   Provider.of<PostProvider>(context, listen: false)
                       .refreshPost(widget.postId);
                 },

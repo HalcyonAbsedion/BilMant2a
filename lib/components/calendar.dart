@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bilmant2a/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert'; // For JSON decoding
@@ -52,9 +53,12 @@ class _CalendarPageState extends State<CalendarPage> {
     log('Adding event: $eventName');
     setState(() {
       if (_events[day] != null) {
-        _events[day]!.add(Event(eventName, eventDescription, day.toString()));
+        _events[day]!
+            .add(Event(eventName, eventDescription, day.toString(), 0, 0));
       } else {
-        _events[day] = [Event(eventName, eventDescription, day.toString())];
+        _events[day] = [
+          Event(eventName, eventDescription, day.toString(), 0, 0)
+        ];
       }
     });
     log("testing array ${_events.entries} ");
@@ -119,17 +123,4 @@ class _CalendarPageState extends State<CalendarPage> {
   List<Event> _getEventsForDay(DateTime day) {
     return _events[day] ?? [];
   }
-}
-
-class Event {
-  final String name;
-  final String description;
-  final String date;
-
-  Event(this.name, this.description, this.date);
-
-  Event.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        description = json['description'],
-        date = json['date'];
 }

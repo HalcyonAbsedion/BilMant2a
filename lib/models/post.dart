@@ -58,6 +58,24 @@ class Post {
     );
   }
 
+  static Future<Post> getPostById(String postId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('Posts')
+          .doc(postId)
+          .get();
+
+      if (snapshot.exists) {
+        return fromSnap(snapshot);
+      } else {
+        return empty(); // Post with the given postId not found
+      }
+    } catch (e) {
+      print('Error fetching post: $e');
+      return empty();
+    }
+  }
+
   Map<String, dynamic> toJson() => {
         "description": description,
         "postType": postType,
