@@ -33,6 +33,7 @@ class _PostWidgetState extends State<PostWidget> {
   late String currentUserUid;
   bool isVolunteer = false;
   bool isDonations = false;
+  bool is
   @override
   void initState() {
     super.initState();

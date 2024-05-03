@@ -28,11 +28,17 @@ class ChatBubble extends StatelessWidget {
             color: isCurrentUser
                 ? Color.fromARGB(121, 51, 214, 29)
                 : Color.fromARGB(144, 158, 158, 158),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
+            borderRadius: isCurrentUser
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  )
+                : BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
             border: Border.all(
               color: isCurrentUser ? Colors.lightGreen : Colors.white,
             ),
