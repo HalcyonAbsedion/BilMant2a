@@ -92,7 +92,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
     model.User user = Provider.of<UserProvider>(context).getUser;
     String _selectedGender = "Male";
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: const Color.fromARGB(255, 21, 21, 22),
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
@@ -161,12 +161,18 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
               userValue: user.firstName,
               field: "firstName",
             ),
+            SizedBox(
+              height: 20,
+            ),
 
             //Last name
             editField(
               label: "Last Name",
               userValue: user.lastName,
               field: "lastName",
+            ),
+            SizedBox(
+              height: 20,
             ),
 
             //age
@@ -177,35 +183,62 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
               isDate: true,
             ),
 
+            SizedBox(
+              height: 20,
+            ),
+
             //bio
             editField(
               label: "Bio",
               userValue: user.bio,
               field: "bio",
             ),
-
-            //gender
-            DropdownButton<String>(
-              value: _selectedGender,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedGender = newValue!;
-                });
-              },
-              items: <String>['Male', 'Female', 'Do Not Specify']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            SizedBox(
+              height: 20,
             ),
-            // editField(
-            //   label: "gender",
-            //   userValue: user.gender,
-            //   field: "gender",
-            // ),
-
+            //gender
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Gender:"),
+                  Container(
+                    width: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: false,
+                        iconEnabledColor: Colors.cyan,
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 16.0,
+                          end: 16.0,
+                        ),
+                        value: _selectedGender,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedGender = newValue!;
+                          });
+                        },
+                        items: <String>['Male', 'Female', 'Do Not Specify']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             //phone number
             editField(
               label: "Phone Number",

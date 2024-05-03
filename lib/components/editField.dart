@@ -82,7 +82,7 @@ class _editFieldState extends State<editField> {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(
+              child: const Text(
                 "Cancel",
                 style: TextStyle(
                   color: Colors.white,
@@ -90,7 +90,7 @@ class _editFieldState extends State<editField> {
               )),
           TextButton(
             onPressed: () => Navigator.of(context).pop(newValue),
-            child: Text(
+            child: const Text(
               "Save",
               style: TextStyle(
                 color: Colors.white,
@@ -128,48 +128,52 @@ class _editFieldState extends State<editField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("${widget.label}:"),
-              IconButton(
-                onPressed: () => edit(widget.field),
-                icon: Container(
-                  height: 30,
-                  width: 30,
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Text("${widget.label}:"),
+            ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => edit(widget.field),
+                  icon: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.cyan,
+                    ),
+                    child: const Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 200,
+                  height: 50,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.blue,
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Container(
-                width: 200,
-                height: 50,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  widget.userValue,
-                  style: TextStyle(
-                    fontSize: 12,
+                  child: Text(
+                    widget.userValue,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
