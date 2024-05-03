@@ -33,7 +33,7 @@ class _PostWidgetState extends State<PostWidget> {
   late String currentUserUid;
   bool isVolunteer = false;
   bool isDonations = false;
-  bool is
+  bool isExplore = false;
   @override
   void initState() {
     super.initState();
@@ -42,6 +42,7 @@ class _PostWidgetState extends State<PostWidget> {
     isLiked = widget.post.likes.contains(currentUserUid);
     isVolunteer = widget.post.postType == "volunteer";
     isDonations = widget.post.postType == "donations";
+    isExplore = widget.post.postType == "explore";
     // log(isVolunteer.toString());
     fetchCommentLen();
   }
@@ -125,26 +126,42 @@ class _PostWidgetState extends State<PostWidget> {
                     );
                   },
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green, width: 2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: CircleAvatar(
-                          backgroundImage: widget.post.profImage != ""
-                              ? NetworkImage(widget.post.profImage)
-                              : null,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          widget.post.username,
-                          style: const TextStyle(
-                            color: Colors.white,
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.green, width: 2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: CircleAvatar(
+                              backgroundImage: widget.post.profImage != ""
+                                  ? NetworkImage(widget.post.profImage)
+                                  : null,
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              widget.post.username,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Icon(
+                        isVolunteer
+                            ? Icons.handshake
+                            : isDonations
+                                ? Icons.volunteer_activism
+                                : isExplore
+                                    ? Icons.explore
+                                    : Icons.error,
+                        color: Colors.cyan,
+                        size: 20,
                       ),
                     ],
                   ),
@@ -172,28 +189,22 @@ class _PostWidgetState extends State<PostWidget> {
                       ),
                     ),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 5.0),
+                    child: Text(
+                      '-',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade700,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(
-                          _getTimeDifference(
-                            widget.post.datePublished,
-                          ), // Display time difference here
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      _getTimeDifference(
+                        widget.post.datePublished,
+                      ), // Display time difference here
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -231,22 +242,28 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
 
-          Row(
-            children: [
-              Expanded(
-                child: likeComponent(),
-              ),
-              shareComponent(),
-              commentComponent(context),
-            ],
+          const SizedBox(
+            height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Container(
-              height: 1,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(162, 255, 255, 255),
+
+          Container(
+            padding:
+                const EdgeInsets.only(top: 1, bottom: 1, left: 10, right: 10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1,
               ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: likeComponent(),
+                ),
+                shareComponent(),
+                commentComponent(context),
+              ],
             ),
           ),
         ],
