@@ -5,6 +5,7 @@ import 'package:bilmant2a/pages/directMessages_page.dart';
 import 'package:bilmant2a/pages/prePostCreation.dart';
 import 'package:bilmant2a/pages/test.dart';
 import 'package:bilmant2a/pages/weather_page.dart';
+import 'package:bilmant2a/providers/locationProvider.dart';
 import 'package:bilmant2a/services/notificationService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,16 @@ class _NavBarState extends State<NavBar> {
   @override
   void initState() {
     super.initState();
+    addData();
     NotificationService().requestPermission();
     NotificationService().init(context);
     pageController = PageController();
+  }
+
+  addData() async {
+    LocationProvider locationProvider =
+        Provider.of<LocationProvider>(context, listen: false);
+    await locationProvider.getCurrentLocation();
   }
 
   @override

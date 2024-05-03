@@ -58,7 +58,7 @@ class _DiplayPostsState extends State<DisplayPosts> {
     return RefreshIndicator(
       onRefresh: () => postProvider.fetchPosts(),
       child: ListView.separated(
-        physics: CustomBouncingScrollPhysics(parent: BouncingScrollPhysics()),
+        physics: RangeMaintainingScrollPhysics(parent: BouncingScrollPhysics()),
         separatorBuilder: (context, int) => Container(
           height: 5,
         ),

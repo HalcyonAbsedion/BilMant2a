@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bilmant2a/components/like_button.dart';
 import 'package:bilmant2a/components/videoComponent.dart';
 import 'package:bilmant2a/pages/comment_screen.dart';
@@ -11,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../models/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../pages/account_page.dart';
 
@@ -28,13 +31,17 @@ class _PostWidgetState extends State<PostWidget> {
   late TextEditingController _textController;
   late PostProvider postProvider;
   late String currentUserUid;
-
+  bool isVolunteer = false;
+  bool isDonations = false;
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     isLiked = widget.post.likes.contains(currentUserUid);
+    isVolunteer = widget.post.postType == "volunteer";
+    isDonations = widget.post.postType == "donations";
+    // log(isVolunteer.toString());
     fetchCommentLen();
   }
 
@@ -353,10 +360,14 @@ class _PostWidgetState extends State<PostWidget> {
             1.85 /
             MediaQuery.of(context).size.height *
             1,
-        child: CachedNetworkImage(
-          imageUrl: url,
-          placeholder: (context, url) => CircularProgressIndicator(),
-          errorWidget: (context, url, error) => Icon(Icons.error),
+        child: GestureDetector(
+          child: PhotoView(
+            imageProvider: CachedNetworkImageProvider(url),
+            loadingBuilder: (context, event) => Center(
+              child: CircularProgressIndicator(),
+            ),
+            errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+          ),
         ),
       );
     }

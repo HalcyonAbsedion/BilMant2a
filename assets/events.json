@@ -1,0 +1,22 @@
+[
+    {
+      "name": "Event 1",
+      "description": "Discuss project progress and next steps.",
+      "date": "2024-05-03 00:00:00.000Z"
+    },
+    {
+      "name": "Event 2",
+      "description": "Regular checkup.",
+      "date": "2024-05-03 00:00:00.000Z"
+    },
+    {
+      "name": "Event 3",
+      "description": "NOICE",
+      "date": "2024-05-09 00:00:00.000Z"
+    },
+    {
+      "name": "Project Deadline",
+      "description": "Project Presentation",
+      "date": "2024-05-17 00:00:00.000Z"
+    }
+  ]

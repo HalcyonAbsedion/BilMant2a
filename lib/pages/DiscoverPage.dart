@@ -24,12 +24,6 @@ class LiteModePage extends GoogleMapExampleAppPage {
       },
     );
   }
-
-  Future<Position> _getCurrentLocation() async {
-    return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-  }
 }
 
 class _LiteModeBody extends StatefulWidget {
@@ -62,43 +56,55 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Card(
-            child: GoogleMap(
-              initialCameraPosition: widget.initialPosition,
-              onMapCreated: (controller) {
-                _controller = controller;
-              },
-              markers: _markers,
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: Card(
+              child: GoogleMap(
+                initialCameraPosition: widget.initialPosition,
+                onMapCreated: (controller) {
+                  _controller = controller;
+                },
+                markers: _markers,
+              ),
             ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            await LaunchApp.openApp(
-              androidPackageName: 'com.example.augmentedrealitydemo',
-              // openStore: true,
-            );
-          },
-          child: Text(
-            "Open AR Application",
-            style: TextStyle(color: Colors.white),
+          ElevatedButton(
+            onPressed: () async {
+              await LaunchApp.openApp(
+                androidPackageName: 'com.example.augmentedrealitydemo',
+                // openStore: true,
+              );
+            },
+            child: Text(
+              "Open AR Application",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 40.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.3,
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CalendarPage();
+              }));
+            },
+            label: Text(
+              "Events Calendar",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.blue,
+            elevation: 4,
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return CalendarPage();
-            }));
-          },
-          child: Text(
-            "Events Calendar",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
+      ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerFloat, // Position
     );
   }
 

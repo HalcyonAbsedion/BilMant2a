@@ -177,6 +177,7 @@ class _postCreationPageState extends State<postCreationPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: TextField(
+                    autofocus: true,
                     controller: textController,
                     decoration: const InputDecoration(
                       hintText: "Share with your neighbors...",
@@ -254,9 +255,7 @@ class _postCreationPageState extends State<postCreationPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        // Call _handleFloatingActionButton method when FloatingActionButton is pressed
         onPressed: _handleFloatingActionButton,
-        // Floating action button icon
         child: const Icon(Icons.image_rounded),
       ),
     );
