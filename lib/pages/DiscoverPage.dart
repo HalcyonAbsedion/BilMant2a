@@ -94,35 +94,53 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              await LaunchApp.openApp(
-                androidPackageName: 'com.example.augmentedrealitydemo',
-                // openStore: true,
-              );
-            },
-            child: Text(
-              "Open AR Application",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
         ],
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 40.0),
+        padding: const EdgeInsets.only(bottom: 700.0),
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.3,
+          width: MediaQuery.of(context).size.width * 0.89,
           child: FloatingActionButton.extended(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return CalendarPage();
               }));
             },
-            label: Text(
-              "Events Calendar",
-              style: TextStyle(color: Colors.white),
+            label: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await LaunchApp.openApp(
+                        androidPackageName: 'com.example.augmentedrealitydemo',
+                        // openStore: true,
+                      );
+                    },
+                    child: const Text(
+                      "Open AR Application",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: const Text(
+                      "Events Calendar",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.cyan,
             elevation: 4,
           ),
         ),

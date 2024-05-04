@@ -49,11 +49,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Container(
-              height: 50,
-              width: 55,
-              decoration: BoxDecoration(color: Colors.cyan),
-            ),
           ],
         ),
       ),

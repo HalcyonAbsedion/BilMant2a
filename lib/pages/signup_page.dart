@@ -197,7 +197,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         value: value,
                         child: Text(
                           value,
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       );
                     }).toList(),
