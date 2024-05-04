@@ -20,8 +20,8 @@ class _NotificationViewState extends State<NotificationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Notification Screen')),
-        backgroundColor: Colors.blue,
+        title: const Text('Notification Screen'),
+        backgroundColor: const Color.fromARGB(255, 66, 74, 90),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
