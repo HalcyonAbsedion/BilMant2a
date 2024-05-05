@@ -72,7 +72,7 @@ class IntroPage3 extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.person, color: Colors.cyan, size: 50)
+                  const Icon(Icons.person, color: Colors.grey, size: 50)
                       .animate()
                       .fadeIn(
                         delay: 1000.ms,
@@ -95,7 +95,7 @@ class IntroPage3 extends StatelessWidget {
                       ),
                 ],
               ),
-              const Icon(Icons.person, color: Colors.cyan, size: 50)
+              const Icon(Icons.person, color: Colors.grey, size: 50)
                   .animate()
                   .fadeIn(
                     delay: 1500.ms,

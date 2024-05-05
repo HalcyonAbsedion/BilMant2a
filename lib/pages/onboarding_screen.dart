@@ -2,6 +2,8 @@ import 'package:bilmant2a/pages/home_page.dart';
 import 'package:bilmant2a/pages/intro_screens/intro_page1.dart';
 import 'package:bilmant2a/pages/intro_screens/intro_page2.dart';
 import 'package:bilmant2a/pages/intro_screens/intro_page3.dart';
+import 'package:bilmant2a/pages/intro_screens/intro_page4.dart';
+import 'package:bilmant2a/pages/intro_screens/intro_page5.dart';
 import 'package:bilmant2a/pages/signup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +35,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             controller: _controller,
             onPageChanged: (index) {
               setState(() {
-                onLastPage = (index == 2);
+                onLastPage = (index == 4);
               });
             },
             children: const [
               IntroPage1(),
               IntroPage2(),
               IntroPage3(),
+              IntroPage4(),
+              IntroPage5()
             ],
           ),
 
@@ -52,14 +56,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   //skip button
                   GestureDetector(
                     onTap: () {
-                      _controller.jumpToPage(2);
+                      _controller.jumpToPage(4);
                     },
                     child: const Text('Skip'),
                   ),
                   // dots
                   SmoothPageIndicator(
                     controller: _controller,
-                    count: 3,
+                    count: 5,
                     effect: const ExpandingDotsEffect(
                       dotColor: Colors.grey,
                       activeDotColor: Colors.blue,

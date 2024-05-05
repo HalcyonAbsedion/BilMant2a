@@ -54,14 +54,14 @@ class IntroPage2 extends StatelessWidget {
               ).animate().fadeIn(
                     delay: 1000.ms,
                   ),
-              const Icon(Icons.volunteer_activism, color: Colors.cyan, size: 50)
+              const Icon(Icons.volunteer_activism, color: Colors.red, size: 50)
                   .animate()
                   .fadeIn(
                     delay: 1500.ms,
                   ),
               const Icon(
                 Icons.handshake,
-                color: Colors.cyan,
+                color: Colors.green,
                 size: 50,
               ).animate().fadeIn(
                     delay: 2000.ms,
