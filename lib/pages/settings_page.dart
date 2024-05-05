@@ -1,15 +1,24 @@
 import 'package:bilmant2a/pages/about_us.dart';
 import 'package:bilmant2a/pages/contact_us.dart';
+import 'package:bilmant2a/pages/manage_organizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
+import 'package:bilmant2a/models/user.dart' as model;
+import 'package:provider/provider.dart';
+
+import '../providers/user_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    
+    final model.User user = userProvider.getUser;
+    bool isOrganization = user.isOrganization;
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 21, 21, 22),
         appBar: AppBar(
@@ -18,7 +27,7 @@ class SettingsPage extends StatelessWidget {
           title: const Text(
             "Settings",
             style: TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 8, 8, 8),
             ),
           ),
         ),
@@ -221,6 +230,51 @@ class SettingsPage extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              // Inside the SettingsPage widget where the "Manage Organizations" button is defined
+              if (!isOrganization)
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ManageOrganizationsPage(),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Manage Organizations',
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => {
+                          userProvider.refreshUser(),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              
+                              builder: (context) => ManageOrganizationsPage(),
+                            ),
+                          )
+                        },
+                        icon: Icon(
+                          Icons.work,
+                          color: Colors.green,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
               const SizedBox(
                 height: 20,
               ),

@@ -62,13 +62,77 @@ class AuthMethods {
           organizations: [], // Add empty list for organizations
           ownerId: cred.user!.uid,
           postIds: [],
-          
         );
         // adding user in our database
         await _firestore
             .collection("Users")
             .doc(cred.user!.uid)
             .set(user.toJson());
+
+        res = "success";
+      } else {
+        res = "Please enter all the fields";
+      }
+    } catch (err) {
+      return err.toString();
+    }
+    return res;
+  }
+
+  Future<String> signOrganization({
+    required String email,
+    required String password,
+    required String organizationName,
+    required String birthDate,
+    required String location,
+  }) async {
+    User currentUser = _auth.currentUser!;
+    String res = "Some error Occurred";
+    try {
+      if (email.isNotEmpty ||
+          password.isNotEmpty ||
+          organizationName.isNotEmpty ||
+          birthDate.isNotEmpty ||
+          location.isNotEmpty) {
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        model.User organizationUser = model.User(
+          firstName: organizationName,
+          lastName: "",
+          uid: cred.user!.uid,
+          photoUrl: "",
+          email: email,
+          bio: "",
+          phoneNumber: "",
+          birthDate: birthDate,
+          gender: "Male",
+          followers: [],
+          following: [],
+          locations: [location],
+          isOrganization: true,
+          organizations: [], // Initialize empty organizations list
+          ownerId: currentUser.uid, // Set ownerId to the current user's uid
+          postIds: [],
+        );
+
+        await _firestore
+            .collection("Users")
+            .doc(cred.user!.uid)
+            .set(organizationUser.toJson());
+
+        // Update owner user's organizations list with the new organizationId
+        model.User ownerUser = await getUserDetails();
+        List<dynamic> organizations =
+            List<dynamic>.from(ownerUser.organizations);
+        organizations.add(
+            cred.user!.uid); // Add organization's uid to organizations list
+
+        await _firestore.collection("Users").doc(currentUser.uid).update({
+          "organizations": organizations,
+        });
 
         res = "success";
       } else {
@@ -108,19 +172,20 @@ class AuthMethods {
   }
 
   Future<void> addUserToList({
-  required String userId,
-  required String fieldName,
-  required dynamic elementToAdd,
-}) async {
-  try {
-    DocumentReference userRef = FirebaseFirestore.instance.collection("Users").doc(userId);
-    await userRef.update({
-      fieldName: FieldValue.arrayUnion([elementToAdd])
-    });
+    required String userId,
+    required String fieldName,
+    required dynamic elementToAdd,
+  }) async {
+    try {
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection("Users").doc(userId);
+      await userRef.update({
+        fieldName: FieldValue.arrayUnion([elementToAdd])
+      });
 
-    print("Element $elementToAdd added to $fieldName for user $userId");
-  } catch (error) {
-    print("Error adding element to $fieldName for user $userId: $error");
+      print("Element $elementToAdd added to $fieldName for user $userId");
+    } catch (error) {
+      print("Error adding element to $fieldName for user $userId: $error");
+    }
   }
-}
 }
