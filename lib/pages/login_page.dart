@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bilmant2a/pages/onboarding_screen.dart';
 import 'package:bilmant2a/pages/signup_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -89,14 +90,40 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Column(
                       children: [
-                        const Text(
-                          'BilMant2a',
-                          style: TextStyle(
-                            color: Colors.cyan,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40,
-                          ),
-                        ).animate().fadeIn(duration: 1500.ms),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'B',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 40,
+                              ),
+                            ).animate().fadeIn(duration: 1500.ms),
+                            const Icon(
+                              Icons.location_pin,
+                              size: 30,
+                              color: Colors.cyan,
+                            )
+                                .animate(
+                                    onPlay: (controller) =>
+                                        controller.repeat(reverse: true))
+                                .moveY(
+                                    duration: 500.ms,
+                                    begin: 0,
+                                    end: -10,
+                                    curve: Curves.easeInOut),
+                            const Text(
+                              'l Mant2a',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 40,
+                              ),
+                            ).animate().fadeIn(duration: 1500.ms),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -243,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Forgot your password? No problem! '),
+                        const Text('Forgot your password? No problem! '),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context,
@@ -324,7 +351,7 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: () => Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return RegisterPage();
+                          return const OnBoardingScreen();
                         })),
                         child: const Center(
                           child: Text(

@@ -2,6 +2,7 @@ import 'package:bilmant2a/pages/home_page.dart';
 import 'package:bilmant2a/pages/intro_screens/intro_page1.dart';
 import 'package:bilmant2a/pages/intro_screens/intro_page2.dart';
 import 'package:bilmant2a/pages/intro_screens/intro_page3.dart';
+import 'package:bilmant2a/pages/signup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -23,6 +24,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
       body: Stack(
         children: [
           PageView(
@@ -41,7 +45,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
           // dot indicators
           Container(
-              alignment: Alignment(0, 0.8),
+              alignment: const Alignment(0, 0.8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -50,10 +54,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     onTap: () {
                       _controller.jumpToPage(2);
                     },
-                    child: Text('Skip'),
+                    child: const Text('Skip'),
                   ),
                   // dots
-                  SmoothPageIndicator(controller: _controller, count: 3),
+                  SmoothPageIndicator(
+                    controller: _controller,
+                    count: 3,
+                    effect: const ExpandingDotsEffect(
+                      dotColor: Colors.grey,
+                      activeDotColor: Colors.blue,
+                      dotHeight: 10,
+                      dotWidth: 10,
+                      spacing: 5,
+                    ),
+                  ),
 
                   //next or done button
                   onLastPage
@@ -63,18 +77,22 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return HomePage();
+                                  return const RegisterPage();
                                 },
                               ),
                             );
                           },
-                          child: Text('Done'),
+                          child: const Text('Done'),
                         )
                       : GestureDetector(
                           onTap: () {
                             //navigate to the next screen
+                            _controller.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeIn,
+                            );
                           },
-                          child: Text('Next'),
+                          child: const Text('Next'),
                         )
                 ],
               )),

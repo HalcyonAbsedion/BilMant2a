@@ -16,7 +16,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    
+
     final model.User user = userProvider.getUser;
     bool isOrganization = user.isOrganization;
     return Scaffold(
@@ -27,7 +27,7 @@ class SettingsPage extends StatelessWidget {
           title: const Text(
             "Settings",
             style: TextStyle(
-              color: Color.fromARGB(255, 8, 8, 8),
+              color: Colors.white,
             ),
           ),
         ),
@@ -195,6 +195,50 @@ class SettingsPage extends StatelessWidget {
                   height: 20,
                 ),
               ),
+
+              // Inside the SettingsPage widget where the "Manage Organizations" button is defined
+              if (!isOrganization)
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ManageOrganizationsPage(),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Manage Organizations',
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => {
+                          userProvider.refreshUser(),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ManageOrganizationsPage(),
+                            ),
+                          )
+                        },
+                        icon: const Icon(
+                          Icons.add_business,
+                          color: Colors.green,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              const SizedBox(
+                height: 20,
+              ),
               GestureDetector(
                 onTap: () {
                   FirebaseAuth.instance.signOut();
@@ -230,50 +274,6 @@ class SettingsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              // Inside the SettingsPage widget where the "Manage Organizations" button is defined
-              if (!isOrganization)
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ManageOrganizationsPage(),
-                      ),
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Manage Organizations',
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => {
-                          userProvider.refreshUser(),
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              
-                              builder: (context) => ManageOrganizationsPage(),
-                            ),
-                          )
-                        },
-                        icon: Icon(
-                          Icons.work,
-                          color: Colors.green,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
 
               const SizedBox(
                 height: 20,
