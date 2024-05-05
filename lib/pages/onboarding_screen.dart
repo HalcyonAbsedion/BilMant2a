@@ -82,7 +82,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                               ),
                             );
                           },
-                          child: const Text('Done'),
+                          child: const Text(
+                            'Done',
+                            style: TextStyle(color: Colors.green),
+                          ),
                         )
                       : GestureDetector(
                           onTap: () {

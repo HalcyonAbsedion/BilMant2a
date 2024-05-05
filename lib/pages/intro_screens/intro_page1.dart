@@ -21,7 +21,7 @@ class IntroPage1 extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Text(
+              const Text(
                 "Bil Mant2a!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -57,7 +57,7 @@ class IntroPage1 extends StatelessWidget {
           ),
           const SizedBox(height: 150),
           const Icon(Icons.arrow_right_alt_rounded,
-                  color: Colors.white, size: 50)
+                  color: Colors.cyan, size: 50)
               .animate(onPlay: (controller) => controller.repeat(reverse: true))
               .fadeIn(delay: 1700.ms)
               .moveX(
