@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
       posts = posts.where((post) => post.postType == widget.postType).toList();
     }
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Column(
           children: [

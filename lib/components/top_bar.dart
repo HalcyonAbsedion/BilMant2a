@@ -100,13 +100,13 @@ class TopBar extends StatelessWidget {
           child: IconButton(
             onPressed: () =>
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return NotificationView();
+              return const NotificationView();
             })),
             icon: const Icon(
               Icons.notifications,
               color: Colors.white,
             ),
-          ),
+          ).animate().shake(duration: 2.seconds),
         ),
       ],
     );
@@ -114,7 +114,7 @@ class TopBar extends StatelessWidget {
 
   Widget _tabBar() {
     return TabBar(
-      labelPadding: EdgeInsets.all(1),
+      labelPadding: const EdgeInsets.all(1),
       labelColor: Colors.white,
       indicatorColor: Colors.transparent,
       indicatorPadding: EdgeInsets.zero,
@@ -190,7 +190,7 @@ class TopBar extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Tab(
+            child: const Tab(
               iconMargin: EdgeInsets.all(0),
               icon: Icon(Icons.handshake),
               text: 'Volunteer',

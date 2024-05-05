@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:bilmant2a/components/comment_card.dart';
+import 'package:bilmant2a/models/post.dart';
 import 'package:bilmant2a/models/user.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/notificationService.dart';
 import 'package:bilmant2a/services/postUpload_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:provider/provider.dart';
 
@@ -37,6 +42,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
         profilePic,
       );
 
+      Post post = await Post.getPostById(widget.postId);
+      String token = await NotificationService().getUserToken(post.uid);
+      NotificationService().sendNotification(
+          'Post Notification',
+          '${name}  Just Commentted On Your Post: ${commentEditingController.text}',
+          token,
+          profilePic,
+          post.uid,
+          postId: widget.postId);
+
       if (res != 'success') {
         showSnackBar(context, res);
       }
@@ -57,6 +72,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
     String username = "${user.firstName} ${user.lastName}";
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 43, 48, 58),
         title: const Text(
           'Comments',
         ),
@@ -101,9 +117,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16, right: 8),
                   child: TextField(
+                    maxLines: null,
                     controller: commentEditingController,
                     decoration: InputDecoration(
-                      hintText: 'Comment as $username',
+                      hintText: 'Comment as $username...',
                       border: InputBorder.none,
                     ),
                   ),
@@ -112,6 +129,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
               InkWell(
                 onTap: () {
                   postComment(user.uid, username, user.photoUrl);
+
                   Provider.of<PostProvider>(context, listen: false)
                       .refreshPost(widget.postId);
                 },
@@ -120,8 +138,15 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   child: const Text(
                     'Post',
-                    style: TextStyle(color: Colors.blue),
-                  ),
+                    style: TextStyle(
+                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  )
+                      .animate(
+                        onPlay: (controller) => controller.repeat(
+                          reverse: true,
+                        ),
+                      )
+                      .fadeOut(duration: 2000.ms),
                 ),
               )
             ],

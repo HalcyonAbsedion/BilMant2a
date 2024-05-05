@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:bilmant2a/components/like_button.dart';
 import 'package:bilmant2a/components/videoComponent.dart';
 import 'package:bilmant2a/pages/comment_screen.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
+import 'package:bilmant2a/services/notificationService.dart';
 import 'package:bilmant2a/services/postUpload_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../models/post.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../pages/account_page.dart';
 
@@ -28,13 +32,19 @@ class _PostWidgetState extends State<PostWidget> {
   late TextEditingController _textController;
   late PostProvider postProvider;
   late String currentUserUid;
-
+  bool isVolunteer = false;
+  bool isDonations = false;
+  bool isExplore = false;
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
     currentUserUid = FirebaseAuth.instance.currentUser!.uid;
     isLiked = widget.post.likes.contains(currentUserUid);
+    isVolunteer = widget.post.postType == "volunteer";
+    isDonations = widget.post.postType == "donations";
+    isExplore = widget.post.postType == "explore";
+    // log(isVolunteer.toString());
     fetchCommentLen();
   }
 
@@ -66,7 +76,7 @@ class _PostWidgetState extends State<PostWidget> {
     super.dispose();
   }
 
-  void toggleLike() {
+  Future<void> toggleLike() async {
     setState(() {
       isLiked = !isLiked;
     });
@@ -77,6 +87,17 @@ class _PostWidgetState extends State<PostWidget> {
       postRef.update({
         'likes': FieldValue.arrayUnion([currentUserUid])
       });
+
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
+      String token = await NotificationService().getUserToken(widget.post.uid);
+      NotificationService().sendNotification(
+          'Post Notification',
+          '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Liked Your Post',
+          token,
+          userProvider.getUser.photoUrl,
+          widget.post.uid,
+          postId: widget.post.postId);
     } else {
       widget.post.likes.remove(currentUserUid);
       postRef.update({
@@ -117,26 +138,42 @@ class _PostWidgetState extends State<PostWidget> {
                     );
                   },
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green, width: 2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: CircleAvatar(
-                          backgroundImage: widget.post.profImage != ""
-                              ? NetworkImage(widget.post.profImage)
-                              : null,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          widget.post.username,
-                          style: const TextStyle(
-                            color: Colors.white,
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.green, width: 2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: CircleAvatar(
+                              backgroundImage: widget.post.profImage != ""
+                                  ? NetworkImage(widget.post.profImage)
+                                  : null,
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              widget.post.username,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Icon(
+                        isVolunteer
+                            ? Icons.handshake
+                            : isDonations
+                                ? Icons.volunteer_activism
+                                : isExplore
+                                    ? Icons.explore
+                                    : Icons.error,
+                        color: Colors.cyan,
+                        size: 20,
                       ),
                     ],
                   ),
@@ -164,28 +201,22 @@ class _PostWidgetState extends State<PostWidget> {
                       ),
                     ),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 5.0),
+                    child: Text(
+                      '-',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade700,
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(
-                          _getTimeDifference(
-                            widget.post.datePublished,
-                          ), // Display time difference here
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      _getTimeDifference(
+                        widget.post.datePublished,
+                      ), // Display time difference here
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -223,22 +254,28 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
 
-          Row(
-            children: [
-              Expanded(
-                child: likeComponent(),
-              ),
-              shareComponent(),
-              commentComponent(context),
-            ],
+          const SizedBox(
+            height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Container(
-              height: 1,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(162, 255, 255, 255),
+
+          Container(
+            padding:
+                const EdgeInsets.only(top: 1, bottom: 1, left: 10, right: 10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey,
+                width: 1,
               ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: likeComponent(),
+                ),
+                shareComponent(),
+                commentComponent(context),
+              ],
             ),
           ),
         ],
@@ -353,10 +390,14 @@ class _PostWidgetState extends State<PostWidget> {
             1.85 /
             MediaQuery.of(context).size.height *
             1,
-        child: CachedNetworkImage(
-          imageUrl: url,
-          placeholder: (context, url) => CircularProgressIndicator(),
-          errorWidget: (context, url, error) => Icon(Icons.error),
+        child: GestureDetector(
+          child: PhotoView(
+            imageProvider: CachedNetworkImageProvider(url),
+            loadingBuilder: (context, event) => Center(
+              child: CircularProgressIndicator(),
+            ),
+            errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+          ),
         ),
       );
     }

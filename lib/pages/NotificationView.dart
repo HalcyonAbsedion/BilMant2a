@@ -1,3 +1,6 @@
+import 'package:bilmant2a/components/post_widget.dart';
+import 'package:bilmant2a/models/post.dart';
+import 'package:bilmant2a/pages/notificationDetails.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +20,8 @@ class _NotificationViewState extends State<NotificationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Notification Screen')),
-        backgroundColor: Colors.blue,
+        title: const Text('Notification Screen'),
+        backgroundColor: const Color.fromARGB(255, 66, 74, 90),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -38,7 +41,23 @@ class _NotificationViewState extends State<NotificationView> {
             itemBuilder: (context, index) {
               final notification =
                   notifications[index].data() as Map<String, dynamic>;
-              return listViewItem(notification);
+              return notification['Title'] == "Post Notification"
+                  ? GestureDetector(
+                      onTap: () async {
+                        // Navigate to desired screen when notification is tapped
+                        Post post =
+                            await Post.getPostById("${notification['postId']}");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailsScreen(
+                                    post: post,
+                                  )),
+                        );
+                      },
+                      child: listViewItem(notification),
+                    )
+                  : listViewItem(notification);
             },
           );
         },

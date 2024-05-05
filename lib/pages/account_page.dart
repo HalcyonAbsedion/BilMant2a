@@ -276,26 +276,8 @@ class _ProfileState extends State<Profile> {
                                               'New Follower Notification',
                                               '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed You',
                                               '${userData['token']}',
-                                              userProvider.getUser.photoUrl);
-                                          String NotificatoinId =
-                                              const Uuid().v1();
-                                          FirebaseFirestore.instance
-                                              .collection('Users')
-                                              .doc(userData?['uid'])
-                                              .collection('Notifications')
-                                              .doc(NotificatoinId)
-                                              .set({
-                                            'Title':
-                                                'New Follower Notification',
-                                            'Body':
-                                                '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed You',
-                                            'SenderId':
-                                                userProvider.getUser.uid,
-                                            'Icon':
-                                                userProvider.getUser.photoUrl,
-                                            'NotificationId': NotificatoinId,
-                                            'datePublished': DateTime.now(),
-                                          });
+                                              userProvider.getUser.photoUrl,
+                                              userData['uid']);
                                         }
                                         userProvider.refreshUser();
                                       });
