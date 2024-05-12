@@ -97,7 +97,7 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
         ],
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 700.0),
+        padding: const EdgeInsets.only(bottom: 00.0),
         child: Container(
           width: MediaQuery.of(context).size.width * 0.89,
           child: FloatingActionButton.extended(
