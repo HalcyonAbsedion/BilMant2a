@@ -74,12 +74,11 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
             ),
             Switch(
-              value: mant2aProvider.useFetchedValue,
+              value: mant2aProvider.useFetchedValue&&_currentMant2a.isNotEmpty,
               onChanged: (value) {
                 mant2aProvider.getLocationName();
                 setState(() {
-                  mant2aProvider.useFetchedValue = value;
-                  mant2aProvider.useFetchedValue = value;
+                  mant2aProvider.useFetchedValue = value&&_currentMant2a.isNotEmpty;
                   mant2aProvider.refreshMant2a(userProvider.getUser.uid);
                 });
               },
