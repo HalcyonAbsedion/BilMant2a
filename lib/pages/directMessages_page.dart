@@ -1,9 +1,11 @@
+import 'package:bilmant2a/components/areaNameSwitch.dart';
 import 'package:bilmant2a/components/customSearchDelegate.dart';
 import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import '../components/areaNameSwitch.dart';
 
 import '../components/user_tile.dart';
 import 'chat_page.dart';
@@ -35,20 +37,17 @@ class DirectMessages extends StatelessWidget {
                 ),
                 const FadeEffect(),
               ],
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  LocationScreen(),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Icon(
                       Icons.chat,
                       color: Colors.white,
                     ),
-                  ),
-                  Text(
-                    'Direct Messages',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  )
                 ],
               ),
             ),

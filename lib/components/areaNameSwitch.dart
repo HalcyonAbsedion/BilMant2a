@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/mant2a_provider.dart';
+import '../providers/user_provider.dart';
 
 class LocationScreen extends StatefulWidget {
   @override
@@ -11,118 +15,25 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   String defaultBilMant2a = 'Bil Mant2a';
   String fetchedBilMant2a = '';
-  bool useFetchedValue = false;
   bool loading = true; // Added loading state
 
   @override
   void initState() {
     super.initState();
-    _fetchLocationNames();
+    addData();
   }
 
-  Future<void> _fetchLocationNames() async {
-    setState(() {
-      loading = true; // Show loading indicator
-    });
-
-    String locationName = await getLocationName();
-    if (mounted) {
-      setState(() {
-        fetchedBilMant2a = locationName.isNotEmpty
-            ? 'Bil $locationName'
-            : 'No locations found';
-        loading = false; // Hide loading indicator after fetching is done
-      });
-    }
-  }
-
-  Future<String> getLocationName() async {
-    List<String> locationNames = [];
-
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-
-      if (_isWithinMainSquare(position.latitude, position.longitude)) {
-        QuerySnapshot querySnapshot =
-            await FirebaseFirestore.instance.collection('locations').get();
-
-        double minDistance = 9999999999999;
-        String nearestLocation = '';
-        querySnapshot.docs.forEach((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          double latitude = data['latitude'] * 1.0;
-          double longitude = data['longitude'] * 1.0;
-          double width = data['width'] * 1.0;
-          double length = data['length'] * 1.0;
-          double distance = Geolocator.distanceBetween(
-              position.latitude, position.longitude, latitude, longitude);
-          if (minDistance > distance) {
-            minDistance = distance;
-            nearestLocation = data['name'];
-          }
-          if (_isWithinArea(
-            position.latitude,
-            position.longitude,
-            latitude,
-            longitude,
-            width,
-            length,
-          )) {
-            setState(() {
-              String locationName = data['name'];
-              locationNames.add(locationName);
-            });
-          }
-        });
-        if (locationNames.isEmpty) {
-          locationNames.add(nearestLocation);
-        } else if (locationNames.length > 1) {
-          locationNames[0] = nearestLocation;
-        }
-      } else {
-        print("User location is outside the main square.");
-      }
-    } catch (e) {
-      print('Error fetching location data: $e');
-    }
-
-    return locationNames.isNotEmpty ? locationNames[0] : '';
-  }
-
-  bool _isWithinArea(
-      double userLatitude,
-      double userLongitude,
-      double locationLatitude,
-      double locationLongitude,
-      double width,
-      double length) {
-    double lengthMeters = length * 1000;
-    double widthMeters = width * 1000;
-
-    double distance = Geolocator.distanceBetween(
-        userLatitude, userLongitude, locationLatitude, locationLongitude);
-
-    return distance <= lengthMeters / 2 && distance <= widthMeters / 2;
-  }
-
-  bool _isWithinMainSquare(double latitude, double longitude) {
-    // Define the bounds of the main square
-    double minLatitude = 33.86728630377537;
-    double maxLatitude = 33.90364270893905;
-    double minLongitude = 35.46668979579287;
-    double maxLongitude = 35.53668439096889;
-
-    // Check if user's location falls within the bounds of the main square
-    return latitude >= minLatitude &&
-        latitude <= maxLatitude &&
-        longitude >= minLongitude &&
-        longitude <= maxLongitude;
+  addData() async {
+    Mant2aProvider locationProvider =
+        Provider.of<Mant2aProvider>(context, listen: false);
+    await locationProvider.getLocationName();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Mant2aProvider mant2aProvider = Provider.of<Mant2aProvider>(context);
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    String _currentMant2a = mant2aProvider.currentLocation;
     return Animate(
       effects: [
         ShimmerEffect(
@@ -136,17 +47,25 @@ class _LocationScreenState extends State<LocationScreen> {
           children: [
             SizedBox(
               width: 110.0, // Set a fixed width for the text
-              child: useFetchedValue
-                  ? Text(
-                      fetchedBilMant2a,
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              child: mant2aProvider.useFetchedValue
+                  ? Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 200, // Set the maximum width constraint
+                      ),
+                      child: Text(
+                        "Bil $_currentMant2a",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1, // Limit to a single line
+                        overflow: TextOverflow
+                            .ellipsis, // Show ellipsis (...) when text overflows
                       ),
                     )
                   : Text(
-                      defaultBilMant2a,
+                      "Bil Mant2a",
                       style: TextStyle(
                         color: Color.fromARGB(255, 255, 255, 255),
                         fontSize: 20,
@@ -155,10 +74,13 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
             ),
             Switch(
-              value: useFetchedValue,
+              value: mant2aProvider.useFetchedValue,
               onChanged: (value) {
+                mant2aProvider.getLocationName();
                 setState(() {
-                  useFetchedValue = value;
+                  mant2aProvider.useFetchedValue = value;
+                  mant2aProvider.useFetchedValue = value;
+                  mant2aProvider.refreshMant2a(userProvider.getUser.uid);
                 });
               },
               activeColor: Colors.green, // Color when the switch is ON

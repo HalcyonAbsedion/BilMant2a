@@ -63,12 +63,7 @@ class ChatService {
   }
 
   String encryptMessage(String message) {
-    
-    final keyBytes = encrypt.Key.fromUtf8(key);
-    final iv = encrypt.IV.fromLength(16); // For AES, this is always 16
-    final encrypter = encrypt.Encrypter(encrypt.AES(keyBytes));
-    final encrypted = encrypter.encrypt(message, iv: iv);
-    return encrypted.base64;
+    return message;
   }
 
   Future<String> decryptMessage(String encryptedMessage) async {

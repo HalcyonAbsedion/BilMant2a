@@ -182,27 +182,20 @@ class _PostWidgetState extends State<PostWidget> {
               Row(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: Colors.cyan,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         widget.post.location,
                         style: const TextStyle(
-                          fontSize: 10,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300,
                           color: Colors.cyan,
                         ),
                       ),
                     ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.only(left: 5.0),
+                    padding: EdgeInsets.only(left: 1.0),
                     child: Text(
                       '-',
                       style: TextStyle(color: Colors.grey),
@@ -222,7 +215,7 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.only(
                   bottom: 8.0,
@@ -231,6 +224,7 @@ class _PostWidgetState extends State<PostWidget> {
                 child: Text(
                   widget.post.description,
                   style: const TextStyle(
+                    fontSize: 15,
                     color: Colors.white,
                   ),
                 ),

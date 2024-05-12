@@ -1,3 +1,4 @@
+import 'package:bilmant2a/providers/mant2a_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,8 @@ class _DiplayPostsState extends State<DisplayPosts> {
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
+    final Mant2aProvider mant2aProvider = Provider.of<Mant2aProvider>(context);
+
     uid = FirebaseAuth.instance.currentUser?.uid;
     if (isUserPage) {
       if (widget.postUserId == uid) {
@@ -50,6 +53,12 @@ class _DiplayPostsState extends State<DisplayPosts> {
       }
     } else {
       posts = postProvider.posts;
+      if (mant2aProvider.useFetchedValue) {
+        posts = posts
+            .where((post) => post.location == mant2aProvider.currentLocation)
+            .toList();
+      }
+
       if (widget.postType != 'explore') {
         posts =
             posts.where((post) => post.postType == widget.postType).toList();

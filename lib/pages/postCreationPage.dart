@@ -13,6 +13,8 @@ import 'package:bilmant2a/models/post.dart' as model;
 import 'package:bilmant2a/models/user.dart' as model2;
 import 'package:uuid/uuid.dart';
 
+import '../components/areaNameSwitch.dart';
+import '../providers/mant2a_provider.dart';
 import '../providers/post_provider.dart';
 
 class postCreationPage extends StatefulWidget {
@@ -59,7 +61,7 @@ class _postCreationPageState extends State<postCreationPage> {
     }
   }
 
-  void postSend(BuildContext context, String location) async {
+  void postSend(BuildContext context, String location, bool useLocation) async {
     showDialog(
       context: context,
       barrierDismissible: false, // Prevent user from dismissing dialog
@@ -85,6 +87,9 @@ class _postCreationPageState extends State<postCreationPage> {
     }
 
     String postId = const Uuid().v1();
+    if (!useLocation) {
+      location = "";
+    }
     model.Post post = model.Post(
       description: textController.text.trim(),
       postType: selectedPostType,
@@ -125,6 +130,7 @@ class _postCreationPageState extends State<postCreationPage> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final Mant2aProvider mant2aProvider = Provider.of<Mant2aProvider>(context);
     final model2.User user = userProvider.getUser;
     final postProvider = Provider.of<PostProvider>(context);
     username = "${user.firstName} ${user.lastName}";
@@ -140,7 +146,8 @@ class _postCreationPageState extends State<postCreationPage> {
         actions: [
           TextButton(
             onPressed: () => {
-              postSend(context, user.locations.last),
+              postSend(
+                  context, user.locations.last, mant2aProvider.useFetchedValue),
               userProvider.refreshUser(),
               postProvider.fetchPosts(),
               postProvider
@@ -179,9 +186,7 @@ class _postCreationPageState extends State<postCreationPage> {
                       profileUrl != "" ? NetworkImage(profileUrl) : null,
                 ),
               ),
-              const SizedBox(
-                width: 200,
-              ),
+              LocationScreen(),
               Container(
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 43, 48, 58),
