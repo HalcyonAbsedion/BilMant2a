@@ -1,6 +1,7 @@
 import 'package:bilmant2a/components/post_widget.dart';
 import 'package:bilmant2a/models/post.dart';
 import 'package:bilmant2a/pages/DisplayPosts.dart';
+import 'package:bilmant2a/pages/chatbot.dart';
 import 'package:bilmant2a/pages/profile_edit.dart';
 import 'package:bilmant2a/pages/settings_page.dart';
 import 'package:bilmant2a/providers/post_provider.dart';
@@ -96,25 +97,42 @@ class _ProfileState extends State<Profile> {
               backgroundColor: Color.fromARGB(255, 43, 48, 58),
               elevation: 0,
               actions: [
-                const SizedBox(
-                  width: 300,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: IconButton(
-                    onPressed: () {
+                if (isCurrentUser)
+                  IconButton(
+                    onPressed: () => {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SettingsPage()),
-                      );
+                          builder: (context) => ChatBot(),
+                        ),
+                      )
                     },
                     icon: const Icon(
-                      Icons.settings,
-                      color: Colors.white,
+                      Icons.question_answer_outlined,
+                      size: 30,
                     ),
                   ),
+                Expanded(
+                  child:
+                      SizedBox(), // Use SizedBox with Expanded to create responsive space
                 ),
+                if (isCurrentUser)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SettingsPage()),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
               ],
             ),
             backgroundColor: const Color.fromARGB(255, 21, 21, 22),
