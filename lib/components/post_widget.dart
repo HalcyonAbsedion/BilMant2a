@@ -113,11 +113,11 @@ class _PostWidgetState extends State<PostWidget> {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 43, 48, 58),
-        borderRadius: BorderRadius.circular(12),
+        color: const Color.fromRGBO(43, 48, 58, 100),
+        borderRadius: BorderRadius.circular(17),
       ),
-      margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
-      padding: const EdgeInsets.all(25),
+      margin: const EdgeInsets.only(top: 18, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 12, bottom: 3, left: 25, right: 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -125,7 +125,7 @@ class _PostWidgetState extends State<PostWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.only(bottom: 1.0),
                 child: GestureDetector(
                   onTap: () {
                     // Navigate to another page
@@ -144,22 +144,71 @@ class _PostWidgetState extends State<PostWidget> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.green, width: 2),
                               shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Color.fromRGBO(0, 208, 46, 100),
+                                width: 2,
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color.fromRGBO(
+                                      0, 208, 46, 100), // Glow color
+                                  blurRadius: 3, // Spread radius
+                                  spreadRadius: 1, // Spread radius
+                                ),
+                              ],
                             ),
                             child: CircleAvatar(
+                              radius: 25,
                               backgroundImage: widget.post.profImage != ""
                                   ? NetworkImage(widget.post.profImage)
                                   : null,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              widget.post.username,
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // Align text to the left
+                              children: [
+                                Text(
+                                  widget.post.username,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        widget.post.location,
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w300,
+                                          color:
+                                              Color.fromRGBO(0, 208, 46, 100),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      ' - ',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(0.0),
+                                      child: Text(
+                                        _getTimeDifference(
+                                          widget.post.datePublished,
+                                        ), // Display time difference here
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -179,52 +228,17 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        widget.post.location,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.cyan,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 1.0),
-                    child: Text(
-                      '-',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Text(
-                      _getTimeDifference(
-                        widget.post.datePublished,
-                      ), // Display time difference here
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 2),
               Padding(
                 padding: const EdgeInsets.only(
-                  bottom: 8.0,
-                  top: 8.0,
+                  bottom: 12.0,
+                  top: 12.0,
                 ),
                 child: Text(
                   widget.post.description,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300,
                     color: Colors.white,
                   ),
                 ),
@@ -249,25 +263,19 @@ class _PostWidgetState extends State<PostWidget> {
             ),
 
           const SizedBox(
-            height: 10,
+            height: 1,
           ),
-
           Container(
-            padding:
-                const EdgeInsets.only(top: 1, bottom: 1, left: 10, right: 10),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
+            height: 1,
+            color: Colors.grey,
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 1, left: 8, right: 8),
             child: Row(
               children: [
                 Expanded(
                   child: likeComponent(),
                 ),
-                shareComponent(),
                 commentComponent(context),
               ],
             ),

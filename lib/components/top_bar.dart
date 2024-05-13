@@ -16,7 +16,7 @@ class TopBar extends StatelessWidget {
       length: 3, // Adjusted length to match the number of tabs
       child: Scaffold(
         appBar: _appBar(context),
-        backgroundColor: const Color.fromARGB(255, 21, 21, 22),
+        backgroundColor: const Color.fromRGBO(24, 25, 26, 100),
         body: const TabBarView(
           children: [
             DisplayPosts(postType: 'explore'),
@@ -30,7 +30,7 @@ class TopBar extends StatelessWidget {
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(130),
+      preferredSize: const Size.fromHeight(150),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: _boxDecoration(),
@@ -38,8 +38,9 @@ class TopBar extends StatelessWidget {
           child: Column(
             children: [
               _topBar(context),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               _tabBar(),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -47,6 +48,19 @@ class TopBar extends StatelessWidget {
     );
   }
 
+// BoxDecoration _boxDecoration() {
+//     return const BoxDecoration(
+//       border: Border(
+//         bottom: BorderSide(
+//           color: Color.fromARGB(255, 66, 74, 90),
+//         ),
+//       ),
+//       borderRadius: BorderRadius.vertical(
+//         bottom: Radius.circular(20),
+//       ),
+//       color: Color.fromARGB(255, 43, 48, 58),
+//     );
+//   }
   BoxDecoration _boxDecoration() {
     return const BoxDecoration(
       border: Border(
@@ -54,10 +68,7 @@ class TopBar extends StatelessWidget {
           color: Color.fromARGB(255, 66, 74, 90),
         ),
       ),
-      borderRadius: BorderRadius.vertical(
-        bottom: Radius.circular(20),
-      ),
-      color: Color.fromARGB(255, 43, 48, 58),
+      color: const Color.fromRGBO(24, 25, 26, 100),
     );
   }
 
@@ -78,7 +89,7 @@ class TopBar extends StatelessWidget {
           ),
         ),
         const Padding(
-          padding: EdgeInsets.only(left: 8.0),
+          padding: EdgeInsets.only(left: 0.0),
           child: WeatherPage(),
         ),
         // badges.Badge(

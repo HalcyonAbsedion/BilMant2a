@@ -53,10 +53,10 @@ class _LocationScreenState extends State<LocationScreen> {
                         maxWidth: 200, // Set the maximum width constraint
                       ),
                       child: Text(
-                        "Bil $_currentMant2a",
+                        "$_currentMant2a",
                         style: TextStyle(
                           color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 12,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1, // Limit to a single line
@@ -84,9 +84,9 @@ class _LocationScreenState extends State<LocationScreen> {
                   mant2aProvider.refreshMant2a(userProvider.getUser.uid);
                 });
               },
-              activeColor: Colors.green, // Color when the switch is ON
+              activeColor: Colors.white, // Color when the switch is ON
               activeTrackColor:
-                  Colors.lightGreenAccent, // Track color when the switch is ON
+                  Colors.green, // Track color when the switch is ON
               inactiveThumbColor:
                   Colors.grey, // Color of the switch thumb when it is OFF
               inactiveTrackColor:

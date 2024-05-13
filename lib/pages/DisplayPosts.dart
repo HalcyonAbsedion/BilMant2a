@@ -66,18 +66,22 @@ class _DiplayPostsState extends State<DisplayPosts> {
     }
     return RefreshIndicator(
       onRefresh: () => postProvider.fetchPosts(),
-      child: ListView.separated(
-        physics: RangeMaintainingScrollPhysics(parent: BouncingScrollPhysics()),
-        separatorBuilder: (context, int) => Container(
-          height: 5,
+      child: Container(
+        color: const Color.fromRGBO(24, 25, 26, 100),
+        child: ListView.separated(
+          physics:
+              RangeMaintainingScrollPhysics(parent: BouncingScrollPhysics()),
+          separatorBuilder: (context, int) => Container(
+            height: 5,
+          ),
+          itemCount: posts.length,
+          itemBuilder: (context, index) {
+            final post = posts[index];
+            return PostWidget(
+              post: post,
+            );
+          },
         ),
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          final post = posts[index];
-          return PostWidget(
-            post: post,
-          );
-        },
       ),
     );
     // return DynMouseScroll(

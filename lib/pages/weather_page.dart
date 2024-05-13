@@ -59,20 +59,43 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     if (_weather == null) {
-      return Icon(Icons.location_disabled_outlined,color: Colors.red,);
+      return Icon(
+        Icons.location_disabled_outlined,
+        color: Colors.red,
+      );
     } else {
-      return Row(
-        children: [
-          Image.asset(
-            getWeatherAnimation(_weather?.mainCondition ?? ""),
-            height: 30.0,
-            width: 30.0,
+      return Padding(
+        padding: const EdgeInsets.all(4.0), // Add padding
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(176, 190, 197, 100),
+            borderRadius: BorderRadius.circular(10.0), // Add border radius
           ),
-          Text('${_weather?.temperature.round()}°C',
-              style: const TextStyle(
-                fontSize: 10,
-              ))
-        ],
+          child: Row(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.all(4.0), // Optional padding around Image
+                child: Image.asset(
+                  getWeatherAnimation(_weather?.mainCondition ?? ""),
+                  height: 30.0,
+                  width: 30.0,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 8.0, horizontal: 6.0), // Padding around Text
+                child: Text(
+                  '${_weather?.temperature.round()}°C',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 11,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
   }
