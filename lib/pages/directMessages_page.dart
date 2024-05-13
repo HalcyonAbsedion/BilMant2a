@@ -42,7 +42,7 @@ class DirectMessages extends StatelessWidget {
                 children: [
                   LocationScreen(),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(9.0),
                     child: Icon(
                       Icons.chat,
                       color: Colors.white,
