@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import '../components/user_tile.dart';
+import '../providers/mant2a_provider.dart';
 import 'chat_page.dart';
 
 class DirectMessages extends StatelessWidget {
@@ -16,7 +17,7 @@ class DirectMessages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-
+    final Mant2aProvider mant2aProvider = Provider.of<Mant2aProvider>(context);
     senderName =
         userProvider.getUser.firstName + " " + userProvider.getUser.lastName;
     dynamic currentlocation = userProvider.getUser.locations.last.toString();
@@ -63,24 +64,28 @@ class DirectMessages extends StatelessWidget {
         children: [
           // Other widgets can be placed here
           // For example:
-          UserTile(
-            url: "",
-            text: currentlocation,
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatPage(
-                      senderName: userProvider.getUser.firstName +
-                          " " +
-                          userProvider.getUser.lastName,
-                      receiverName: currentlocation,
-                      receiverID: currentlocation.toString().toLowerCase(),
-                      receiverPhotoUrl: "",
-                      senderID: userProvider.getUser.uid,
-                    ),
-                  ));
-            },
+          Container(
+            child: mant2aProvider.useFetchedValue?
+            UserTile(
+              url: "",
+              text: currentlocation,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatPage(
+                        senderName: userProvider.getUser.firstName +
+                            " " +
+                            userProvider.getUser.lastName,
+                        receiverName: currentlocation,
+                        receiverID: currentlocation.toString().toLowerCase(),
+                        receiverPhotoUrl: "",
+                        senderID: userProvider.getUser.uid,
+                      ),
+                    ));
+              },
+            ):
+            Container()
           ),
           Expanded(
             child: _buildUserList(), // Using Expanded to take available space
