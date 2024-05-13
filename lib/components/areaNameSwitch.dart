@@ -56,7 +56,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         "Bil $_currentMant2a",
                         style: TextStyle(
                           color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 20,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1, // Limit to a single line
@@ -74,11 +74,13 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
             ),
             Switch(
-              value: mant2aProvider.useFetchedValue&&_currentMant2a.isNotEmpty,
+              value:
+                  mant2aProvider.useFetchedValue && _currentMant2a.isNotEmpty,
               onChanged: (value) {
                 mant2aProvider.getLocationName();
                 setState(() {
-                  mant2aProvider.useFetchedValue = value&&_currentMant2a.isNotEmpty;
+                  mant2aProvider.useFetchedValue =
+                      value && _currentMant2a.isNotEmpty;
                   mant2aProvider.refreshMant2a(userProvider.getUser.uid);
                 });
               },
