@@ -197,6 +197,7 @@ class _ProfileState extends State<Profile> {
                     ).animate().fadeIn().slideX(
                           delay: 1000.ms,
                           begin: 1.5,
+                          end: 0.1,
                           duration: 1500.ms,
                           curve: Curves.easeInOutBack,
                         ),
