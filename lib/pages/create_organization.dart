@@ -1,4 +1,6 @@
+import 'package:bilmant2a/components/areaNameSwitch.dart';
 import 'package:bilmant2a/pages/login_page.dart';
+import 'package:bilmant2a/providers/mant2a_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:bilmant2a/services/auth_service.dart';
@@ -16,12 +18,11 @@ class CreateOrganizationPage extends StatefulWidget {
 
 class _CreateOrganizationPageState extends State<CreateOrganizationPage> {
   final _organizationNameController = TextEditingController();
-  final _locationController = TextEditingController();
   final _creationDateController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
+  String location = "";
   bool _isLoading = false;
 
   void _createOrganization() async {
@@ -29,11 +30,14 @@ class _CreateOrganizationPageState extends State<CreateOrganizationPage> {
     setState(() {
       _isLoading = true;
     });
+    if (location.isEmpty) {
+      _displayMessage("Please turn on location switch");
+      return;
+    }
 
     try {
       // Get values from controllers
       String organizationName = _organizationNameController.text.trim();
-      String location = _locationController.text.trim();
       String creationDate = _creationDateController.text.trim();
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
@@ -41,7 +45,6 @@ class _CreateOrganizationPageState extends State<CreateOrganizationPage> {
 
       // Validate fields
       if (organizationName.isEmpty ||
-          location.isEmpty ||
           creationDate.isEmpty ||
           email.isEmpty ||
           password.isEmpty ||
@@ -68,7 +71,6 @@ class _CreateOrganizationPageState extends State<CreateOrganizationPage> {
         _displayMessage("Organization created successfully!");
         // Clear text fields on success
         _organizationNameController.clear();
-        _locationController.clear();
         _creationDateController.clear();
         _emailController.clear();
         _passwordController.clear();
@@ -111,6 +113,12 @@ class _CreateOrganizationPageState extends State<CreateOrganizationPage> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final Mant2aProvider mant2aProvider = Provider.of<Mant2aProvider>(context);
+    if (mant2aProvider.useFetchedValue) {
+      location = mant2aProvider.currentLocation;
+    } else {
+      location = "";
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Organization'),
@@ -136,12 +144,7 @@ class _CreateOrganizationPageState extends State<CreateOrganizationPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  labelText: 'Location / Area',
-                ),
-              ),
+              LocationScreen(),
               const SizedBox(height: 10),
               TextField(
                 controller: _creationDateController,
@@ -209,7 +212,6 @@ class _CreateOrganizationPageState extends State<CreateOrganizationPage> {
   @override
   void dispose() {
     _organizationNameController.dispose();
-    _locationController.dispose();
     _creationDateController.dispose();
     _emailController.dispose();
     _passwordController.dispose();

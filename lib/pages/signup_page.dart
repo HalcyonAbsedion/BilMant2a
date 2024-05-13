@@ -19,7 +19,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
 
-  final _locationController = TextEditingController();
   final _genderController = TextEditingController();
   final _birthDateController = TextEditingController();
 
@@ -31,7 +30,6 @@ class _RegisterPageState extends State<RegisterPage> {
     _firstNameController.dispose();
     _lastNameController.dispose();
 
-    _locationController.dispose();
     _genderController.dispose();
     super.dispose();
   }
@@ -60,7 +58,6 @@ class _RegisterPageState extends State<RegisterPage> {
         lastName: _lastNameController.text.trim(),
         gender: _selectedGender,
         password: _passwordController.text.trim(),
-        location: _locationController.text.trim(),
       );
 
       _hideProgressIndicator();
@@ -177,11 +174,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     label: "Email",
                     controller: _emailController,
                   ),
-
-                  //gender
-                  inputFile(
-                      label: "Location / Area",
-                      controller: _locationController),
                   DropdownButton<String>(
                     style: const TextStyle(color: Colors.white),
                     dropdownColor: Colors.white,
