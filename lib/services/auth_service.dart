@@ -16,8 +16,22 @@ class AuthMethods {
     return model.User.fromSnap(documentSnapshot);
   }
 
-  // Signing Up User
+  Future<bool> areFollowingEachOther(
+      String firstUserId, String secondUserId) async {
+    // Get the 'following' list of the first user (firstUserId)
+    DocumentSnapshot snap =
+        await _firestore.collection('Users').doc(firstUserId).get();
+    var snapshot = snap.data() as Map<String, dynamic>;
+    if (snapshot.isNotEmpty) {
+      List followingOfFirstUser = snapshot["following"];
+      List followersOfFirstUser = snapshot["followers"];
+      return followersOfFirstUser.contains(secondUserId) &&
+          followingOfFirstUser.contains(secondUserId);
+    }
+    return false;
+  }
 
+  // Signing Up User
   Future<String> signUpUser({
     required String email,
     required String password,

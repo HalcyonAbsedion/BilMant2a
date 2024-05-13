@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:bilmant2a/services/auth_service.dart';
 import 'package:uuid/uuid.dart';
 
+import 'chat_page.dart';
+
 class Profile extends StatefulWidget {
   final String userId;
   const Profile({super.key, required this.userId});
@@ -34,6 +36,7 @@ class _ProfileState extends State<Profile> {
   int following = 0;
   bool isFollowing = false;
   bool isLoading = false;
+  bool areFriends = true;
 
   @override
   void initState() {
@@ -45,7 +48,6 @@ class _ProfileState extends State<Profile> {
   Future<void> fetchData() async {
     final postProvider = Provider.of<PostProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-
     postProvider.clearOtherUserPosts();
     postProvider.fetchCurrentUserFilteredPosts(userProvider.getUser.postIds);
   }
@@ -87,7 +89,7 @@ class _ProfileState extends State<Profile> {
       following = userProvider.getUser.following.length;
       postLen = userProvider.getUser.postIds.length;
       isLoading = false;
-    } else {}
+    }
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -270,52 +272,85 @@ class _ProfileState extends State<Profile> {
                                     ),
                                   ),
                                 )
-                              : ElevatedButton(
-                                  child: Text(
-                                    isFollowing ? "Unfollow" : "Follow",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  onPressed: () async {
-                                    try {
-                                      // Toggle follow status
-                                      await FirebaseMethods().followUser(
-                                          currentUserUid, userData?['uid']);
+                              : Row(
+                                  children: [
+                                    ElevatedButton(
+                                      child: Text(
+                                        isFollowing ? "Unfollow" : "Follow",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      onPressed: () async {
+                                        try {
+                                          // Toggle follow status
+                                          await FirebaseMethods().followUser(
+                                              currentUserUid, userData?['uid']);
 
-                                      // Update UI based on follow status
-                                      setState(() {
-                                        if (isFollowing) {
-                                          isFollowing = false;
-                                          followers--;
-                                        } else {
-                                          isFollowing = true;
-                                          followers++;
+                                          // Update UI based on follow status
+                                          setState(() {
+                                            if (isFollowing) {
+                                              isFollowing = false;
+                                              followers--;
+                                            } else {
+                                              isFollowing = true;
+                                              followers++;
 
-                                          NotificationService().sendNotification(
-                                              'New Follower Notification',
-                                              '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed You',
-                                              '${userData['token']}',
-                                              userProvider.getUser.photoUrl,
-                                              userData['uid']);
+                                              NotificationService().sendNotification(
+                                                  'New Follower Notification',
+                                                  '${userProvider.getUser.firstName} ${userProvider.getUser.lastName} Just Followed You',
+                                                  '${userData['token']}',
+                                                  userProvider.getUser.photoUrl,
+                                                  userData['uid']);
+                                            }
+                                            userProvider.refreshUser();
+                                          });
+                                        } catch (error) {
+                                          print(
+                                              "Error toggling follow status: $error");
+                                          // Handle error if necessary
                                         }
-                                        userProvider.refreshUser();
-                                      });
-                                    } catch (error) {
-                                      print(
-                                          "Error toggling follow status: $error");
-                                      // Handle error if necessary
-                                    }
-                                  },
-                                  //edit button
-                                  style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(0),
-                                    fixedSize: const Size(300, 50),
-                                    backgroundColor: Colors.grey[300],
-                                    textStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
+                                      },
+                                      //edit button
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.all(0),
+                                        fixedSize: const Size(300, 50),
+                                        backgroundColor: Colors.grey[300],
+                                        textStyle: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Center(
+                                      child: areFriends
+                                          ? IconButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ChatPage(
+                                                        senderName: "",
+                                                        receiverName:
+                                                            "${userData['firstName']} ${userData?['lastName'] ?? ""}",
+                                                        receiverID:
+                                                            "${userData['uid']}",
+                                                        receiverPhotoUrl:
+                                                            userData?[
+                                                                'photoUrl'],
+                                                        senderID: userProvider
+                                                            .getUser.uid,
+                                                      ),
+                                                    ));
+                                              },
+                                              icon: const Icon(
+                                                Icons.message,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : Container(),
+                                    ),
+                                  ],
                                 )),
                       const SizedBox(height: 10),
                       Container(

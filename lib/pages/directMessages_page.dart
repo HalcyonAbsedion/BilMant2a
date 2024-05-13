@@ -5,8 +5,6 @@ import 'package:bilmant2a/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import '../components/areaNameSwitch.dart';
-
 import '../components/user_tile.dart';
 import 'chat_page.dart';
 
