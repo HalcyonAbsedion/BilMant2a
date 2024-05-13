@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:bilmant2a/models/event.dart';
+import 'package:bilmant2a/pages/addEventPage.dart';
+import 'package:bilmant2a/pages/manage_organizations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert'; // For JSON decoding
@@ -25,19 +28,27 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   void _loadPreSetEvents() async {
-    String jsonString =
-        await DefaultAssetBundle.of(context).loadString('assets/events.json');
-    List<dynamic> jsonData = jsonDecode(jsonString);
-    setState(() {
-      _preSetEvents =
-          jsonData.map((eventData) => Event.fromJson(eventData)).toList();
-      _populateEventsMap();
-    });
+    try {
+      log("TEST");
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('events').get();
+      List<Event> events =
+          querySnapshot.docs.map((doc) => Event.fromSnapshot(doc)).toList();
+      log(events.toString());
+      setState(() {
+        _preSetEvents = events;
+
+        _populateEventsMap();
+      });
+    } catch (error) {
+      print('Error loading events: $error');
+      // Handle error appropriately, e.g., display error message to the user
+    }
   }
 
   void _populateEventsMap() {
     for (Event event in _preSetEvents) {
-      // log(event.name);
+      log(event.name);
       DateTime eventDate = DateTime.parse(event.date);
       _addEvent(eventDate, event.name, event.description);
     }
@@ -86,7 +97,13 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             ElevatedButton(
               onPressed: () {
-                _addEvent(_selectedDay, "test event", "description");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LocationAppExample(),
+                  ),
+                );
+                // _addEvent(_selectedDay, "test event", "description");
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
