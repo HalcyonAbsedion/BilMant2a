@@ -99,7 +99,7 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 00.0),
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.89,
+          width: MediaQuery.of(context).size.width * 0.85,
           child: FloatingActionButton.extended(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -125,9 +125,9 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(9.0),
                   child: Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(9),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(25),
