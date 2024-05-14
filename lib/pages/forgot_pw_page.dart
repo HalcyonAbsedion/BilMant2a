@@ -70,7 +70,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: Text(
               'Enter your email address below to reset your password. You will receive an email with a link to create a new password.',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 color: Colors.black,
               ),
             ),

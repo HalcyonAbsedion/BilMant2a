@@ -162,7 +162,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
               field: "firstName",
             ),
             SizedBox(
-              height: 20,
+              height: 18,
             ),
 
             //Last name
@@ -172,7 +172,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
               field: "lastName",
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
 
             //age
@@ -223,8 +223,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                             _selectedGender = newValue!;
                           });
                         },
-                        items: <String>['Male', 'Female', 'Do Not Specify']
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: <String>[
+                          'Male',
+                          'Female',
+                        ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
