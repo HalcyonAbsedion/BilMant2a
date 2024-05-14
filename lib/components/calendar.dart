@@ -78,7 +78,10 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Calendar")),
+      appBar: AppBar(
+        title: const Text("Calendar"),
+        backgroundColor: const Color.fromARGB(255, 66, 74, 90),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -108,7 +111,7 @@ class _CalendarPageState extends State<CalendarPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
               ),
-              child: Text(
+              child: const Text(
                 'Add Event',
                 style: TextStyle(color: Colors.white),
               ),
@@ -122,6 +125,31 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _buildCalendar() {
     return TableCalendar(
       locale: "en_US",
+      calendarBuilders: CalendarBuilders(
+        selectedBuilder: (context, date, _) {
+          return Container(
+            margin: const EdgeInsets.all(4.0),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(127, 118, 11, 189),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Text(
+              date.day.toString(),
+              style: const TextStyle(color: Colors.white),
+            ),
+          );
+        },
+      ),
+      calendarStyle: const CalendarStyle(
+          todayDecoration:
+              BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+          markerDecoration:
+              BoxDecoration(color: Colors.green, shape: BoxShape.circle)),
+      daysOfWeekStyle: const DaysOfWeekStyle(
+        weekdayStyle: TextStyle(color: Colors.grey),
+        weekendStyle: TextStyle(color: Colors.red),
+      ),
       rowHeight: 43,
       headerStyle: const HeaderStyle(
         formatButtonVisible: false,

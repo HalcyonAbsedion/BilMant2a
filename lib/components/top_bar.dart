@@ -147,7 +147,7 @@ class TopBar extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.grey,
-                width: 2,
+                width: 1,
               ),
               borderRadius: BorderRadius.circular(20),
             ),
