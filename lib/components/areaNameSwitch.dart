@@ -42,38 +42,39 @@ class _LocationScreenState extends State<LocationScreen> {
           color: Colors.cyan,
         ),
       ],
-      child: Container(
-        child: Row(
-          children: [
-            SizedBox(
-              width: 110.0, // Set a fixed width for the text
-              child: mant2aProvider.useFetchedValue
-                  ? Container(
-                      constraints: BoxConstraints(
-                        maxWidth: 200, // Set the maximum width constraint
-                      ),
-                      child: Text(
-                        "$_currentMant2a",
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1, // Limit to a single line
-                        overflow: TextOverflow
-                            .ellipsis, // Show ellipsis (...) when text overflows
-                      ),
-                    )
-                  : Text(
-                      "Bil Mant2a",
+      child: Row(
+        children: [
+          SizedBox(
+            width: 110.0, // Set a fixed width for the text
+            child: mant2aProvider.useFetchedValue
+                ? Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 200, // Set the maximum width constraint
+                    ),
+                    child: Text(
+                      "$_currentMant2a",
                       style: TextStyle(
                         color: Color.fromARGB(255, 255, 255, 255),
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 1, // Limit to a single line
+                      overflow: TextOverflow
+                          .ellipsis, // Show ellipsis (...) when text overflows
                     ),
-            ),
-            Switch(
+                  )
+                : Text(
+                    "Bil Mant2a",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Switch(
               value:
                   mant2aProvider.useFetchedValue && _currentMant2a.isNotEmpty,
               onChanged: (value) {
@@ -92,8 +93,8 @@ class _LocationScreenState extends State<LocationScreen> {
               inactiveTrackColor:
                   Colors.grey, // Track color when the switch is OFF
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

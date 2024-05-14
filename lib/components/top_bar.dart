@@ -68,7 +68,7 @@ class TopBar extends StatelessWidget {
           color: Color.fromARGB(255, 66, 74, 90),
         ),
       ),
-      color: const Color.fromRGBO(24, 25, 26, 100),
+      color: Color.fromRGBO(24, 25, 26, 100),
     );
   }
 

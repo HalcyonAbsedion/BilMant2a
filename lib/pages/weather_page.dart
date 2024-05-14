@@ -75,43 +75,44 @@ class _WeatherPageState extends State<WeatherPage> {
         color: Colors.red,
       );
     } else {
-      return Container(
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(176, 190, 197, 1.0),
-          borderRadius: BorderRadius.circular(15.0), // Add border radius
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Image.asset(
-                  getWeatherAnimation(_weather?.mainCondition ?? ""),
-                  fit: BoxFit.cover,
-                ),
+      // Container(
+
+      //   decoration: BoxDecoration(
+
+      //     color: const Color.fromRGBO(176, 190, 197, 1.0),
+      //     borderRadius: BorderRadius.circular(15.0), // Add border radius
+      //   ),
+      return Stack(
+        children: [
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.asset(
+                getWeatherAnimation(_weather?.mainCondition ?? ""),
+                fit: BoxFit.cover,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5.0,
-                    horizontal: 15.0,
-                  ),
-                  child: Text(
-                    '${_weather?.temperature.round()}°C',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20,
-                      color: getTextColor(Color.fromRGBO(176, 190, 197, 1.0)),
-                    ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 5.0,
+                  horizontal: 15.0,
+                ),
+                child: Text(
+                  '${_weather?.temperature.round()}°C',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.black,
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       );
     }
   }

@@ -24,8 +24,25 @@ class DirectMessages extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        shadowColor: Colors.black,
+        elevation: 4,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(0),
+          child: Container(
+            height: 4,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+          ),
+        ),
+        surfaceTintColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: const Color.fromRGBO(24, 25, 26, 100),
         toolbarHeight: 150,
+        scrolledUnderElevation: 4,
         title: Column(
           children: [
             Animate(
@@ -40,13 +57,6 @@ class DirectMessages extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   LocationScreen(),
-                  Padding(
-                    padding: EdgeInsets.all(9.0),
-                    child: Icon(
-                      Icons.chat,
-                      color: Colors.white,
-                    ),
-                  )
                 ],
               ),
             ),
@@ -65,28 +75,28 @@ class DirectMessages extends StatelessWidget {
           // Other widgets can be placed here
           // For example:
           Container(
-            child: mant2aProvider.useFetchedValue?
-            UserTile(
-              url: "",
-              text: currentlocation,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatPage(
-                        senderName: userProvider.getUser.firstName +
-                            " " +
-                            userProvider.getUser.lastName,
-                        receiverName: currentlocation,
-                        receiverID: currentlocation.toString().toLowerCase(),
-                        receiverPhotoUrl: "",
-                        senderID: userProvider.getUser.uid,
-                      ),
-                    ));
-              },
-            ):
-            Container()
-          ),
+              child: mant2aProvider.useFetchedValue
+                  ? UserTile(
+                      url: "",
+                      text: currentlocation,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatPage(
+                                senderName: userProvider.getUser.firstName +
+                                    " " +
+                                    userProvider.getUser.lastName,
+                                receiverName: currentlocation,
+                                receiverID:
+                                    currentlocation.toString().toLowerCase(),
+                                receiverPhotoUrl: "",
+                                senderID: userProvider.getUser.uid,
+                              ),
+                            ));
+                      },
+                    )
+                  : Container()),
           Expanded(
             child: _buildUserList(), // Using Expanded to take available space
           ),
