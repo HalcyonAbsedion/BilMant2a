@@ -96,6 +96,21 @@ class _ProfileState extends State<Profile> {
           )
         : Scaffold(
             appBar: AppBar(
+              title: Animate(
+                effects: [
+                  ShimmerEffect(color: Colors.cyan, duration: 1000.ms),
+                ],
+                child: Text(
+                  isCurrentUser
+                      ? "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}"
+                      : "${userData['firstName']} ${userData?['lastName'] ?? ""}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 23,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               backgroundColor: Color.fromARGB(255, 43, 48, 58),
               elevation: 0,
               actions: [
@@ -114,10 +129,6 @@ class _ProfileState extends State<Profile> {
                       size: 30,
                     ),
                   ),
-                Expanded(
-                  child:
-                      SizedBox(), // Use SizedBox with Expanded to create responsive space
-                ),
                 if (isCurrentUser)
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
@@ -140,58 +151,38 @@ class _ProfileState extends State<Profile> {
             backgroundColor: const Color.fromARGB(255, 21, 21, 22),
             body: Column(
               children: [
-                Animate(
-                  effects: [
-                    ShimmerEffect(color: Colors.cyan, duration: 1000.ms),
-                  ],
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      isCurrentUser
-                          ? "${userProvider.getUser.firstName} ${userProvider.getUser.lastName}"
-                          : "${userData['firstName']} ${userData?['lastName'] ?? ""}",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
                 Row(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 20,
-                        right: 10,
+                        right: 30,
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.green,
-                            width: 3,
-                          ),
                           shape: BoxShape.circle,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.transparent,
-                              width: 3,
+                          border: Border.all(
+                            color: const Color.fromRGBO(0, 208, 46, 100),
+                            width: 2,
+                          ),
+                          boxShadow: const [
+                            BoxShadow(
+                              color:
+                                  Color.fromRGBO(0, 208, 46, 100), // Glow color
+                              blurRadius: 3, // Spread radius
+                              spreadRadius: 3, // Spread radius
                             ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: CircleAvatar(
-                            radius: 40,
-                            backgroundImage: isCurrentUser
-                                ? (userProvider.getUser.photoUrl != ""
-                                    ? NetworkImage(
-                                        userProvider.getUser.photoUrl)
-                                    : null)
-                                : (userData?['photoUrl'] != null
-                                    ? NetworkImage(userData?['photoUrl'])
-                                    : null),
-                          ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundImage: isCurrentUser
+                              ? (userProvider.getUser.photoUrl != ""
+                                  ? NetworkImage(userProvider.getUser.photoUrl)
+                                  : null)
+                              : (userData?['photoUrl'] != null
+                                  ? NetworkImage(userData?['photoUrl'])
+                                  : null),
                         ),
                       ),
                     ).animate().fadeIn().slideX(
@@ -263,8 +254,7 @@ class _ProfileState extends State<Profile> {
                                     );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.all(0),
-                                    fixedSize: const Size(225, 50),
+                                    fixedSize: const Size(170, 30),
                                     backgroundColor: Colors.grey[300],
                                     textStyle: const TextStyle(
                                       color: Colors.white,
@@ -274,6 +264,8 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 )
                               : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     ElevatedButton(
                                       child: Text(
@@ -313,7 +305,7 @@ class _ProfileState extends State<Profile> {
                                       //edit button
                                       style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.all(0),
-                                        fixedSize: const Size(300, 50),
+                                        fixedSize: const Size(170, 30),
                                         backgroundColor: Colors.grey[300],
                                         textStyle: const TextStyle(
                                           color: Colors.white,
@@ -324,29 +316,35 @@ class _ProfileState extends State<Profile> {
                                     ),
                                     Center(
                                       child: areFriends
-                                          ? IconButton(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ChatPage(
-                                                        senderName: "",
-                                                        receiverName:
-                                                            "${userData['firstName']} ${userData?['lastName'] ?? ""}",
-                                                        receiverID:
-                                                            "${userData['uid']}",
-                                                        receiverPhotoUrl:
-                                                            userData?[
-                                                                'photoUrl'],
-                                                        senderID: userProvider
-                                                            .getUser.uid,
-                                                      ),
-                                                    ));
-                                              },
-                                              icon: const Icon(
-                                                Icons.message,
-                                                color: Colors.white,
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ChatPage(
+                                                          senderName: "",
+                                                          receiverName:
+                                                              "${userData['firstName']} ${userData?['lastName'] ?? ""}",
+                                                          receiverID:
+                                                              "${userData['uid']}",
+                                                          receiverPhotoUrl:
+                                                              userData?[
+                                                                  'photoUrl'],
+                                                          senderID: userProvider
+                                                              .getUser.uid,
+                                                        ),
+                                                      ));
+                                                },
+                                                icon: const Icon(
+                                                  Icons.message,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                             )
                                           : Container(),
