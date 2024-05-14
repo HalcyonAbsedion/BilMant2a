@@ -26,6 +26,17 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
+  Color getTextColor(Color backgroundColor) {
+    // Calculate the relative luminance (brightness) of the background color
+    final luminance = (0.2126 * backgroundColor.red +
+            0.7152 * backgroundColor.green +
+            0.0722 * backgroundColor.blue) /
+        255.0;
+
+    // Choose white or black text color based on contrast ratio
+    return luminance > 0.5 ? Colors.black : Colors.white;
+  }
+
   String getWeatherAnimation(String? mainCondition) {
     if (mainCondition == null) return 'assests/sunny.json';
     switch (mainCondition.toLowerCase()) {
@@ -41,7 +52,7 @@ class _WeatherPageState extends State<WeatherPage> {
       case 'shower rain':
         return 'assets/rainy.png';
       case 'thuderstorm':
-        return 'assets/thunder.png';
+        return 'assets/rainy.png';
       case 'clear':
         return 'assets/sunny.png';
       default:
@@ -64,37 +75,42 @@ class _WeatherPageState extends State<WeatherPage> {
         color: Colors.red,
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.all(4.0), // Add padding
-        child: Container(
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(176, 190, 197, 100),
-            borderRadius: BorderRadius.circular(10.0), // Add border radius
-          ),
-          child: Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.all(4.0), // Optional padding around Image
+      return Container(
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(176, 190, 197, 1.0),
+          borderRadius: BorderRadius.circular(15.0), // Add border radius
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
                 child: Image.asset(
                   getWeatherAnimation(_weather?.mainCondition ?? ""),
-                  height: 30.0,
-                  width: 30.0,
+                  fit: BoxFit.cover,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 8.0, horizontal: 6.0), // Padding around Text
-                child: Text(
-                  '${_weather?.temperature.round()}°C',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 11,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5.0,
+                    horizontal: 15.0,
+                  ),
+                  child: Text(
+                    '${_weather?.temperature.round()}°C',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20,
+                      color: getTextColor(Color.fromRGBO(176, 190, 197, 1.0)),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       );
     }

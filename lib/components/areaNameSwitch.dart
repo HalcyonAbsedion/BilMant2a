@@ -88,9 +88,9 @@ class _LocationScreenState extends State<LocationScreen> {
               activeTrackColor:
                   Colors.green, // Track color when the switch is ON
               inactiveThumbColor:
-                  Colors.grey, // Color of the switch thumb when it is OFF
+                  Colors.white, // Color of the switch thumb when it is OFF
               inactiveTrackColor:
-                  Colors.grey[300], // Track color when the switch is OFF
+                  Colors.grey, // Track color when the switch is OFF
             ),
           ],
         ),
