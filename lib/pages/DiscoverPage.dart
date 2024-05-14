@@ -5,6 +5,7 @@ import 'package:bilmant2a/components/calendar.dart';
 import 'package:bilmant2a/models/event.dart';
 import 'package:bilmant2a/pages/GoogleMaps.dart';
 import 'package:bilmant2a/providers/locationProvider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -44,14 +45,22 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
   Set<Marker> _markers = {}; // Set to hold the markers
   List<Event> _preSetEvents = [];
   void _loadPreSetEvents() async {
-    String jsonString =
-        await DefaultAssetBundle.of(context).loadString('assets/events.json');
-    List<dynamic> jsonData = jsonDecode(jsonString);
-    setState(() {
-      _preSetEvents =
-          jsonData.map((eventData) => Event.fromJson(eventData)).toList();
-      _populateEventsMap();
-    });
+    try {
+      log("TEST");
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('events').get();
+      List<Event> events =
+          querySnapshot.docs.map((doc) => Event.fromSnapshot(doc)).toList();
+      log(events.toString());
+      setState(() {
+        _preSetEvents = events;
+
+        _populateEventsMap();
+      });
+    } catch (error) {
+      print('Error loading events: $error');
+      // Handle error appropriately, e.g., display error message to the user
+    }
   }
 
   void _populateEventsMap() {
@@ -99,7 +108,7 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 00.0),
         child: Container(
-          width: MediaQuery.of(context).size.width * 0.85,
+          width: MediaQuery.of(context).size.width * 0.89,
           child: FloatingActionButton.extended(
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -125,9 +134,9 @@ class _LiteModeBodyState extends State<_LiteModeBody> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(9.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Container(
-                    padding: const EdgeInsets.all(9),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(25),
