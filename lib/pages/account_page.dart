@@ -179,10 +179,12 @@ class _ProfileState extends State<Profile> {
                           backgroundImage: isCurrentUser
                               ? (userProvider.getUser.photoUrl != ""
                                   ? NetworkImage(userProvider.getUser.photoUrl)
-                                  : null)
-                              : (userData?['photoUrl'] != null
+                                  : AssetImage('assets/profile.jpg')
+                                      as ImageProvider)
+                              : (userData?['photoUrl'] != ""
                                   ? NetworkImage(userData?['photoUrl'])
-                                  : null),
+                                  : AssetImage('assets/profile.jpg')
+                                      as ImageProvider),
                         ),
                       ),
                     ).animate().fadeIn().slideX(

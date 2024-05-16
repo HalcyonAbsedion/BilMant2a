@@ -118,7 +118,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit> {
                       radius: 50,
                       backgroundImage: user.photoUrl != ""
                           ? NetworkImage(user.photoUrl)
-                          : null,
+                          : AssetImage('assets/profile.jpg') as ImageProvider,
                     ),
                   ),
                   Positioned(

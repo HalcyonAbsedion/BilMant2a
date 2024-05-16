@@ -1,4 +1,5 @@
 import 'package:bilmant2a/components/chat_bubble.dart';
+import 'package:bilmant2a/pages/account_page.dart';
 import 'package:bilmant2a/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,25 +50,34 @@ class ChatPage extends StatelessWidget {
             width: 1,
           ),
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                receiverName,
-                style: const TextStyle(
-                  fontSize: 18,
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Profile(userId: receiverID)),
+            );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  receiverName,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
                 ),
               ),
-            ),
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: receiverPhotoUrl != ""
-                  ? NetworkImage(receiverPhotoUrl)
-                  : null,
-            ),
-          ],
+              CircleAvatar(
+                radius: 25,
+                backgroundImage: receiverPhotoUrl != ""
+                    ? NetworkImage(receiverPhotoUrl)
+                    : AssetImage('assets/profile.jpg') as ImageProvider,
+              ),
+            ],
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         foregroundColor: Colors.white,

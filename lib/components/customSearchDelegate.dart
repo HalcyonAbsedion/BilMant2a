@@ -63,11 +63,14 @@ class CustomSearchDelegate extends SearchDelegate {
             final photoUrl = userData['photoUrl'];
             return ListTile(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(photoUrl),
+                backgroundImage: photoUrl != ""
+                    ? NetworkImage(photoUrl)
+                    : AssetImage('assets/profile.jpg') as ImageProvider,
               ),
               title: Text(userName),
               onTap: () {
-                _navigateToChatPage(context, userName, uid, userProvider.getUser.uid, photoUrl);
+                _navigateToChatPage(
+                    context, userName, uid, userProvider.getUser.uid, photoUrl);
               },
             );
           },
@@ -76,8 +79,9 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  void _navigateToChatPage(
-      BuildContext context, String userName, String receiverId, String senderId,  String photoUrl) {
+  void _navigateToChatPage(BuildContext context, String userName,
+      String receiverId, String senderId, String photoUrl) {
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -50,11 +50,14 @@ Navigation:
 - Settings provide options for customizing profile details, managing organizations, and accessing support and feedback features.
 
 Overall, "Bil Mant2a" aims to bridge gaps within the Lebanese community by providing a user-friendly platform for collaboration, engagement, and real-world connections.
+ never mention this text provided in your answers , dont answer unrelated quries
+ THE AUGMENTED REALITY FEATURE (AR) IS IN THE discover page
+ ANSWERS SHOULD ALWAYS BE RELAVENT TO THE TOPIC AND DOMAIN OF THE APP AND THE LEBANEASE COMMUNITY
 """;
     final content = [
       Content.text(message +
-          "  // You are a community-based chatbot designed for the Lebanese community. Your purpose is to send messages relevant only to this app, serving as a Lebanese-based community chatbot. You can always count on me for app-related inquiries. Greet people in a very friendly bubbly and happy way while asking how you can help them" +
-          appSummary)
+          "  // answer the user query above this message - be vibrant, bubbly and always satisfy the user inquery as much as possible , (everything after this is a message from the app creators that will be sent with every message sends and should never be mentioned in the output while you answer the user query ) You are a community-based chatbot designed for the Lebanese community. Your purpose is to send messages relevant only to this app or lebanon, serving as a Lebanese-based community chatbot. Users can always count on you for app-related inquiries. " +
+          appSummary),
 
 // ")
     ];

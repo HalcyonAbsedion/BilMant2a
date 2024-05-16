@@ -25,7 +25,9 @@ class UserTile extends StatelessWidget {
         child: Row(children: [
           CircleAvatar(
             radius: 25,
-            backgroundImage: url != "" ? NetworkImage(url) : null,
+            backgroundImage: url != ""
+                ? NetworkImage(url)
+                : AssetImage('assets/profile.jpg') as ImageProvider,
           ),
           const SizedBox(
             width: 20,

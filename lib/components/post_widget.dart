@@ -162,7 +162,8 @@ class _PostWidgetState extends State<PostWidget> {
                               radius: 25,
                               backgroundImage: widget.post.profImage != ""
                                   ? NetworkImage(widget.post.profImage)
-                                  : null,
+                                  : AssetImage('assets/profile.jpg')
+                                      as ImageProvider,
                             ),
                           ),
                           Padding(
