@@ -46,7 +46,7 @@ class _WeatherPageState extends State<WeatherPage> {
       case 'haze':
       case 'dust':
       case 'fog':
-        return 'assets/cloudy.png';
+        return 'assets/cloudy (2).png';
       case 'rain':
       case 'drizzle':
       case 'shower rain':
@@ -105,7 +105,7 @@ class _WeatherPageState extends State<WeatherPage> {
                   '${_weather?.temperature.round()}°C',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 21,
                     color: Colors.black,
                   ),
                 ),

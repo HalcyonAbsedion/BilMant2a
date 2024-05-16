@@ -20,7 +20,7 @@ class DirectMessages extends StatelessWidget {
     final Mant2aProvider mant2aProvider = Provider.of<Mant2aProvider>(context);
     senderName =
         userProvider.getUser.firstName + " " + userProvider.getUser.lastName;
-    dynamic currentlocation = userProvider.getUser.locations.last.toString();
+    String current_location = mant2aProvider.currentLocation;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -75,23 +75,21 @@ class DirectMessages extends StatelessWidget {
           // Other widgets can be placed here
           // For example:
           Container(
-              child: mant2aProvider.useFetchedValue
+              child: mant2aProvider.useFetchedValue &&
+                      current_location.isNotEmpty
                   ? UserTile(
                       url: "",
-                      text: currentlocation,
+                      text: current_location,
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ChatPage(
-                                senderName: userProvider.getUser.firstName +
-                                    " " +
-                                    userProvider.getUser.lastName,
-                                receiverName: currentlocation,
-                                receiverID:
-                                    currentlocation.toString().toLowerCase(),
+                                senderName: "",
+                                receiverName: current_location,
+                                receiverID: current_location,
                                 receiverPhotoUrl: "",
-                                senderID: userProvider.getUser.uid,
+                                senderID: _chatService.getCurrentUser()!.uid,
                               ),
                             ));
                       },

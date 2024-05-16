@@ -17,7 +17,8 @@ class ChatService {
 
   ChatService({this.senderId = "", this.receiverId = ""}) {
     chatRoomId = receiverId;
-    if (receiverId.length > 12) {
+    if (receiverId.length > 22) {
+      print("pc-------------------------------------------");
       List<String> ids = [senderId, receiverId];
       ids.sort();
       chatRoomId = ids.join('_');

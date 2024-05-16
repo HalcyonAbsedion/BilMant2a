@@ -99,10 +99,7 @@ class _NavBarState extends State<NavBar> {
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(
-        border: Border.all(
-          color: const Color.fromARGB(255, 66, 74, 90),
-        ),
-        backgroundColor: const Color.fromARGB(255, 43, 48, 58),
+        backgroundColor: Colors.black,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Padding(

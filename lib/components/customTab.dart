@@ -1,40 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class CustomTab extends StatelessWidget {
-  final String text;
   final IconData icon;
-  final Color shimmerColor;
-  final int delay;
-  final Color selectedTextColor;
-  final Color selectedBackgroundColor;
+  final String text;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final Color borderColor;
 
   const CustomTab({
     Key? key,
-    required this.text,
     required this.icon,
-    required this.shimmerColor,
-    required this.delay,
-    required this.selectedTextColor,
-    required this.selectedBackgroundColor,
+    required this.text,
+    required this.isSelected,
+    required this.onTap,
+    this.borderColor = Colors.grey, // Default border color
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      width: 100,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-          width: 2,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          // Transparent background
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? borderColor : Colors.transparent,
+            width: 2,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: borderColor.withOpacity(0.2),
+                    spreadRadius: 3,
+                    blurRadius: 5,
+                  ),
+                ]
+              : [],
+          color: Colors.transparent,
         ),
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.transparent, // Default background color
-      ),
-      child: Tab(
-        iconMargin: EdgeInsets.all(0),
-        icon: Icon(icon),
-        text: text,
+        child: Container(
+          width: 100,
+          height: 70,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (isSelected) // Show icon only if tab is selected
+                Icon(
+                  icon,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              if (isSelected)
+                const SizedBox(width: 8), // Add spacing if icon is shown
+              Text(
+                text,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Colors.grey[700],
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
