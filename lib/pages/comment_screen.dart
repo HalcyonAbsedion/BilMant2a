@@ -46,7 +46,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       String token = await NotificationService().getUserToken(post.uid);
       NotificationService().sendNotification(
           'Post Notification',
-          '${name}  Just Commentted On Your Post: ${commentEditingController.text}',
+          '${name}  Just Commented On Your Post: ${commentEditingController.text}',
           token,
           profilePic,
           post.uid,
@@ -139,7 +139,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   child: const Text(
-                    'Post',
+                    'Send',
                     style: TextStyle(
                         color: Colors.blue, fontWeight: FontWeight.bold),
                   )
