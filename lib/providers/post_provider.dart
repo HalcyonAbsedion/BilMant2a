@@ -13,17 +13,17 @@ class PostProvider extends ChangeNotifier {
   List<Post> get posts => _posts;
   List<Post> get currentUserPosts => _currentUserPosts;
   List<Post> get otherUserPosts => _otherUserPosts;
-  // late StreamSubscription<QuerySnapshot> _subscription;
-  // PostProvider() {
-  //   // Initialize the stream subscription in the constructor
-  //   _subscription = FirebaseFirestore.instance
-  //       .collection('Posts')
-  //       .snapshots()
-  //       .listen((querySnapshot) {
-  //     _posts = querySnapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
-  //     notifyListeners();
-  //   });
-  // }
+  late StreamSubscription<QuerySnapshot> _subscription;
+  PostProvider() {
+    // Initialize the stream subscription in the constructor
+    _subscription = FirebaseFirestore.instance
+        .collection('Posts')
+        .snapshots()
+        .listen((querySnapshot) {
+      _posts = querySnapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
+      notifyListeners();
+    });
+  }
 
   Post getPostByPostID(String postID) {
     return _posts.firstWhere((post) => post.postId == postID,

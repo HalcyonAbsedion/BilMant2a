@@ -110,7 +110,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(user.photoUrl),
+                backgroundImage: user.photoUrl != ""
+                    ? NetworkImage(user.photoUrl)
+                    : AssetImage('assets/profile.jpg') as ImageProvider,
                 radius: 18,
               ),
               Expanded(

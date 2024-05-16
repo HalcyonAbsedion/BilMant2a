@@ -97,7 +97,10 @@ class _NotificationViewState extends State<NotificationView> {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(
-          image: NetworkImage(iconUrl), // Load image from URL
+          image: iconUrl != ""
+              ? NetworkImage(iconUrl)
+              : AssetImage('assets/profile.jpg')
+                  as ImageProvider, // Load image from URL
           fit: BoxFit.cover,
         ),
       ),

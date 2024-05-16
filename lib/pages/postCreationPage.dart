@@ -182,8 +182,9 @@ class _postCreationPageState extends State<postCreationPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: CircleAvatar(
-                  backgroundImage:
-                      profileUrl != "" ? NetworkImage(profileUrl) : null,
+                  backgroundImage: profileUrl != ""
+                      ? NetworkImage(profileUrl)
+                      : AssetImage('assets/profile.jpg') as ImageProvider,
                 ),
               ),
               LocationScreen(),
