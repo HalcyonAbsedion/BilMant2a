@@ -390,7 +390,7 @@ class _PostWidgetState extends State<PostWidget> {
       // Video case
       return AspectRatio(
         aspectRatio: MediaQuery.of(context).size.width *
-            1.85 /
+            2 /
             MediaQuery.of(context).size.height *
             1,
         child: VideoPlayerPage(videoUrl: url),
