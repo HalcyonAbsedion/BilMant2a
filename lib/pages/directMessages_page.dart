@@ -78,7 +78,8 @@ class DirectMessages extends StatelessWidget {
               child: mant2aProvider.useFetchedValue &&
                       current_location.isNotEmpty
                   ? UserTile(
-                      url: "",
+                      url:
+                          "https://i.pinimg.com/1200x/98/53/c5/9853c5ae293810fc37fb567c8940c303.jpg",
                       text: current_location,
                       onTap: () {
                         Navigator.push(
@@ -88,7 +89,8 @@ class DirectMessages extends StatelessWidget {
                                 senderName: "",
                                 receiverName: current_location,
                                 receiverID: current_location,
-                                receiverPhotoUrl: "",
+                                receiverPhotoUrl:
+                                    "https://i.pinimg.com/1200x/98/53/c5/9853c5ae293810fc37fb567c8940c303.jpg",
                                 senderID: _chatService.getCurrentUser()!.uid,
                               ),
                             ));
