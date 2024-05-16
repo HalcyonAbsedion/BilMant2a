@@ -48,6 +48,15 @@ class _PostWidgetState extends State<PostWidget> {
     fetchCommentLen();
   }
 
+  Future<bool> getData(userId) async {
+    bool token =
+        (await FirebaseFirestore.instance.collection('Users').doc(userId).get())
+                .data()?['isOrganization'] ??
+            false;
+
+    return token;
+  }
+
   fetchCommentLen() async {
     try {
       QuerySnapshot snap = await FirebaseFirestore.instance

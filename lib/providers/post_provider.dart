@@ -21,6 +21,7 @@ class PostProvider extends ChangeNotifier {
         .snapshots()
         .listen((querySnapshot) {
       _posts = querySnapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
+      _posts.sort((a, b) => b.datePublished.compareTo(a.datePublished));
       notifyListeners();
     });
   }
@@ -36,6 +37,7 @@ class PostProvider extends ChangeNotifier {
           await FirebaseFirestore.instance.collection('Posts').get();
 
       _posts = querySnapshot.docs.map((doc) => Post.fromSnap(doc)).toList();
+      _posts.sort((a, b) => b.datePublished.compareTo(a.datePublished));
       notifyListeners();
     } catch (e) {
       print('Error fetching posts: $e');
