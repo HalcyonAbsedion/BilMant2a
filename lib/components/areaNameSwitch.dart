@@ -73,7 +73,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+            padding: const EdgeInsets.only(left: 5.0),
             child: Switch(
               value:
                   mant2aProvider.useFetchedValue && _currentMant2a.isNotEmpty,
