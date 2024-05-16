@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:bilmant2a/models/event.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:intl/intl.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:provider/provider.dart';
 
 class LocationAppExample extends StatefulWidget {
   @override
@@ -118,7 +120,7 @@ class _LocationAppExampleState extends State<LocationAppExample> {
               TextField(
                 controller: _dateController,
                 decoration: InputDecoration(
-                  labelText: 'Creation Date',
+                  labelText: 'Select Date',
                   suffixIcon: IconButton(
                     onPressed: () async {
                       final pickedDate = await showDatePicker(
@@ -139,14 +141,19 @@ class _LocationAppExampleState extends State<LocationAppExample> {
                 ),
                 readOnly: true,
               ),
-              const SizedBox(height: 10),
-              TextField(
+              const SizedBox(height: 30),
+              TextFormField(
                 controller: _description,
-                decoration: InputDecoration(
+                maxLines: null,
+                decoration: const InputDecoration(
                   labelText: 'Description',
+                  alignLabelWithHint: true,
+                  border:
+                      OutlineInputBorder(), // Adds a border around the input field
+                  hintText: 'Enter your description here', // Placeholder text
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               // ValueListenableBuilder<GeoPoint?>(
               //   valueListenable: notifier,
               //   builder: (ctx, p, child) {
@@ -166,6 +173,11 @@ class _LocationAppExampleState extends State<LocationAppExample> {
               //   },
               // ),
               ElevatedButton(
+                style: ButtonStyle(
+                  alignment: Alignment.centerLeft,
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                ),
                 onPressed: () async {
                   var p = await showSimplePickerLocation(
                     context: context,
@@ -187,9 +199,19 @@ class _LocationAppExampleState extends State<LocationAppExample> {
                     notifier.value = p;
                   }
                 },
-                child: Text("show picker address"),
+                child: Text(
+                  "Pick Location",
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              SizedBox(
+                height: 30,
               ),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue),
+                ),
                 onPressed: _isLoading ? null : _createEvent,
                 child: _isLoading
                     ? const CircularProgressIndicator(

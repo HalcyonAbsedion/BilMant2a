@@ -7,6 +7,7 @@ class CommentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String photoUrl = snap.data()['profilePic'];
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: Column(
@@ -14,9 +15,9 @@ class CommentCard extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(
-                  snap.data()['profilePic'],
-                ),
+                backgroundImage: photoUrl != ""
+                    ? NetworkImage(photoUrl)
+                    : AssetImage('assets/profile.jpg') as ImageProvider,
                 radius: 18,
               ),
               Expanded(

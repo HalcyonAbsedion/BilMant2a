@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:bilmant2a/models/event.dart';
 import 'package:bilmant2a/pages/addEventPage.dart';
 import 'package:bilmant2a/pages/manage_organizations.dart';
+import 'package:bilmant2a/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'dart:convert'; // For JSON decoding
 
@@ -77,6 +79,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Calendar"),
@@ -98,24 +101,26 @@ class _CalendarPageState extends State<CalendarPage> {
                 }).toList(),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LocationAppExample(),
-                  ),
-                );
-                // _addEvent(_selectedDay, "test event", "description");
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-              ),
-              child: const Text(
-                'Add Event',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            userProvider.getUser.isOrganization
+                ? ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LocationAppExample(),
+                        ),
+                      );
+                      // _addEvent(_selectedDay, "test event", "description");
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                    child: const Text(
+                      'Add Event',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                : SizedBox(),
           ],
         ),
       ),
